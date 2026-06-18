@@ -1,3 +1,6 @@
+.cursor/
+zfoo/
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia
