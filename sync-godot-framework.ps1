@@ -3,7 +3,7 @@
 #   .\sync-godot-framework.ps1
 
 param(
-	[string]$RepoUrl = "https://github.com/godot-fun/godot-framework.git"
+    [string]$RepoUrl = "https://github.com/godot-fun/godot-framework.git"
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,46 +15,63 @@ $CloneDir = $TempRoot
 New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
 
 function Remove-TempRoot {
-	if (Test-Path $TempRoot) {
-		Write-Host "Cleaning up temporary directory: $TempRoot"
-		Remove-Item -Path $TempRoot -Recurse -Force
-	}
+    if (Test-Path $TempRoot) {
+        Write-Host "Cleaning up temporary directory: $TempRoot"
+        Remove-Item -Path $TempRoot -Recurse -Force
+    }
 }
 
 function Copy-FrameworkDirs {
-	param(
-		[string]$SourceRoot
-	)
+    param(
+        [string]$SourceRoot
+    )
 
-	foreach ($dir in @(".cursor", "zfoo")) {
-		$src = Join-Path $SourceRoot $dir
-		$dst = Join-Path $ProjectRoot $dir
+    foreach ($dir in @(".cursor", "zfoo")) {
+        $src = Join-Path $SourceRoot $dir
+        $dst = Join-Path $ProjectRoot $dir
 
-		if (-not (Test-Path $src)) {
-			throw "Directory not found in source repo: $dir"
-		}
+        if (-not (Test-Path $src)) {
+            throw "Directory not found in source repo: $dir"
+        }
 
-		Write-Host "Copying $dir -> $dst"
-		if (Test-Path $dst) {
-			Remove-Item -Path $dst -Recurse -Force
-		}
-		Copy-Item -Path $src -Destination $dst -Recurse -Force
-	}
+        Write-Host "Copying $dir -> $dst"
+        if (Test-Path $dst) {
+            Remove-Item -Path $dst -Recurse -Force
+        }
+        Copy-Item -Path $src -Destination $dst -Recurse -Force
+    }
+}
+
+function Copy-ReadmeToZfoo {
+    param(
+        [string]$SourceRoot
+    )
+
+    $src = Join-Path $SourceRoot "README.md"
+    $dst = Join-Path $ProjectRoot "zfoo\README.md"
+
+    if (-not (Test-Path $src)) {
+        throw "README.md not found in source repo"
+    }
+
+    Write-Host "Copying README.md -> $dst"
+    Copy-Item -Path $src -Destination $dst -Force
 }
 
 try {
-	Write-Host "Cloning $RepoUrl ..."
-	git clone --depth 1 $RepoUrl $CloneDir
-	if ($LASTEXITCODE -ne 0) {
-		throw "git clone failed with exit code $LASTEXITCODE"
-	}
+    Write-Host "Cloning $RepoUrl ..."
+    git clone --depth 1 $RepoUrl $CloneDir
+    if ($LASTEXITCODE -ne 0) {
+        throw "git clone failed with exit code $LASTEXITCODE"
+    }
 
-	Copy-FrameworkDirs -SourceRoot $CloneDir
+    Copy-FrameworkDirs -SourceRoot $CloneDir
+    Copy-ReadmeToZfoo -SourceRoot $CloneDir
 
-	Write-Host "Sync completed."
+    Write-Host "Sync completed."
 } catch {
-	Write-Error $_
-	exit 1
+    Write-Error $_
+    exit 1
 } finally {
-	Remove-TempRoot
+    Remove-TempRoot
 }
