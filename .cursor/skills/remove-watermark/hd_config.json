@@ -1,0 +1,4 @@
+{
+  "hd_strategy": "Resize",
+  "hd_strategy_resize_limit": 2048
+}
