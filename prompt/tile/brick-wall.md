@@ -1,7 +1,7 @@
 ﻿生成一个用于 Top-Down 2D 游戏的砖墙地形 Tile。
 
 【画布尺寸】
-正方形
+512×512 像素。
 
 【美术风格】
 高精度像素风（High-Res / Modern Pixel Art）。
