@@ -3,17 +3,13 @@ class_name EnemyEasy
 
 const AI_THINK_INTERVAL := 0.6
 
-var grid_pos := Vector2i.ZERO
-var facing := Vector2i(0, 1)
-var moving := false
 var ai_think_timer := 0.0
-
-@onready var sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
 	apply_data(TankConfig.enemy_easy)
-	scale_tank()
+	facing = Vector2i(0, 1)
+	update_facing(facing)
 	ai_think_timer = AI_THINK_INTERVAL
 	pass
 
@@ -32,22 +28,6 @@ func _physics_process(delta: float) -> void:
 		var direction := pick_move_direction()
 		if direction != Vector2i.ZERO:
 			try_move(direction)
-	pass
-
-
-func scale_tank() -> void:
-	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2(grid_size) * TankConfig.tile_size
-	scale = target_size / texture_size
-
-	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
-	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
-	pass
-
-
-func update_facing(direction: Vector2i) -> void:
-	facing = direction
-	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 	pass
 
 
