@@ -10,7 +10,7 @@ var moving := false
 
 func _ready() -> void:
 	land_on_grid()
-
+	pass
 
 func _physics_process(_delta: float) -> void:
 	if moving:
@@ -19,20 +19,20 @@ func _physics_process(_delta: float) -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)
-
+	pass
 
 func land_on_grid() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(TankConfig.tank_grid_size) * TankConfig.tile_size
 	scale = target_size / texture_size
-
+	
 	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position))
-	global_position = TankConfig.grid_to_world(grid_pos)
-
+	global_position = TankConfig.grid_to_world(grid_pos)	
+	pass
 
 func update_facing(direction: Vector2i) -> void:
 	sprite.rotation = Vector2(direction).angle() + PI / 2.0
-
+	pass
 
 func read_direction() -> Vector2i:
 	if Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W):
@@ -59,10 +59,11 @@ func try_move(direction: Vector2i) -> void:
 	var tween := create_tween()
 	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos), MOVE_DURATION)
 	tween.finished.connect(on_move_finished)
-
+	pass
 
 func on_move_finished() -> void:
 	moving = false
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)
+	pass

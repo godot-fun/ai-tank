@@ -6,6 +6,7 @@ extends Node2D
 func _ready() -> void:
 	z_index = -10
 	queue_redraw()
+	pass
 
 
 func _draw() -> void:
@@ -24,3 +25,4 @@ func _draw() -> void:
 	for y in range(TankConfig.map_grid_height + 1):
 		var py := y * tile_size
 		draw_line(Vector2(0.0, py), Vector2(map_width, py), grid_color)
+	pass
