@@ -28,16 +28,6 @@ func apply_data(data: TankConfig.TankData) -> void:
 	invincible = data.invincible
 
 
-func take_damage(amount: int) -> void:
-	if invincible:
-		return
-	hp = maxi(hp - amount, 0)
-
-
-func get_team() -> int:
-	return team
-
-
 func can_fire() -> bool:
 	return fire_cooldown <= 0.0
 
