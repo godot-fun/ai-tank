@@ -31,11 +31,11 @@ func _physics_process(delta: float) -> void:
 
 func scale_tank() -> void:
 	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2(TankConfig.tank_grid_size) * TankConfig.tile_size
+	var target_size := Vector2(grid_size) * TankConfig.tile_size
 	scale = target_size / texture_size
 
-	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position))
-	global_position = TankConfig.grid_to_world(grid_pos)
+	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
+	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 
@@ -61,7 +61,7 @@ func try_move(direction: Vector2i) -> void:
 	update_facing(direction)
 
 	var target_grid := grid_pos + direction
-	if not TankConfig.is_in_bounds(target_grid):
+	if not TankConfig.is_in_bounds(target_grid, grid_size):
 		return
 
 	grid_pos = target_grid
@@ -69,7 +69,7 @@ func try_move(direction: Vector2i) -> void:
 
 	var move_duration := TankConfig.tile_size / speed
 	var tween := create_tween()
-	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos), move_duration)
+	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos, grid_size), move_duration)
 	tween.finished.connect(on_move_finished)
 	pass
 

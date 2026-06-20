@@ -4,6 +4,7 @@ class_name Tank
 # tank data property
 var id: int
 var team: int
+var grid_size: Vector2i
 var hp: int
 var max_hp: int
 var speed: float
@@ -22,6 +23,7 @@ var fire_cooldown := 0.0
 func apply_data(data: TankConfig.TankData) -> void:
 	id = data.id
 	team = data.team
+	grid_size = data.grid_size
 	hp = data.hp
 	max_hp = data.max_hp
 	speed = data.speed
