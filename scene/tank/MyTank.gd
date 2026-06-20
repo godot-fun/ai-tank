@@ -5,10 +5,11 @@ const MOVE_DURATION := 0.12
 var grid_pos := Vector2i.ZERO
 var moving := false
 
+@onready var sprite: Sprite2D = $Sprite2D
+
 
 func _ready() -> void:
-	grid_pos = TankConfig.world_to_grid(global_position)
-	global_position = TankConfig.grid_to_world(grid_pos)
+	land_on_grid()
 
 
 func _physics_process(_delta: float) -> void:
@@ -18,6 +19,19 @@ func _physics_process(_delta: float) -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)
+
+
+func land_on_grid() -> void:
+	var texture_size := sprite.texture.get_size()
+	var target_size := Vector2(TankConfig.tank_grid_size) * TankConfig.tile_size
+	scale = target_size / texture_size
+
+	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position))
+	global_position = TankConfig.grid_to_world(grid_pos)
+
+
+func update_facing(direction: Vector2i) -> void:
+	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 
 
 func read_direction() -> Vector2i:
@@ -33,6 +47,8 @@ func read_direction() -> Vector2i:
 
 
 func try_move(direction: Vector2i) -> void:
+	update_facing(direction)
+
 	var target_grid := grid_pos + direction
 	if not TankConfig.is_in_bounds(target_grid):
 		return

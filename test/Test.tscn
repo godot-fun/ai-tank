@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bu5y1usaw8mww"]
+
+[ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/map/BattleMap.tscn" id="1_tl1hq"]
+[ext_resource type="PackedScene" uid="uid://dwsteegw242qj" path="res://scene/tank/Tank.tscn" id="2_ndh2t"]
+
+[node name="Test" type="Node2D" unique_id=1280781325]
+
+[node name="BattleMap" parent="." unique_id=2094860258 instance=ExtResource("1_tl1hq")]
+
+[node name="Tank" parent="." unique_id=1235553680 instance=ExtResource("2_ndh2t")]
