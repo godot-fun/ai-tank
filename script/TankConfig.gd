@@ -2,6 +2,7 @@
 
 const tile_size: int = 60
 const tank_grid_size := Vector2i(2, 2)
+const bullet_speed := 680.0
 
 # 地图的格子的长宽
 static var map_grid_width: int = ProjectSettings.get_setting("display/window/size/viewport_width") / tile_size

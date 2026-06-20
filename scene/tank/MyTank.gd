@@ -1,18 +1,30 @@
 extends CharacterBody2D
 
 const MOVE_DURATION := 0.12
+const FIRE_COOLDOWN := 0.35
+const BULLET_SCENE := preload("res://scene/bullet/BasicBullet.tscn")
 
 var grid_pos := Vector2i.ZERO
+var facing := Vector2i(0, -1)
 var moving := false
+var fire_cooldown := 0.0
+var active_bullet: Node2D
 
 @onready var sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
-	land_on_grid()
+	scale_tank()
 	pass
 
-func _physics_process(_delta: float) -> void:
+
+func _physics_process(delta: float) -> void:
+	if fire_cooldown > 0.0:
+		fire_cooldown -= delta
+
+	if Input.is_action_just_pressed("ui_accept"):
+		try_shoot()
+
 	if moving:
 		return
 
@@ -21,18 +33,22 @@ func _physics_process(_delta: float) -> void:
 		try_move(direction)
 	pass
 
-func land_on_grid() -> void:
+
+func scale_tank() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(TankConfig.tank_grid_size) * TankConfig.tile_size
 	scale = target_size / texture_size
-	
+
 	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position))
-	global_position = TankConfig.grid_to_world(grid_pos)	
+	global_position = TankConfig.grid_to_world(grid_pos)
 	pass
 
+
 func update_facing(direction: Vector2i) -> void:
+	facing = direction
 	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 	pass
+
 
 func read_direction() -> Vector2i:
 	if Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W):
@@ -60,6 +76,34 @@ func try_move(direction: Vector2i) -> void:
 	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos), MOVE_DURATION)
 	tween.finished.connect(on_move_finished)
 	pass
+
+
+func try_shoot() -> void:
+	if fire_cooldown > 0.0:
+		return
+	if active_bullet != null and is_instance_valid(active_bullet):
+		return
+
+	var aim_direction := read_direction()
+	if aim_direction != Vector2i.ZERO:
+		update_facing(aim_direction)
+
+	var bullet: BasicBullet = BULLET_SCENE.instantiate()
+	get_tree().current_scene.add_child(bullet)
+
+	var spawn_offset := Vector2(facing) * TankConfig.tile_size
+	bullet.launch(global_position + spawn_offset, facing, self)
+
+	active_bullet = bullet
+	bullet.tree_exited.connect(on_bullet_exited)
+	fire_cooldown = FIRE_COOLDOWN
+	pass
+
+
+func on_bullet_exited() -> void:
+	active_bullet = null
+	pass
+
 
 func on_move_finished() -> void:
 	moving = false
