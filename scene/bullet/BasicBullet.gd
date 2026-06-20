@@ -51,8 +51,8 @@ func is_out_of_bounds() -> bool:
 
 
 func on_body_entered(body: Node2D) -> void:
-	var script := body.get_script()
-	if script and body is Tank:
+	var script = body.get_script()
+	if script != null && body is Tank:
 		var tank := body as Tank
 		if tank.team == team:
 			return

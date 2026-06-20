@@ -23,6 +23,9 @@ class TankData:
 	var bullet_damage: int
 	var fire_interval: float
 	var invincible: bool
+	var bullet_resource: String
+	var tank_resource: String
+	var script_resource: String
 
 	func _init(
 		_id: int,
@@ -34,6 +37,9 @@ class TankData:
 		_bullet_damage: int,
 		_fire_interval: float,
 		_invincible: bool,
+		_bullet_resource: String,
+		_tank_resource: String,
+		_script_resource: String,
 	):
 		id = _id
 		team = _team
@@ -44,8 +50,24 @@ class TankData:
 		bullet_damage = _bullet_damage
 		fire_interval = _fire_interval
 		invincible = _invincible
+		bullet_resource = _bullet_resource
+		tank_resource = _tank_resource
+		script_resource = _script_resource
 
-static var my_tank: TankData = TankData.new(0, Team.PLAYER, 1, 1, 400.0, 800.0, 1, 1.5, true)
+static var my_tank: TankData = TankData.new(
+	0,
+	Team.PLAYER,
+	1,
+	1,
+	400.0,
+	800.0,
+	1,
+	1.5,
+	true,
+	"res://scene/bullet/BasicBullet.tscn",
+	"res://scene/tank/Tank.tscn",
+	"res://script/tank/MyTank.gd",
+)
 
 static func grid_to_world(grid: Vector2i) -> Vector2:
 	return Vector2(

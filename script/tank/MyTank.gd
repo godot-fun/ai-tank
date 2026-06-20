@@ -1,8 +1,6 @@
 extends Tank
 class_name MyTank
 
-const BULLET_SCENE := preload("res://scene/bullet/BasicBullet.tscn")
-
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i(0, -1)
 var moving := false
@@ -84,7 +82,8 @@ func try_shoot() -> void:
 	if aim_direction != Vector2i.ZERO:
 		update_facing(aim_direction)
 
-	var bullet: BasicBullet = BULLET_SCENE.instantiate()
+	var bullet_scene: PackedScene = load(bullet_resource)
+	var bullet: BasicBullet = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
 
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
