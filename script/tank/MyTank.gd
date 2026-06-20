@@ -1,24 +1,23 @@
-extends CharacterBody2D
+extends Tank
+class_name MyTank
 
 const BULLET_SCENE := preload("res://scene/bullet/BasicBullet.tscn")
 
-var data: TankConfig.TankData = TankConfig.my_tank
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i(0, -1)
 var moving := false
-var fire_cooldown := 0.0
 
 @onready var sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
+	apply_data(TankConfig.my_tank)
 	scale_tank()
 	pass
 
 
 func _physics_process(delta: float) -> void:
-	if fire_cooldown > 0.0:
-		fire_cooldown -= delta
+	update_fire_cooldown(delta)
 
 	if Input.is_action_pressed("ui_accept"):
 		try_shoot()
@@ -70,7 +69,7 @@ func try_move(direction: Vector2i) -> void:
 	grid_pos = target_grid
 	moving = true
 
-	var move_duration := TankConfig.tile_size / data.speed
+	var move_duration := TankConfig.tile_size / speed
 	var tween := create_tween()
 	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos), move_duration)
 	tween.finished.connect(on_move_finished)
@@ -78,7 +77,7 @@ func try_move(direction: Vector2i) -> void:
 
 
 func try_shoot() -> void:
-	if fire_cooldown > 0.0:
+	if not can_fire():
 		return
 
 	var aim_direction := read_direction()
@@ -89,8 +88,8 @@ func try_shoot() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, self, data.bullet_speed, data.bullet_damage)
-	fire_cooldown = data.fire_interval
+	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
+	start_fire_cooldown()
 	pass
 
 
@@ -99,11 +98,4 @@ func on_move_finished() -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)
-	pass
-
-
-func take_damage(amount: int) -> void:
-	if data.invincible:
-		return
-	data.hp = maxi(data.hp - amount, 0)
 	pass
