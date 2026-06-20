@@ -1,0 +1,26 @@
+﻿class_name TankHelper
+
+const TANK_SCENE := "res://scene/tank/Tank.tscn"
+
+
+static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
+	var scene: PackedScene = load(TANK_SCENE)
+	var tank: CharacterBody2D = scene.instantiate()
+	tank.set_script(load(data.script_resource))
+
+	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
+	parent.add_child(tank)
+
+	var tank_instance := tank as Tank
+	tank_instance.apply_data(data)
+
+	var sprite: Sprite2D = tank.get_node("Sprite2D")
+	sprite.texture = load(data.tank_resource)
+
+	var clamped_grid := TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
+	tank.global_position = TankConfig.grid_to_world(clamped_grid, data.grid_size)
+
+	if tank_instance.has_method("scale_tank"):
+		tank_instance.scale_tank()
+
+	return tank_instance

@@ -1,14 +1,12 @@
 [gd_scene format=3 uid="uid://dwsteegw242qj"]
 
 [ext_resource type="Texture2D" uid="uid://qtpyui00tglf" path="res://image/characters/blue_tank_1.png" id="1_0fblr"]
-[ext_resource type="Script" uid="uid://dpr7xlyh63rnn" path="res://script/tank/MyTank.gd" id="1_nwjqb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwjqb"]
 size = Vector2(512, 512)
 
 [node name="Tank" type="CharacterBody2D" unique_id=1235553680]
 motion_mode = 1
-script = ExtResource("1_nwjqb")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1590629967]
 texture = ExtResource("1_0fblr")

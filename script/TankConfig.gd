@@ -68,8 +68,24 @@ static var my_tank: TankData = TankData.new(
 	1.5,
 	true,
 	"res://scene/bullet/BasicBullet.tscn",
-	"res://scene/tank/Tank.tscn",
+	"res://image/characters/blue_tank_1.png",
 	"res://script/tank/MyTank.gd",
+)
+
+static var enemy_easy: TankData = TankData.new(
+	1,
+	Team.ENEMY,
+	Vector2i(2, 2),
+	1,
+	1,
+	320.0,
+	800.0,
+	1,
+	2.0,
+	false,
+	"res://scene/bullet/BasicBullet.tscn",
+	"res://image/characters/red_tank_1.png",
+	"res://script/tank/EnemyEasy.gd",
 )
 
 static func grid_to_world(grid: Vector2i, grid_size: Vector2i) -> Vector2:
