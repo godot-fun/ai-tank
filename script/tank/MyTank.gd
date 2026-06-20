@@ -1,14 +1,12 @@
 extends CharacterBody2D
 
-const MOVE_DURATION := 0.12
-const FIRE_COOLDOWN := 0.35
 const BULLET_SCENE := preload("res://scene/bullet/BasicBullet.tscn")
 
+var data: TankConfig.TankData = TankConfig.my_tank
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i(0, -1)
 var moving := false
 var fire_cooldown := 0.0
-var active_bullet: Node2D
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -22,7 +20,7 @@ func _physics_process(delta: float) -> void:
 	if fire_cooldown > 0.0:
 		fire_cooldown -= delta
 
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_pressed("ui_accept"):
 		try_shoot()
 
 	if moving:
@@ -72,16 +70,15 @@ func try_move(direction: Vector2i) -> void:
 	grid_pos = target_grid
 	moving = true
 
+	var move_duration := TankConfig.tile_size / data.speed
 	var tween := create_tween()
-	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos), MOVE_DURATION)
+	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos), move_duration)
 	tween.finished.connect(on_move_finished)
 	pass
 
 
 func try_shoot() -> void:
 	if fire_cooldown > 0.0:
-		return
-	if active_bullet != null and is_instance_valid(active_bullet):
 		return
 
 	var aim_direction := read_direction()
@@ -92,16 +89,8 @@ func try_shoot() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, self)
-
-	active_bullet = bullet
-	bullet.tree_exited.connect(on_bullet_exited)
-	fire_cooldown = FIRE_COOLDOWN
-	pass
-
-
-func on_bullet_exited() -> void:
-	active_bullet = null
+	bullet.launch(global_position + spawn_offset, facing, self, data.bullet_speed, data.bullet_damage)
+	fire_cooldown = data.fire_interval
 	pass
 
 
@@ -110,4 +99,11 @@ func on_move_finished() -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)
+	pass
+
+
+func take_damage(amount: int) -> void:
+	if data.invincible:
+		return
+	data.hp = maxi(data.hp - amount, 0)
 	pass
