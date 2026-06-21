@@ -1,6 +1,6 @@
 class_name TileConfig
 
-class TileData:
+class TileCell:
 	var id: int
 	var max_hp: int
 	var tile_resource: String
@@ -17,7 +17,7 @@ class TileData:
 		tile_resource = _tile_resource
 		script_resource = _script_resource
 
-static var brick_wall: TileData = TileData.new(
+static var brick_wall: TileCell = TileCell.new(
 	0,
 	1,
 	"res://image/tiles/brick_wall_1.png",

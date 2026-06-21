@@ -3,7 +3,7 @@ class_name TileHelper
 const TILE_SCENE := "res://scene/Tile.tscn"
 
 
-static func create_tile(data: TileConfig.TileData, grid: Vector2i) -> Tile:
+static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 	var scene: PackedScene = load(TILE_SCENE)
 	var tile: StaticBody2D = scene.instantiate()
 	tile.set_script(load(data.script_resource))
