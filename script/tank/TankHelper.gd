@@ -1,6 +1,6 @@
 ﻿class_name TankHelper
 
-const TANK_SCENE := "res://scene/tank/Tank.tscn"
+const TANK_SCENE := "res://scene/Tank.tscn"
 
 
 static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
