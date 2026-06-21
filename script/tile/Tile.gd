@@ -11,7 +11,7 @@ var grid_pos := Vector2i.ZERO
 @onready var sprite: Sprite2D = $Sprite2D
 
 
-func apply_data(data: TankConfig.TileData) -> void:
+func apply_data(data: TileConfig.TileData) -> void:
 	max_hp = data.max_hp
 	hp = max_hp
 	sprite.texture = load(data.tile_resource)
