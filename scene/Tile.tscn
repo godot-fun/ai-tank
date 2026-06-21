@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bejcplkql47ek"]
 
-[ext_resource type="Script" uid="uid://dvxmt3jse52mq" path="res://scene/tile/BrickWall.gd" id="1_0tnot"]
+[ext_resource type="Script" uid="uid://dvxmt3jse52mq" path="res://script/tile/BrickWall.gd" id="1_0tnot"]
 [ext_resource type="Texture2D" uid="uid://cdrey2vdh42dm" path="res://image/tiles/brick_wall_1.png" id="2_w4568"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7itor"]
