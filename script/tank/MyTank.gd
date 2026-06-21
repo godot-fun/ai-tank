@@ -3,6 +3,7 @@ class_name MyTank
 
 
 func _ready() -> void:
+	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
 	apply_data(TankConfig.my_tank)
 	pass
 
