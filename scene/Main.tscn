@@ -1,12 +1,3 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb3ya0m5mhk8q"]
-
-[ext_resource type="PackedScene" uid="uid://dwsteegw242qj" path="res://scene/tank/Tank.tscn" id="1_tank"]
-[ext_resource type="PackedScene" uid="uid://c8enemy01easy" path="res://scene/tank/EnemyEasy.tscn" id="2_enemy"]
+[gd_scene format=3 uid="uid://cb3ya0m5mhk8q"]
 
 [node name="Main" type="Node2D" unique_id=264583349]
-
-[node name="Tank" parent="." instance=ExtResource("1_tank")]
-position = Vector2(60, 60)
-
-[node name="EnemyEasy" parent="." instance=ExtResource("2_enemy")]
-position = Vector2(1860, 1020)
