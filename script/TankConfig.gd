@@ -65,7 +65,7 @@ static var my_tank: TankData = TankData.new(
 	400.0,
 	800.0,
 	1,
-	1.5,
+	0.3,
 	true,
 	"res://scene/bullet/BasicBullet.tscn",
 	"res://image/characters/blue_tank_1.png",

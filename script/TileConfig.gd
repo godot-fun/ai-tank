@@ -23,3 +23,10 @@ static var brick_wall: TileCell = TileCell.new(
 	"res://image/tiles/brick_wall_1.png",
 	"res://script/tile/BrickWall.gd",
 )
+
+static var water: TileCell = TileCell.new(
+	1,
+	0,
+	"res://image/tiles/water_1.png",
+	"res://script/tile/Water.gd",
+)

@@ -19,6 +19,11 @@ func apply_data(data: TileConfig.TileCell) -> void:
 	pass
 
 
+func blocks_tank() -> bool:
+	return true
+
+
+
 func scale_tile() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(GRID_SIZE) * TankConfig.tile_size

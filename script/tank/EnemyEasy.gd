@@ -50,7 +50,9 @@ func pick_random_direction() -> Vector2i:
 	directions.shuffle()
 
 	for direction in directions:
-		if TankConfig.is_in_bounds(grid_pos + direction, grid_size):
+		var target_grid := grid_pos + direction
+		if TankConfig.is_in_bounds(target_grid, grid_size) \
+				and not TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
 			return direction
 
 	return Vector2i.ZERO
@@ -80,6 +82,8 @@ func try_move(direction: Vector2i) -> void:
 
 	var target_grid := grid_pos + direction
 	if not TankConfig.is_in_bounds(target_grid, grid_size):
+		return
+	if TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
 		return
 
 	grid_pos = target_grid
