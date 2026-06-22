@@ -20,7 +20,7 @@ class TileCell:
 static var brick_wall: TileCell = TileCell.new(
 	0,
 	1,
-	"res://image/tiles/brick_wall_1.png",
+	"res://image/tiles/brick_wall_2.png",
 	"res://script/tile/BrickWall.gd",
 )
 
@@ -34,6 +34,13 @@ static var water: TileCell = TileCell.new(
 static var steel_wall: TileCell = TileCell.new(
 	2,
 	0,
-	"res://image/tiles/steel_wall_1.png",
+	"res://image/tiles/steel_wall_3.png",
 	"res://script/tile/SteelWall.gd",
+)
+
+static var forest: TileCell = TileCell.new(
+	3,
+	0,
+	"res://image/tiles/forest_3.png",
+	"res://script/tile/Forest.gd",
 )
