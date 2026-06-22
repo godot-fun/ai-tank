@@ -30,3 +30,10 @@ static var water: TileCell = TileCell.new(
 	"res://image/tiles/water_1.png",
 	"res://script/tile/Water.gd",
 )
+
+static var steel_wall: TileCell = TileCell.new(
+	2,
+	0,
+	"res://image/tiles/steel_wall_1.png",
+	"res://script/tile/SteelWall.gd",
+)

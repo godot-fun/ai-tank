@@ -58,8 +58,10 @@ func on_body_entered(body: Node2D) -> void:
 		if not tank.invincible:
 			tank.hp = maxi(tank.hp - damage, 0)
 		queue_free()
-	elif body is BrickWall:
+	elif body is Tile:
 		var tile := body as Tile
+		if not tile.blocks_bullet():
+			return
 		tile.take_damage(damage)
 		queue_free()
 	pass

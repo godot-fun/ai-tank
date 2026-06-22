@@ -23,6 +23,9 @@ func blocks_tank() -> bool:
 	return true
 
 
+func blocks_bullet() -> bool:
+	return true
+
 
 func scale_tile() -> void:
 	var texture_size := sprite.texture.get_size()

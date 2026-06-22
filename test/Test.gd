@@ -12,6 +12,8 @@ func _ready() -> void:
 		TileHelper.create_tile(TileConfig.brick_wall, Vector2i(i, 9))
 	for i in range(10, 22):
 		TileHelper.create_tile(TileConfig.water, Vector2i(i, 12))
+	for i in range(14, 18):
+		TileHelper.create_tile(TileConfig.steel_wall, Vector2i(i, 6))
 	pass # Replace with function body.
 
 
