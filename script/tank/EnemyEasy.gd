@@ -6,7 +6,7 @@ const AI_THINK_INTERVAL := 0.6
 var ai_think_timer := 0.0
 
 
-func _ready() -> void:
+func start() -> void:
 	apply_data(TankConfig.enemy_easy)
 	facing = Vector2i(0, 1)
 	update_facing(facing)
@@ -14,8 +14,7 @@ func _ready() -> void:
 	pass
 
 
-func _physics_process(delta: float) -> void:
-	update_fire_cooldown(delta)
+func update(delta: float) -> void:
 	ai_think_timer -= delta
 
 	try_shoot_at_player()

@@ -27,6 +27,26 @@ var moving := false
 @onready var sprite: Sprite2D = $Sprite2D
 
 
+func _ready() -> void:
+	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
+	start()
+	pass
+
+
+func _physics_process(delta: float) -> void:
+	update_fire_cooldown(delta)
+	update(delta)
+	pass
+
+
+func start() -> void:
+	pass
+
+
+func update(_delta: float) -> void:
+	pass
+
+
 func apply_data(data: TankConfig.TankData) -> void:
 	id = data.id
 	team = data.team

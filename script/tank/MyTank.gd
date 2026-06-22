@@ -2,15 +2,12 @@ extends Tank
 class_name MyTank
 
 
-func _ready() -> void:
-	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
+func start() -> void:
 	apply_data(TankConfig.my_tank)
 	pass
 
 
-func _physics_process(delta: float) -> void:
-	update_fire_cooldown(delta)
-
+func update(_delta: float) -> void:
 	if Input.is_action_pressed("ui_accept"):
 		try_shoot()
 
