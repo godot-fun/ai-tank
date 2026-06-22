@@ -6,7 +6,6 @@ extends Node2D
 func _ready() -> void:
 	z_index = -10
 	queue_redraw()
-	EagleHelper.create_eagle()
 	pass
 
 

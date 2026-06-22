@@ -48,7 +48,7 @@ func try_shoot() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)a
+	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
 	start_fire_cooldown()
 	pass
 
