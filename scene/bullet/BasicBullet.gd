@@ -64,4 +64,10 @@ func on_body_entered(body: Node2D) -> void:
 			return
 		tile.take_damage(damage)
 		queue_free()
+	elif body is Eagle:
+		var eagle := body as Eagle
+		if not eagle.blocks_bullet():
+			return
+		eagle.take_damage(damage, team)
+		queue_free()
 	pass

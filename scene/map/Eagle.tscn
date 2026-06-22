@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://bodb4tpvy01eh"]
 
-[ext_resource type="Script" uid="uid://dvxmt3jse52mq" path="res://script/tile/BrickWall.gd" id="1_tu2lk"]
-[ext_resource type="Texture2D" uid="uid://cdrey2vdh42dm" path="res://image/tiles/brick_wall_1.png" id="2_eqj37"]
+[ext_resource type="Script" uid="uid://cxu02pv7x6d3m" path="res://scene/map/Eagle.gd" id="1_eagle"]
+[ext_resource type="Texture2D" uid="uid://j6l43u3k4a4g" path="res://image/characters/eagle_base_1.png" id="2_eagle"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7itor"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eagle"]
 size = Vector2(512, 512)
 
-[node name="BrickWall" type="StaticBody2D" unique_id=933329516]
-script = ExtResource("1_tu2lk")
+[node name="Eagle" type="StaticBody2D"]
+script = ExtResource("1_eagle")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2115809521]
-texture = ExtResource("2_eqj37")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_eagle")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=196892597]
-shape = SubResource("RectangleShape2D_7itor")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_eagle")

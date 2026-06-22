@@ -1,11 +1,24 @@
 extends Node2D
 
+const EAGLE_SCENE := preload("res://scene/map/Eagle.tscn")
+
 @export var show_grid: bool = false
 
 
 func _ready() -> void:
 	z_index = -10
 	queue_redraw()
+	_create_eagle()
+	pass
+
+
+func _create_eagle() -> void:
+	var eagle: Eagle = EAGLE_SCENE.instantiate()
+	eagle.grid_pos = Vector2i(
+		(TankConfig.map_grid_width - Eagle.GRID_SIZE.x) / 2,
+		TankConfig.map_grid_height - Eagle.GRID_SIZE.y,
+	)
+	add_child(eagle)
 	pass
 
 
