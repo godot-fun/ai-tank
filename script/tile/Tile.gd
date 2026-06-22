@@ -34,6 +34,12 @@ func scale_tile() -> void:
 		GRID_SIZE,
 	)
 	global_position = TankConfig.grid_to_world(grid_pos, GRID_SIZE)
+	TileHelper.register_tile(self)
+	pass
+
+
+func _exit_tree() -> void:
+	TileHelper.unregister_tile(self)
 	pass
 
 
