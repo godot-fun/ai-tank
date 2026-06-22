@@ -127,6 +127,8 @@ func try_move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 		return
 	if TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
 		return
+	if TankHelper.is_area_blocked_by_tank(target_grid, grid_size, self):
+		return
 
 	grid_pos = target_grid
 	moving = true
