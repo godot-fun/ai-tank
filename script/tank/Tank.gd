@@ -66,7 +66,18 @@ func apply_data(data: TankConfig.TankData) -> void:
 	scale_tank()
 	pass
 
+# ----------------------------------------------------------------------------------------------------------------------
 
+func scale_tank() -> void:
+	var texture_size := sprite.texture.get_size()
+	var target_size := Vector2(grid_size) * TankConfig.tile_size
+	scale = target_size / texture_size
+
+	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
+	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+	pass
+
+# ----------------------------------------------------------------------------------------------------------------------
 func can_fire() -> bool:
 	return fire_cooldown <= 0.0
 
@@ -94,26 +105,13 @@ func try_shoot() -> void:
 	pass
 
 
-func scale_tank() -> void:
-	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2(grid_size) * TankConfig.tile_size
-	scale = target_size / texture_size
-
-	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
-	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
-	pass
-
+# ----------------------------------------------------------------------------------------------------------------------
+const ICE_SLIDE_TILES := 2
 
 func update_facing(direction: Vector2i) -> void:
 	facing = direction
 	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 	pass
-
-
-func affected_by_ice() -> bool:
-	return true
-
-const ICE_SLIDE_TILES := 2
 
 func try_move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 	update_facing(direction)
@@ -136,11 +134,10 @@ func try_move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 
 func on_move_finished(ice_slides_left: int) -> void:
 	moving = false
-	if affected_by_ice():
-		if ice_slides_left == -1 and TileHelper.is_area_on_ice(grid_pos, grid_size):
-			ice_slides_left = ICE_SLIDE_TILES
-		if ice_slides_left > 0:
-			try_move(facing, ice_slides_left - 1)
-			return
+	if ice_slides_left == -1 and TileHelper.is_area_on_ice(grid_pos, grid_size):
+		ice_slides_left = ICE_SLIDE_TILES
+	if ice_slides_left > 0:
+		try_move(facing, ice_slides_left - 1)
+		return
 	pass
 
