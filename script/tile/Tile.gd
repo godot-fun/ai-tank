@@ -27,6 +27,9 @@ func blocks_bullet() -> bool:
 	return true
 
 
+func is_ice() -> bool:
+	return false
+
 func scale_tile() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(GRID_SIZE) * TankConfig.tile_size

@@ -8,6 +8,10 @@ func _ready() -> void:
 	pass
 
 
+func affected_by_ice() -> bool:
+	return true
+
+
 func _physics_process(delta: float) -> void:
 	update_fire_cooldown(delta)
 
@@ -74,6 +78,9 @@ func try_shoot() -> void:
 
 func on_move_finished() -> void:
 	moving = false
+	if affected_by_ice() and TileHelper.is_area_on_ice(grid_pos, grid_size):
+		try_move(facing)
+		return
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)

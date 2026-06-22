@@ -17,6 +17,9 @@ func _ready() -> void:
 	for i in range(6, 10):
 		for j in range(14, 17):
 			TileHelper.create_tile(TileConfig.forest, Vector2i(i, j))
+	for i in range(20, 26):
+		for j in range(14, 17):
+			TileHelper.create_tile(TileConfig.ice, Vector2i(i, j))
 	pass # Replace with function body.
 
 

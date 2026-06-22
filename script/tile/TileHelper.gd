@@ -58,6 +58,23 @@ static func is_grid_blocked_for_tank(grid: Vector2i) -> bool:
 	return tile != null and tile.blocks_tank()
 
 
+static func is_area_on_ice(grid: Vector2i, grid_size: Vector2i) -> bool:
+	for x in range(grid_size.x):
+		for y in range(grid_size.y):
+			if is_grid_ice(grid + Vector2i(x, y)):
+				return true
+	return false
+
+
+static func is_grid_ice(grid: Vector2i) -> bool:
+	if not _is_cell_in_bounds(grid):
+		return false
+
+	_ensure_grid()
+	var tile: Tile = _grid[grid.x][grid.y]
+	return tile != null and tile.is_ice()
+
+
 static func _ensure_grid() -> void:
 	if not _grid.is_empty():
 		return

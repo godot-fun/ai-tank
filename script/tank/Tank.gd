@@ -73,3 +73,7 @@ func update_facing(direction: Vector2i) -> void:
 	facing = direction
 	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 	pass
+
+
+func affected_by_ice() -> bool:
+	return false
