@@ -17,9 +17,8 @@ func start() -> void:
 func update(delta: float) -> void:
 	ai_think_timer -= delta
 
-	try_shoot_at_player()
-
 	if moving:
+		try_shoot()
 		return
 
 	if ai_think_timer <= 0.0:
@@ -73,25 +72,3 @@ func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
 			return direction
 
 	return Vector2i.ZERO
-
-
-func try_shoot_at_player() -> void:
-	if not can_fire():
-		return
-
-	var player := TankHelper.find_player()
-	if player == null:
-		return
-
-	var player_grid := TankHelper.get_tank_grid(player)
-	var diff := player_grid - grid_pos
-	if diff.x != 0 and diff.y != 0:
-		return
-
-	if diff.x != 0:
-		update_facing(Vector2i.RIGHT if signi(diff.x) > 0 else Vector2i.LEFT)
-	else:
-		update_facing(Vector2i.DOWN if signi(diff.y) > 0 else Vector2i.UP)
-
-	try_shoot()
-	pass
