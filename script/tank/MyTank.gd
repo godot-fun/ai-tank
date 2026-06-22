@@ -8,10 +8,6 @@ func _ready() -> void:
 	pass
 
 
-func affected_by_ice() -> bool:
-	return true
-
-
 func _physics_process(delta: float) -> void:
 	update_fire_cooldown(delta)
 
@@ -39,25 +35,6 @@ func read_direction() -> Vector2i:
 	return Vector2i.ZERO
 
 
-func try_move(direction: Vector2i) -> void:
-	update_facing(direction)
-
-	var target_grid := grid_pos + direction
-	if not TankConfig.is_in_bounds(target_grid, grid_size):
-		return
-	if TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
-		return
-
-	grid_pos = target_grid
-	moving = true
-
-	var move_duration := TankConfig.tile_size / speed
-	var tween := create_tween()
-	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos, grid_size), move_duration)
-	tween.finished.connect(on_move_finished)
-	pass
-
-
 func try_shoot() -> void:
 	if not can_fire():
 		return
@@ -71,16 +48,12 @@ func try_shoot() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
+	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)a
 	start_fire_cooldown()
 	pass
 
 
-func on_move_finished() -> void:
-	moving = false
-	if affected_by_ice() and TileHelper.is_area_on_ice(grid_pos, grid_size):
-		try_move(facing)
-		return
+func on_move_continue() -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
 		try_move(direction)

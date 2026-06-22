@@ -16,11 +16,15 @@ var bullet_resource: String
 var tank_resource: String
 var script_resource: String
 
+const ICE_SLIDE_TILES := 2
+
 # custom property
 var fire_cooldown := 0.0
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i(0, -1)
 var moving := false
+var _is_ice_slide := false
+var _ice_slides_remaining := 0
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -76,4 +80,43 @@ func update_facing(direction: Vector2i) -> void:
 
 
 func affected_by_ice() -> bool:
-	return false
+	return true
+
+
+func try_move(direction: Vector2i, ice_slide: bool = false) -> void:
+	if not ice_slide:
+		_ice_slides_remaining = 0
+
+	update_facing(direction)
+
+	var target_grid := grid_pos + direction
+	if not TankConfig.is_in_bounds(target_grid, grid_size):
+		return
+	if TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
+		return
+
+	_is_ice_slide = ice_slide
+	grid_pos = target_grid
+	moving = true
+
+	var move_duration := TankConfig.tile_size / speed
+	var tween := create_tween()
+	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos, grid_size), move_duration)
+	tween.finished.connect(on_move_finished)
+	pass
+
+
+func on_move_finished() -> void:
+	moving = false
+	if affected_by_ice() and not _is_ice_slide and TileHelper.is_area_on_ice(grid_pos, grid_size):
+		_ice_slides_remaining = ICE_SLIDE_TILES
+	if affected_by_ice() and _ice_slides_remaining > 0:
+		_ice_slides_remaining -= 1
+		try_move(facing, true)
+		return
+	on_move_continue()
+	pass
+
+
+func on_move_continue() -> void:
+	pass

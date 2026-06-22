@@ -77,25 +77,6 @@ func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
 	return Vector2i.ZERO
 
 
-func try_move(direction: Vector2i) -> void:
-	update_facing(direction)
-
-	var target_grid := grid_pos + direction
-	if not TankConfig.is_in_bounds(target_grid, grid_size):
-		return
-	if TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
-		return
-
-	grid_pos = target_grid
-	moving = true
-
-	var move_duration := TankConfig.tile_size / speed
-	var tween := create_tween()
-	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos, grid_size), move_duration)
-	tween.finished.connect(on_move_finished)
-	pass
-
-
 func try_shoot_at_player() -> void:
 	if not can_fire():
 		return
@@ -121,11 +102,6 @@ func try_shoot_at_player() -> void:
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
 	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
 	start_fire_cooldown()
-	pass
-
-
-func on_move_finished() -> void:
-	moving = false
 	pass
 
 
