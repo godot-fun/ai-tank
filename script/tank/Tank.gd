@@ -29,6 +29,12 @@ var moving := false
 func _ready() -> void:
 	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
 	start()
+	TankHelper.register_tank(self)
+	pass
+
+
+func _exit_tree() -> void:
+	TankHelper.unregister_tank(self)
 	pass
 
 

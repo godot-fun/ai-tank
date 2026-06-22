@@ -31,11 +31,11 @@ func update(delta: float) -> void:
 
 
 func pick_move_direction() -> Vector2i:
-	var player := find_player()
+	var player := TankHelper.find_player()
 	if player == null or randf() < 0.35:
 		return pick_random_direction()
 
-	return pick_direction_toward(get_tank_grid(player))
+	return pick_direction_toward(TankHelper.get_tank_grid(player))
 	pass
 
 
@@ -80,11 +80,11 @@ func try_shoot_at_player() -> void:
 	if not can_fire():
 		return
 
-	var player := find_player()
+	var player := TankHelper.find_player()
 	if player == null:
 		return
 
-	var player_grid := get_tank_grid(player)
+	var player_grid := TankHelper.get_tank_grid(player)
 	var diff := player_grid - grid_pos
 	if diff.x != 0 and diff.y != 0:
 		return
@@ -96,14 +96,3 @@ func try_shoot_at_player() -> void:
 
 	try_shoot()
 	pass
-
-
-func find_player() -> Tank:
-	for node in get_tree().current_scene.get_children():
-		if node is Tank and node.team == TankConfig.Team.PLAYER:
-			return node
-	return null
-
-
-func get_tank_grid(tank: Tank) -> Vector2i:
-	return TankConfig.world_to_grid(tank.global_position, tank.grid_size)
