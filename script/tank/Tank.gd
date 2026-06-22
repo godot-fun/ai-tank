@@ -61,6 +61,20 @@ func start_fire_cooldown() -> void:
 	fire_cooldown = fire_interval
 
 
+func try_shoot() -> void:
+	if not can_fire():
+		return
+
+	var bullet_scene: PackedScene = load(bullet_resource)
+	var bullet: BasicBullet = bullet_scene.instantiate()
+	get_tree().current_scene.add_child(bullet)
+
+	var spawn_offset := Vector2(facing) * TankConfig.tile_size
+	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
+	start_fire_cooldown()
+	pass
+
+
 func scale_tank() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(grid_size) * TankConfig.tile_size

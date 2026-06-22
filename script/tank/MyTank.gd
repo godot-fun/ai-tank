@@ -35,24 +35,6 @@ func read_direction() -> Vector2i:
 	return Vector2i.ZERO
 
 
-func try_shoot() -> void:
-	if not can_fire():
-		return
-
-	var aim_direction := read_direction()
-	if aim_direction != Vector2i.ZERO:
-		update_facing(aim_direction)
-
-	var bullet_scene: PackedScene = load(bullet_resource)
-	var bullet: BasicBullet = bullet_scene.instantiate()
-	get_tree().current_scene.add_child(bullet)
-
-	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
-	start_fire_cooldown()
-	pass
-
-
 func on_move_continue() -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:

@@ -95,13 +95,7 @@ func try_shoot_at_player() -> void:
 	else:
 		update_facing(Vector2i(0, signi(diff.y)))
 
-	var bullet_scene: PackedScene = load(bullet_resource)
-	var bullet: BasicBullet = bullet_scene.instantiate()
-	get_tree().current_scene.add_child(bullet)
-
-	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
-	start_fire_cooldown()
+	try_shoot()
 	pass
 
 
