@@ -1,8 +1,6 @@
 class_name Tile
 extends StaticBody2D
 
-const GRID_SIZE := Vector2i.ONE
-
 @export var max_hp: int = 1
 
 var hp: int
@@ -32,14 +30,14 @@ func is_ice() -> bool:
 
 func scale_tile() -> void:
 	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2(GRID_SIZE) * TankConfig.tile_size
+	var target_size := Vector2.ONE * TankConfig.tile_size
 	scale = target_size / texture_size
 
 	grid_pos = TankConfig.clamp_grid_to_bounds(
-		TankConfig.world_to_grid(global_position, GRID_SIZE),
-		GRID_SIZE,
+		TankConfig.world_to_grid(global_position, Vector2i.ONE),
+		Vector2i.ONE,
 	)
-	global_position = TankConfig.grid_to_world(grid_pos, GRID_SIZE)
+	global_position = TankConfig.grid_to_world(grid_pos, Vector2i.ONE)
 	TileHelper.register_tile(self)
 	pass
 

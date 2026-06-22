@@ -10,8 +10,8 @@ static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 	var tile: StaticBody2D = scene.instantiate()
 	tile.set_script(load(data.script_resource))
 
-	var clamped_grid := TankConfig.clamp_grid_to_bounds(grid, Tile.GRID_SIZE)
-	tile.global_position = TankConfig.grid_to_world(clamped_grid, Tile.GRID_SIZE)
+	var clamped_grid := TankConfig.clamp_grid_to_bounds(grid, Vector2i.ONE)
+	tile.global_position = TankConfig.grid_to_world(clamped_grid, Vector2i.ONE)
 
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tile)
@@ -21,11 +21,9 @@ static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 
 static func register_tile(tile: Tile) -> void:
 	_ensure_grid()
-	for x in range(Tile.GRID_SIZE.x):
-		for y in range(Tile.GRID_SIZE.y):
-			var cell := tile.grid_pos + Vector2i(x, y)
-			if _is_cell_in_bounds(cell):
-				_grid[cell.x][cell.y] = tile
+	var cell := tile.grid_pos
+	if _is_cell_in_bounds(cell):
+		_grid[cell.x][cell.y] = tile
 	pass
 
 
@@ -33,11 +31,9 @@ static func unregister_tile(tile: Tile) -> void:
 	if _grid.is_empty():
 		return
 
-	for x in range(Tile.GRID_SIZE.x):
-		for y in range(Tile.GRID_SIZE.y):
-			var cell := tile.grid_pos + Vector2i(x, y)
-			if _is_cell_in_bounds(cell) and _grid[cell.x][cell.y] == tile:
-				_grid[cell.x][cell.y] = null
+	var cell := tile.grid_pos
+	if _is_cell_in_bounds(cell) and _grid[cell.x][cell.y] == tile:
+		_grid[cell.x][cell.y] = null
 	pass
 
 
