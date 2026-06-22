@@ -23,16 +23,7 @@ static func create_eagle() -> Eagle:
 
 
 static func is_area_blocked_for_tank(grid: Vector2i, grid_size: Vector2i) -> bool:
-	return _rects_overlap(grid, grid_size, grid_pos, Eagle.GRID_SIZE)
-
-
-static func _rects_overlap(
-	pos_a: Vector2i,
-	size_a: Vector2i,
-	pos_b: Vector2i,
-	size_b: Vector2i,
-) -> bool:
-	return pos_a.x < pos_b.x + size_b.x \
-		and pos_a.x + size_a.x > pos_b.x \
-		and pos_a.y < pos_b.y + size_b.y \
-		and pos_a.y + size_a.y > pos_b.y
+	return grid.x < grid_pos.x + Eagle.GRID_SIZE.x \
+		and grid.x + grid_size.x > grid_pos.x \
+		and grid.y < grid_pos.y + Eagle.GRID_SIZE.y \
+		and grid.y + grid_size.y > grid_pos.y
