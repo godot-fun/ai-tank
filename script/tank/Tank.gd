@@ -16,7 +16,6 @@ var bullet_resource: String
 var tank_resource: String
 var script_resource: String
 
-const ICE_SLIDE_TILES := 2
 
 # custom property
 var fire_cooldown := 0.0
@@ -114,12 +113,9 @@ func update_facing(direction: Vector2i) -> void:
 func affected_by_ice() -> bool:
 	return true
 
+const ICE_SLIDE_TILES := 2
 
-func try_move(direction: Vector2i) -> void:
-	_do_move(direction, -1)
-
-
-func _do_move(direction: Vector2i, ice_slides_left: int) -> void:
+func try_move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 	update_facing(direction)
 
 	var target_grid := grid_pos + direction
@@ -144,11 +140,7 @@ func on_move_finished(ice_slides_left: int) -> void:
 		if ice_slides_left == -1 and TileHelper.is_area_on_ice(grid_pos, grid_size):
 			ice_slides_left = ICE_SLIDE_TILES
 		if ice_slides_left > 0:
-			_do_move(facing, ice_slides_left - 1)
+			try_move(facing, ice_slides_left - 1)
 			return
-	on_move_continue()
 	pass
 
-
-func on_move_continue() -> void:
-	pass
