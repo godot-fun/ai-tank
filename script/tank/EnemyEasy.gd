@@ -8,7 +8,7 @@ var ai_think_timer := 0.0
 
 func start() -> void:
 	apply_data(TankConfig.enemy_easy)
-	facing = Vector2i(0, 1)
+	facing = Vector2i.DOWN
 	update_facing(facing)
 	ai_think_timer = AI_THINK_INTERVAL
 	pass
@@ -41,17 +41,16 @@ func pick_move_direction() -> Vector2i:
 
 func pick_random_direction() -> Vector2i:
 	var directions: Array[Vector2i] = [
-		Vector2i(0, -1),
-		Vector2i(0, 1),
-		Vector2i(-1, 0),
-		Vector2i(1, 0),
+		Vector2i.UP,
+		Vector2i.DOWN,
+		Vector2i.LEFT,
+		Vector2i.RIGHT,
 	]
 	directions.shuffle()
 
 	for direction in directions:
 		var target_grid := grid_pos + direction
-		if TankConfig.is_in_bounds(target_grid, grid_size) \
-				and not TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
+		if not TankHelper.is_move_blocked(target_grid, grid_size, self):
 			return direction
 
 	return Vector2i.ZERO
@@ -64,13 +63,13 @@ func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
 
 	var candidates: Array[Vector2i] = []
 	if diff.x != 0:
-		candidates.append(Vector2i(signi(diff.x), 0))
+		candidates.append(Vector2i.RIGHT if signi(diff.x) > 0 else Vector2i.LEFT)
 	if diff.y != 0:
-		candidates.append(Vector2i(0, signi(diff.y)))
+		candidates.append(Vector2i.DOWN if signi(diff.y) > 0 else Vector2i.UP)
 
 	candidates.shuffle()
 	for direction in candidates:
-		if TankConfig.is_in_bounds(grid_pos + direction, grid_size):
+		if not TankHelper.is_move_blocked(grid_pos + direction, grid_size, self):
 			return direction
 
 	return Vector2i.ZERO
@@ -90,9 +89,9 @@ func try_shoot_at_player() -> void:
 		return
 
 	if diff.x != 0:
-		update_facing(Vector2i(signi(diff.x), 0))
+		update_facing(Vector2i.RIGHT if signi(diff.x) > 0 else Vector2i.LEFT)
 	else:
-		update_facing(Vector2i(0, signi(diff.y)))
+		update_facing(Vector2i.DOWN if signi(diff.y) > 0 else Vector2i.UP)
 
 	try_shoot()
 	pass

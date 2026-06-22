@@ -41,6 +41,16 @@ static func get_tank_grid(tank: Tank) -> Vector2i:
 	return TankConfig.world_to_grid(tank.global_position, tank.grid_size)
 
 
+static func is_move_blocked(grid: Vector2i, grid_size: Vector2i, exclude: Tank = null) -> bool:
+	if not TankConfig.is_in_bounds(grid, grid_size):
+		return true
+	if TileHelper.is_area_blocked_for_tank(grid, grid_size):
+		return true
+	if is_area_blocked_by_tank(grid, grid_size, exclude):
+		return true
+	return false
+
+
 static func is_area_blocked_by_tank(grid: Vector2i, grid_size: Vector2i, exclude: Tank = null) -> bool:
 	for tank in _tanks:
 		if tank == exclude:

@@ -20,7 +20,7 @@ var script_resource: String
 # custom property
 var fire_cooldown := 0.0
 var grid_pos := Vector2i.ZERO
-var facing := Vector2i(0, -1)
+var facing := Vector2i.UP
 var moving := false
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -123,11 +123,7 @@ func try_move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 	update_facing(direction)
 
 	var target_grid := grid_pos + direction
-	if not TankConfig.is_in_bounds(target_grid, grid_size):
-		return
-	if TileHelper.is_area_blocked_for_tank(target_grid, grid_size):
-		return
-	if TankHelper.is_area_blocked_by_tank(target_grid, grid_size, self):
+	if TankHelper.is_move_blocked(target_grid, grid_size, self):
 		return
 
 	grid_pos = target_grid
