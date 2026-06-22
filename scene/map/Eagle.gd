@@ -16,12 +16,6 @@ var _alive := true
 func _ready() -> void:
 	_setup_sprite(TEXTURE_INTACT)
 	_align_to_grid()
-	EagleHelper.register(self)
-	pass
-
-
-func _exit_tree() -> void:
-	EagleHelper.unregister()
 	pass
 
 
@@ -63,6 +57,6 @@ func _setup_sprite(texture_path: String) -> void:
 
 
 func _align_to_grid() -> void:
-	grid_pos = TankConfig.clamp_grid_to_bounds(grid_pos, GRID_SIZE)
+	grid_pos = EagleHelper.grid_pos
 	global_position = TankConfig.grid_to_world(grid_pos, GRID_SIZE)
 	pass
