@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://c8battlehud001"]
+
+[ext_resource type="Script" path="res://scene/ui/BattleHud.gd" id="1_hud"]
+
+[node name="BattleHud" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_hud")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -320.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 32
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="EnemyLabel" type="Label" parent="MarginContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.92, 0.35, 1)
+theme_override_font_sizes/font_size = 36
+text = "剩余敌人: 0"
+horizontal_alignment = 2
+
+[node name="TimerLabel" type="Label" parent="MarginContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 28
+text = "01:00"
+horizontal_alignment = 2

@@ -21,12 +21,11 @@ class MapData:
 	var level: int
 	var enemy_count: int
 	var tile_placements: Array = []
-	var enemy_spawns: Array[Vector2i] = []
 	var player_spawns: Array[Vector2i] = []
 
 
 static func calc_enemy_count(level: int) -> int:
-	return clampi(2 + level, 3, 14)
+	return BattleProgress.INITIAL_ENEMY_COUNT + (level - 1) * BattleProgress.ENEMY_COUNT_PER_LEVEL
 
 
 static func build(parent: Node, level: int, enemy_count: int = -1) -> void:
@@ -47,7 +46,6 @@ static func generate(level: int, enemy_count: int) -> MapData:
 	_add_eagle_protection(data, occupied)
 	_place_obstacle_clusters(level, occupied, data)
 	_place_level_features(level, occupied, data)
-	data.enemy_spawns = _pick_enemy_spawns(enemy_count, occupied)
 	return data
 
 
@@ -61,9 +59,27 @@ static func spawn(parent: Node, data: MapData) -> void:
 
 	TankHelper.create_tank(TankConfig.my_tank, data.player_spawns[0])
 	TankHelper.create_tank(TankConfig.partner_tank, data.player_spawns[1])
-	for spawn_grid in data.enemy_spawns:
-		TankHelper.create_tank(TankConfig.enemy_easy, spawn_grid)
 	pass
+
+
+static func try_spawn_enemy() -> bool:
+	var grid := _find_enemy_spawn_grid()
+	if grid == Vector2i(-1, -1):
+		return false
+	TankHelper.create_tank(TankConfig.enemy_easy, grid)
+	return true
+
+
+static func _find_enemy_spawn_grid() -> Vector2i:
+	var candidates: Array[Vector2i] = []
+	for x in range(0, TankConfig.map_grid_width - TANK_SIZE.x + 1):
+		var grid := Vector2i(x, 0)
+		if not TankHelper.is_move_blocked(grid, TANK_SIZE):
+			candidates.append(grid)
+	if candidates.is_empty():
+		return Vector2i(-1, -1)
+	candidates.shuffle()
+	return candidates[0]
 
 
 static func _create_occupancy() -> Array:
@@ -251,22 +267,6 @@ static func _random_obstacle_cell(occupied: Array) -> Vector2i:
 		if not occupied[cell.x][cell.y]:
 			return cell
 	return Vector2i(-1, -1)
-
-
-static func _pick_enemy_spawns(count: int, occupied: Array) -> Array[Vector2i]:
-	var candidates: Array[Vector2i] = []
-	for y in range(0, 3):
-		for x in range(0, TankConfig.map_grid_width - TANK_SIZE.x + 1):
-			if _can_place_tank(Vector2i(x, y), occupied):
-				candidates.append(Vector2i(x, y))
-
-	candidates.shuffle()
-	var spawns: Array[Vector2i] = []
-	for i in mini(count, candidates.size()):
-		var spawn_grid := candidates[i]
-		_mark_rect(occupied, spawn_grid, TANK_SIZE, true)
-		spawns.append(spawn_grid)
-	return spawns
 
 
 static func _can_place_tank(grid: Vector2i, occupied: Array) -> bool:

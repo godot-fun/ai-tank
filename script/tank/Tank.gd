@@ -116,6 +116,10 @@ func on_die() -> void:
 		death_effect_resource,
 		Vector2.ONE * TankConfig.tile_size * 2.5,
 	)
+	if team == TankConfig.Team.ENEMY:
+		var battle_map := get_tree().current_scene
+		if battle_map != null and battle_map.has_method("on_enemy_killed"):
+			battle_map.call_deferred("on_enemy_killed")
 	queue_free()
 	pass
 

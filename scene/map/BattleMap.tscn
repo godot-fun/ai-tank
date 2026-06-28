@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://ch5hlyfdokboa"]
 
 [ext_resource type="Script" uid="uid://737exiiytbv4" path="res://scene/map/BattleMap.gd" id="1_unovv"]
+[ext_resource type="PackedScene" uid="uid://c8battlehud001" path="res://scene/ui/BattleHud.tscn" id="2_hud"]
 
 [node name="BattleMap" type="Node2D" unique_id=2094860258]
 script = ExtResource("1_unovv")
 show_grid = true
+
+[node name="BattleHud" parent="." instance=ExtResource("2_hud")]
