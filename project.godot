@@ -15,6 +15,10 @@ run/main_scene="uid://cb3ya0m5mhk8q"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GodotFramework="*res://zfoo/GodotFramework.tscn"
+
 [display]
 
 window/size/viewport_width=1920

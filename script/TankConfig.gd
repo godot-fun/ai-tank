@@ -24,6 +24,7 @@ class TankData:
 	var fire_interval: float
 	var invincible: bool
 	var bullet_resource: String
+	var fire_sound_resource: String
 	var tank_resource: String
 	var script_resource: String
 
@@ -39,6 +40,7 @@ class TankData:
 		_fire_interval: float,
 		_invincible: bool,
 		_bullet_resource: String,
+		_fire_sound_resource: String,
 		_tank_resource: String,
 		_script_resource: String,
 	):
@@ -53,6 +55,7 @@ class TankData:
 		fire_interval = _fire_interval
 		invincible = _invincible
 		bullet_resource = _bullet_resource
+		fire_sound_resource = _fire_sound_resource
 		tank_resource = _tank_resource
 		script_resource = _script_resource
 
@@ -68,6 +71,7 @@ static var my_tank: TankData = TankData.new(
 	0.3,
 	true,
 	"res://scene/bullet/BasicBullet.tscn",
+	"res://audio/sfx/shoot-basic/01.wav",
 	"res://image/characters/blue_tank_1.png",
 	"res://script/tank/MyTank.gd",
 )
@@ -84,6 +88,7 @@ static var enemy_easy: TankData = TankData.new(
 	2.0,
 	false,
 	"res://scene/bullet/BasicBullet.tscn",
+	"",
 	"res://image/characters/red_tank_1.png",
 	"res://script/tank/EnemyEasy.gd",
 )

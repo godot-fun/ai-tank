@@ -13,6 +13,7 @@ var bullet_damage: int
 var fire_interval: float
 var invincible: bool
 var bullet_resource: String
+var fire_sound_resource: String
 var tank_resource: String
 var script_resource: String
 
@@ -64,6 +65,7 @@ func apply_data(data: TankConfig.TankData) -> void:
 	fire_interval = data.fire_interval
 	invincible = data.invincible
 	bullet_resource = data.bullet_resource
+	fire_sound_resource = data.fire_sound_resource
 	tank_resource = data.tank_resource
 	script_resource = data.script_resource
 	
@@ -108,6 +110,7 @@ func try_shoot() -> void:
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
 	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
 	start_fire_cooldown()
+	Audio.play_sound(fire_sound_resource)
 	pass
 
 
