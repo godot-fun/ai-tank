@@ -2,13 +2,6 @@ class_name BasicBullet
 extends Area2D
 
 const BULLET_SIZE_RATIO := 0.5
-const CLASH_SOUND_RESOURCES: Array[String] = [
-	"res://audio/sfx/bullet-hit-steel/01.wav",
-	"res://audio/sfx/bullet-hit-steel/02.wav",
-	"res://audio/sfx/bullet-hit-steel/03.wav",
-	"res://audio/sfx/bullet-hit-steel/04.wav",
-	"res://audio/sfx/bullet-hit-steel/05.wav",
-]
 
 var direction := Vector2i.ZERO
 var speed := 0.0
@@ -70,7 +63,7 @@ func on_area_entered(area: Area2D) -> void:
 	if get_instance_id() > other.get_instance_id():
 		return
 
-	Audio.play_sound(RandomUtils.random_ele(CLASH_SOUND_RESOURCES))
+	Audio.play_sound(RandomUtils.random_ele(TileConfig.BULLET_HIT_STEEL_SOUNDS))
 	queue_free()
 	other.queue_free()
 	pass
@@ -87,6 +80,7 @@ func on_body_entered(body: Node2D) -> void:
 		var tile := body as Tile
 		if not tile.blocks_bullet():
 			return
+		tile.play_bullet_hit_sound()
 		tile.take_damage(damage)
 		queue_free()
 	elif body is Eagle:

@@ -5,6 +5,7 @@ extends StaticBody2D
 
 var hp: int
 var grid_pos := Vector2i.ZERO
+var bullet_hit_sound_resources: Array[String] = []
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -12,6 +13,7 @@ var grid_pos := Vector2i.ZERO
 func apply_data(data: TileConfig.TileCell) -> void:
 	max_hp = data.max_hp
 	hp = max_hp
+	bullet_hit_sound_resources = data.bullet_hit_sound_resources
 	sprite.texture = load(data.tile_resource)
 	scale_tile()
 	pass
@@ -44,6 +46,14 @@ func scale_tile() -> void:
 
 func _exit_tree() -> void:
 	TileHelper.unregister_tile(self)
+	pass
+
+
+func play_bullet_hit_sound() -> void:
+	if bullet_hit_sound_resources.is_empty():
+		return
+
+	Audio.play_sound(RandomUtils.random_ele(bullet_hit_sound_resources))
 	pass
 
 
