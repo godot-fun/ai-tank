@@ -22,7 +22,6 @@ class TankData:
 	var bullet_speed: float
 	var bullet_damage: int
 	var fire_interval: float
-	var invincible: bool
 	var bullet_resource: String
 	var fire_sound_resource: String
 	var death_sound_resource: String
@@ -39,7 +38,6 @@ class TankData:
 		_bullet_speed: float,
 		_bullet_damage: int,
 		_fire_interval: float,
-		_invincible: bool,
 		_bullet_resource: String,
 		_fire_sound_resource: String,
 		_death_sound_resource: String,
@@ -55,7 +53,6 @@ class TankData:
 		bullet_speed = _bullet_speed
 		bullet_damage = _bullet_damage
 		fire_interval = _fire_interval
-		invincible = _invincible
 		bullet_resource = _bullet_resource
 		fire_sound_resource = _fire_sound_resource
 		death_sound_resource = _death_sound_resource
@@ -72,7 +69,6 @@ static var my_tank: TankData = TankData.new(
 	800.0,
 	1,
 	0.3,
-	true,
 	"res://scene/bullet/BasicBullet.tscn",
 	"res://audio/sfx/shoot-basic/01.wav",
 	"res://audio/sfx/tank-death/01.wav",
@@ -90,7 +86,6 @@ static var enemy_easy: TankData = TankData.new(
 	800.0,
 	1,
 	2.0,
-	false,
 	"res://scene/bullet/BasicBullet.tscn",
 	"",
 	"res://audio/sfx/tank-death/01.wav",

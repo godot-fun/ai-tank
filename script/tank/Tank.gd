@@ -11,7 +11,6 @@ var speed: float
 var bullet_speed: float
 var bullet_damage: int
 var fire_interval: float
-var invincible: bool
 var bullet_resource: String
 var fire_sound_resource: String
 var death_sound_resource: String
@@ -20,7 +19,6 @@ var script_resource: String
 
 
 # custom property
-var alive := true
 var fire_cooldown := 0.0
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i.UP
@@ -67,7 +65,6 @@ func apply_data(data: TankConfig.TankData) -> void:
 	bullet_speed = data.bullet_speed
 	bullet_damage = data.bullet_damage
 	fire_interval = data.fire_interval
-	invincible = data.invincible
 	bullet_resource = data.bullet_resource
 	fire_sound_resource = data.fire_sound_resource
 	death_sound_resource = data.death_sound_resource
@@ -92,26 +89,23 @@ func scale_tank() -> void:
 
 # ----------------------------------------------------------------------------------------------------------------------
 func is_alive() -> bool:
-	return alive
+	return hp > 0
 
 
 func take_damage(amount: int) -> void:
 	if not is_alive() or amount <= 0:
 		return
-	if invincible:
-		return
 
 	hp = maxi(hp - amount, 0)
 	if hp <= 0:
-		die()
+		on_die()
 	pass
 
 
-func die() -> void:
-	if not is_alive():
+func on_die() -> void:
+	if is_queued_for_deletion():
 		return
 
-	alive = false
 	Audio.play_sound(death_sound_resource)
 	queue_free()
 	pass
