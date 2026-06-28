@@ -5,6 +5,14 @@ const TILE_SCENE := "res://scene/Tile.tscn"
 static var _grid: Array = []
 
 
+static func has_tile_at(grid: Vector2i) -> bool:
+	if not _is_cell_in_bounds(grid):
+		return false
+
+	_ensure_grid()
+	return _grid[grid.x][grid.y] != null
+
+
 static func clear_grid() -> void:
 	_grid.clear()
 	pass

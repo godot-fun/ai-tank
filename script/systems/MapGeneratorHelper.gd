@@ -17,13 +17,10 @@ static func build(parent: Node, level: int, enemy_count: int = -1) -> void:
 	TileHelper.clear_grid()
 	EagleHelper.create_eagle()
 
-	var occupied := _create_occupancy()
 	var player_spawns := get_player_spawns()
-	_mark_player_zones(occupied, player_spawns)
-	_mark_eagle_zone(occupied)
-	_add_eagle_brick_ring(occupied)
-	_place_obstacle_clusters(level, occupied)
-	_place_level_features(level, occupied)
+	_add_eagle_brick_ring()
+	_place_obstacle_clusters(level, player_spawns)
+	_place_level_features(level, player_spawns)
 
 	TankHelper.create_tank(TankConfig.my_tank, player_spawns[0])
 	TankHelper.create_tank(TankConfig.partner_tank, player_spawns[1])
@@ -62,45 +59,11 @@ static func try_spawn_enemy_at(grid: Vector2i) -> bool:
 	return true
 
 
-static func _create_occupancy() -> Array:
-	var width := TankConfig.map_grid_width
-	var height := TankConfig.map_grid_height
-	var grid: Array = []
-	grid.resize(width)
-	for x in range(width):
-		var column: Array = []
-		column.resize(height)
-		column.fill(false)
-		grid[x] = column
-	return grid
-
-
-static func _mark_rect(occupied: Array, grid: Vector2i, size: Vector2i, value: bool) -> void:
-	for x in range(size.x):
-		for y in range(size.y):
-			var cell := grid + Vector2i(x, y)
-			if _is_cell_in_bounds(cell):
-				occupied[cell.x][cell.y] = value
-
-
-static func _mark_player_zones(occupied: Array, player_spawns: Array[Vector2i]) -> void:
-	for spawn_grid in player_spawns:
-		_mark_rect(occupied, spawn_grid, TANK_SIZE, true)
-	for y in range(TankConfig.map_grid_height - 5, TankConfig.map_grid_height):
-		for x in range(TankConfig.map_grid_width):
-			occupied[x][y] = true
-
-
-static func _mark_eagle_zone(occupied: Array) -> void:
-	var eagle_pos := EagleHelper.grid_pos
-	_mark_rect(occupied, eagle_pos, Eagle.GRID_SIZE, true)
+static func _add_eagle_brick_ring() -> void:
 	for cell in _get_eagle_brick_ring_cells():
-		occupied[cell.x][cell.y] = true
-
-
-static func _add_eagle_brick_ring(occupied: Array) -> void:
-	for cell in _get_eagle_brick_ring_cells():
-		_try_place_tile(occupied, TileConfig.brick_wall, cell)
+		if TileHelper.has_tile_at(cell):
+			continue
+		TileHelper.create_tile(TileConfig.brick_wall, cell)
 	pass
 
 
@@ -141,7 +104,7 @@ static func _is_cell_in_eagle(cell: Vector2i, eagle_pos: Vector2i) -> bool:
 		and cell.y >= eagle_pos.y and cell.y < eagle_pos.y + Eagle.GRID_SIZE.y
 
 
-static func _place_obstacle_clusters(level: int, occupied: Array) -> void:
+static func _place_obstacle_clusters(level: int, player_spawns: Array[Vector2i]) -> void:
 	var target_tiles := mini(10 + level * 4, 72)
 	var placed := 0
 	var attempts := 0
@@ -149,29 +112,29 @@ static func _place_obstacle_clusters(level: int, occupied: Array) -> void:
 
 	while placed < target_tiles and attempts < max_attempts:
 		attempts += 1
-		var center := _random_obstacle_cell(occupied)
+		var center := _random_obstacle_cell(player_spawns)
 		if center == Vector2i(-1, -1):
 			break
 
 		var cell := _pick_tile_cell(level)
 		var cluster_size := randi_range(2, mini(3 + level / 2, 8))
-		placed += _stamp_cluster(center, cell, cluster_size, occupied)
+		placed += _stamp_cluster(center, cell, cluster_size, player_spawns)
 	pass
 
 
-static func _place_level_features(level: int, occupied: Array) -> void:
+static func _place_level_features(level: int, player_spawns: Array[Vector2i]) -> void:
 	if level >= 3:
-		_place_water_channels(level, occupied)
+		_place_water_channels(level, player_spawns)
 	if level >= 5:
-		_place_steel_forts(level, occupied)
+		_place_steel_forts(level, player_spawns)
 	if level >= 7:
-		_place_forest_patches(level, occupied)
+		_place_forest_patches(level, player_spawns)
 	if level >= 9:
-		_place_ice_patches(level, occupied)
+		_place_ice_patches(level, player_spawns)
 	pass
 
 
-static func _place_water_channels(level: int, occupied: Array) -> void:
+static func _place_water_channels(level: int, player_spawns: Array[Vector2i]) -> void:
 	var channel_count := mini(1 + level / 4, 3)
 	for _i in channel_count:
 		var y := randi_range(OBSTACLE_ZONE_TOP + 1, OBSTACLE_ZONE_BOTTOM - 1)
@@ -180,39 +143,39 @@ static func _place_water_channels(level: int, occupied: Array) -> void:
 		for x in range(TankConfig.map_grid_width):
 			if x >= gap_start and x < gap_start + gap_width:
 				continue
-			_try_place_tile(occupied, TileConfig.water, Vector2i(x, y))
+			_try_place_tile(TileConfig.water, Vector2i(x, y), player_spawns)
 	pass
 
 
-static func _place_steel_forts(level: int, occupied: Array) -> void:
+static func _place_steel_forts(level: int, player_spawns: Array[Vector2i]) -> void:
 	var fort_count := mini(1 + level / 5, 4)
 	for _i in fort_count:
-		var origin := _random_obstacle_cell(occupied)
+		var origin := _random_obstacle_cell(player_spawns)
 		if origin == Vector2i(-1, -1):
 			continue
 		for x in range(2):
 			for y in range(2):
-				_try_place_tile(occupied, TileConfig.steel_wall, origin + Vector2i(x, y))
+				_try_place_tile(TileConfig.steel_wall, origin + Vector2i(x, y), player_spawns)
 	pass
 
 
-static func _place_forest_patches(level: int, occupied: Array) -> void:
+static func _place_forest_patches(level: int, player_spawns: Array[Vector2i]) -> void:
 	var patch_count := mini(1 + level / 3, 5)
 	for _i in patch_count:
-		var center := _random_obstacle_cell(occupied)
+		var center := _random_obstacle_cell(player_spawns)
 		if center == Vector2i(-1, -1):
 			continue
-		_stamp_cluster(center, TileConfig.forest, randi_range(3, 5 + level / 4), occupied)
+		_stamp_cluster(center, TileConfig.forest, randi_range(3, 5 + level / 4), player_spawns)
 	pass
 
 
-static func _place_ice_patches(level: int, occupied: Array) -> void:
+static func _place_ice_patches(level: int, player_spawns: Array[Vector2i]) -> void:
 	var patch_count := mini(1 + level / 4, 4)
 	for _i in patch_count:
-		var center := _random_obstacle_cell(occupied)
+		var center := _random_obstacle_cell(player_spawns)
 		if center == Vector2i(-1, -1):
 			continue
-		_stamp_cluster(center, TileConfig.ice, randi_range(2, 4 + level / 5), occupied)
+		_stamp_cluster(center, TileConfig.ice, randi_range(2, 4 + level / 5), player_spawns)
 	pass
 
 
@@ -231,12 +194,12 @@ static func _stamp_cluster(
 	center: Vector2i,
 	cell: TileConfig.TileCell,
 	size: int,
-	occupied: Array,
+	player_spawns: Array[Vector2i],
 ) -> int:
 	var placed := 0
 	var current := center
 	for _step in size:
-		if _try_place_tile(occupied, cell, current):
+		if _try_place_tile(cell, current, player_spawns):
 			placed += 1
 		var direction := Vector2i(
 			randi_range(-1, 1),
@@ -248,24 +211,50 @@ static func _stamp_cluster(
 	return placed
 
 
-static func _try_place_tile(occupied: Array, cell: TileConfig.TileCell, grid: Vector2i) -> bool:
-	if not _is_cell_in_bounds(grid):
+static func _try_place_tile(cell: TileConfig.TileCell, grid: Vector2i, player_spawns: Array[Vector2i]) -> bool:
+	if _is_cell_blocked_for_obstacle(grid, player_spawns):
 		return false
-	if occupied[grid.x][grid.y]:
-		return false
-
-	occupied[grid.x][grid.y] = true
 	TileHelper.create_tile(cell, grid)
 	return true
 
 
-static func _random_obstacle_cell(occupied: Array) -> Vector2i:
+static func _is_cell_blocked_for_obstacle(grid: Vector2i, player_spawns: Array[Vector2i]) -> bool:
+	if not _is_cell_in_bounds(grid):
+		return true
+	if TileHelper.has_tile_at(grid):
+		return true
+	if grid.y >= TankConfig.map_grid_height - 5:
+		return true
+	if _is_in_base_area(grid):
+		return true
+	return _is_in_player_spawn(grid, player_spawns)
+
+
+static func _is_in_base_area(grid: Vector2i) -> bool:
+	var eagle_pos := EagleHelper.grid_pos
+	if _is_cell_in_eagle(grid, eagle_pos):
+		return true
+	for cell in _get_eagle_brick_ring_cells():
+		if cell == grid:
+			return true
+	return false
+
+
+static func _is_in_player_spawn(grid: Vector2i, player_spawns: Array[Vector2i]) -> bool:
+	for spawn in player_spawns:
+		if grid.x >= spawn.x and grid.x < spawn.x + TANK_SIZE.x \
+				and grid.y >= spawn.y and grid.y < spawn.y + TANK_SIZE.y:
+			return true
+	return false
+
+
+static func _random_obstacle_cell(player_spawns: Array[Vector2i]) -> Vector2i:
 	for _attempt in 32:
 		var cell := Vector2i(
 			randi_range(1, TankConfig.map_grid_width - 2),
 			randi_range(OBSTACLE_ZONE_TOP, OBSTACLE_ZONE_BOTTOM),
 		)
-		if not occupied[cell.x][cell.y]:
+		if not _is_cell_blocked_for_obstacle(cell, player_spawns):
 			return cell
 	return Vector2i(-1, -1)
 
