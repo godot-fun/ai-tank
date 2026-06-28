@@ -14,11 +14,13 @@ var fire_interval: float
 var invincible: bool
 var bullet_resource: String
 var fire_sound_resource: String
+var death_sound_resource: String
 var tank_resource: String
 var script_resource: String
 
 
 # custom property
+var alive := true
 var fire_cooldown := 0.0
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i.UP
@@ -40,6 +42,8 @@ func _exit_tree() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not is_alive():
+		return
 	update_fire_cooldown(delta)
 	update(delta)
 	pass
@@ -66,6 +70,7 @@ func apply_data(data: TankConfig.TankData) -> void:
 	invincible = data.invincible
 	bullet_resource = data.bullet_resource
 	fire_sound_resource = data.fire_sound_resource
+	death_sound_resource = data.death_sound_resource
 	tank_resource = data.tank_resource
 	script_resource = data.script_resource
 	
@@ -83,6 +88,32 @@ func scale_tank() -> void:
 
 	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
 	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+	pass
+
+# ----------------------------------------------------------------------------------------------------------------------
+func is_alive() -> bool:
+	return alive
+
+
+func take_damage(amount: int) -> void:
+	if not is_alive() or amount <= 0:
+		return
+	if invincible:
+		return
+
+	hp = maxi(hp - amount, 0)
+	if hp <= 0:
+		die()
+	pass
+
+
+func die() -> void:
+	if not is_alive():
+		return
+
+	alive = false
+	Audio.play_sound(death_sound_resource)
+	queue_free()
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
