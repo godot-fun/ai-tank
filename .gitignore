@@ -67,6 +67,9 @@ package-lock.json
 tests/**/coverage/
 tests/e2e/reports
 
+# Downloaded SFX source packs (organized output lives in audio/sfx/)
+audio/_sources/
+
 # Godot-specific ignores
 .import/
 export.cfg
