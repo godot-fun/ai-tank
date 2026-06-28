@@ -1,7 +1,6 @@
 extends Node2D
 
 const SPAWN_INTERVAL := 5.0
-const SPAWN_BATCH_SIZE := 3
 
 @export var show_grid: bool = false
 
@@ -88,11 +87,11 @@ func spawn_enemy_wave() -> void:
 	if _enemies_spawned >= _target_enemy_count:
 		return
 
-	var batch_size := mini(SPAWN_BATCH_SIZE, _target_enemy_count - _enemies_spawned)
-	for _i in batch_size:
-		if not MapGeneratorHelper.try_spawn_enemy():
+	for grid in MapGeneratorHelper.get_enemy_spawn_points():
+		if _enemies_spawned >= _target_enemy_count:
 			break
-		_enemies_spawned += 1
+		if MapGeneratorHelper.try_spawn_enemy_at(grid):
+			_enemies_spawned += 1
 	pass
 
 

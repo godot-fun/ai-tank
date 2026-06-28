@@ -1,7 +1,5 @@
 class_name MapGeneratorHelper
 
-const PLAYER_MY_SPAWN := Vector2i(15, 14)
-const PLAYER_PARTNER_SPAWN := Vector2i(11, 14)
 const TANK_SIZE := Vector2i(2, 2)
 
 const OBSTACLE_ZONE_TOP := 4
@@ -38,15 +36,31 @@ static func generate(level: int, enemy_count: int) -> MapData:
 	var data := MapData.new()
 	data.level = level
 	data.enemy_count = enemy_count
-	data.player_spawns = [PLAYER_MY_SPAWN, PLAYER_PARTNER_SPAWN]
+	data.player_spawns = get_player_spawns()
 
 	var occupied := _create_occupancy()
-	_mark_player_zones(occupied)
+	_mark_player_zones(occupied, data.player_spawns)
 	_mark_eagle_zone(occupied)
-	_add_eagle_protection(data, occupied)
+	_add_eagle_brick_ring(data, occupied)
 	_place_obstacle_clusters(level, occupied, data)
 	_place_level_features(level, occupied, data)
 	return data
+
+
+static func get_player_spawns() -> Array[Vector2i]:
+	var eagle_pos := EagleHelper.grid_pos
+	var spawn_y := eagle_pos.y - 2
+	var ring_left := eagle_pos.x - 1
+	var ring_right := eagle_pos.x + Eagle.GRID_SIZE.x
+	var my_spawn := TankConfig.clamp_grid_to_bounds(
+		Vector2i(ring_left - TANK_SIZE.x, spawn_y),
+		TANK_SIZE,
+	)
+	var partner_spawn := TankConfig.clamp_grid_to_bounds(
+		Vector2i(ring_right + 1, spawn_y),
+		TANK_SIZE,
+	)
+	return [my_spawn, partner_spawn]
 
 
 static func spawn(parent: Node, data: MapData) -> void:
@@ -62,24 +76,20 @@ static func spawn(parent: Node, data: MapData) -> void:
 	pass
 
 
-static func try_spawn_enemy() -> bool:
-	var grid := _find_enemy_spawn_grid()
-	if grid == Vector2i(-1, -1):
+static func get_enemy_spawn_points() -> Array[Vector2i]:
+	var max_x := TankConfig.map_grid_width - TANK_SIZE.x
+	return [
+		Vector2i(0, 0),
+		Vector2i(max_x / 2, 0),
+		Vector2i(max_x, 0),
+	]
+
+
+static func try_spawn_enemy_at(grid: Vector2i) -> bool:
+	if TankHelper.is_move_blocked(grid, TANK_SIZE):
 		return false
 	TankHelper.create_tank(TankConfig.enemy_easy, grid)
 	return true
-
-
-static func _find_enemy_spawn_grid() -> Vector2i:
-	var candidates: Array[Vector2i] = []
-	for x in range(0, TankConfig.map_grid_width - TANK_SIZE.x + 1):
-		var grid := Vector2i(x, 0)
-		if not TankHelper.is_move_blocked(grid, TANK_SIZE):
-			candidates.append(grid)
-	if candidates.is_empty():
-		return Vector2i(-1, -1)
-	candidates.shuffle()
-	return candidates[0]
 
 
 static func _create_occupancy() -> Array:
@@ -103,9 +113,9 @@ static func _mark_rect(occupied: Array, grid: Vector2i, size: Vector2i, value: b
 				occupied[cell.x][cell.y] = value
 
 
-static func _mark_player_zones(occupied: Array) -> void:
-	_mark_rect(occupied, PLAYER_MY_SPAWN, TANK_SIZE, true)
-	_mark_rect(occupied, PLAYER_PARTNER_SPAWN, TANK_SIZE, true)
+static func _mark_player_zones(occupied: Array, player_spawns: Array[Vector2i]) -> void:
+	for spawn_grid in player_spawns:
+		_mark_rect(occupied, spawn_grid, TANK_SIZE, true)
 	for y in range(TankConfig.map_grid_height - 5, TankConfig.map_grid_height):
 		for x in range(TankConfig.map_grid_width):
 			occupied[x][y] = true
@@ -113,25 +123,52 @@ static func _mark_player_zones(occupied: Array) -> void:
 
 static func _mark_eagle_zone(occupied: Array) -> void:
 	var eagle_pos := EagleHelper.grid_pos
-	_mark_rect(occupied, eagle_pos - Vector2i(1, 1), Vector2i(4, 4), true)
+	_mark_rect(occupied, eagle_pos, Eagle.GRID_SIZE, true)
+	for cell in _get_eagle_brick_ring_cells():
+		occupied[cell.x][cell.y] = true
 
 
-static func _add_eagle_protection(data: MapData, occupied: Array) -> void:
-	var eagle_pos := EagleHelper.grid_pos
-	var protection_cells: Array[Vector2i] = [
-		Vector2i(eagle_pos.x - 1, eagle_pos.y - 1),
-		Vector2i(eagle_pos.x, eagle_pos.y - 1),
-		Vector2i(eagle_pos.x + 1, eagle_pos.y - 1),
-		Vector2i(eagle_pos.x + 2, eagle_pos.y - 1),
-		Vector2i(eagle_pos.x - 1, eagle_pos.y),
-		Vector2i(eagle_pos.x + 2, eagle_pos.y),
-		Vector2i(eagle_pos.x - 1, eagle_pos.y + 1),
-		Vector2i(eagle_pos.x + 2, eagle_pos.y + 1),
-	]
-
-	for cell in protection_cells:
+static func _add_eagle_brick_ring(data: MapData, occupied: Array) -> void:
+	for cell in _get_eagle_brick_ring_cells():
 		_try_place_tile(data, occupied, TileConfig.brick_wall, cell)
 	pass
+
+
+static func _get_eagle_brick_ring_cells() -> Array[Vector2i]:
+	var eagle_pos := EagleHelper.grid_pos
+	var left := eagle_pos.x - 1
+	var right := eagle_pos.x + Eagle.GRID_SIZE.x
+	var top := eagle_pos.y - 1
+	var bottom := eagle_pos.y + Eagle.GRID_SIZE.y
+	var cells: Array[Vector2i] = []
+
+	for x in range(left, right + 1):
+		_append_ring_cell(cells, Vector2i(x, top), eagle_pos)
+
+	for y in range(top + 1, bottom + 1):
+		_append_ring_cell(cells, Vector2i(left, y), eagle_pos)
+		_append_ring_cell(cells, Vector2i(right, y), eagle_pos)
+
+	if bottom < TankConfig.map_grid_height:
+		for x in range(left, right + 1):
+			_append_ring_cell(cells, Vector2i(x, bottom), eagle_pos)
+
+	return cells
+
+
+static func _append_ring_cell(cells: Array[Vector2i], cell: Vector2i, eagle_pos: Vector2i) -> void:
+	if not _is_cell_in_bounds(cell):
+		return
+	if _is_cell_in_eagle(cell, eagle_pos):
+		return
+	if cells.has(cell):
+		return
+	cells.append(cell)
+
+
+static func _is_cell_in_eagle(cell: Vector2i, eagle_pos: Vector2i) -> bool:
+	return cell.x >= eagle_pos.x and cell.x < eagle_pos.x + Eagle.GRID_SIZE.x \
+		and cell.y >= eagle_pos.y and cell.y < eagle_pos.y + Eagle.GRID_SIZE.y
 
 
 static func _place_obstacle_clusters(level: int, occupied: Array, data: MapData) -> void:
