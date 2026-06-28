@@ -63,7 +63,7 @@ func on_area_entered(area: Area2D) -> void:
 	if get_instance_id() > other.get_instance_id():
 		return
 
-	Audio.play_sound(RandomUtils.random_ele(TileConfig.BULLET_HIT_STEEL_SOUNDS))
+	Audio.play_sound(TileConfig.steel_wall.bullet_hit_sound_resource)
 	queue_free()
 	other.queue_free()
 	pass
