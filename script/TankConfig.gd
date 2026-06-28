@@ -66,7 +66,7 @@ static var my_tank: TankData = TankData.new(
 	0,
 	Team.PLAYER,
 	Vector2i(2, 2),
-	1,
+	10,
 	1,
 	400.0,
 	800.0,

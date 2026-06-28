@@ -2,6 +2,13 @@ class_name BasicBullet
 extends Area2D
 
 const BULLET_SIZE_RATIO := 0.5
+const CLASH_SOUND_RESOURCES: Array[String] = [
+	"res://audio/sfx/bullet-hit-steel/01.wav",
+	"res://audio/sfx/bullet-hit-steel/02.wav",
+	"res://audio/sfx/bullet-hit-steel/03.wav",
+	"res://audio/sfx/bullet-hit-steel/04.wav",
+	"res://audio/sfx/bullet-hit-steel/05.wav",
+]
 
 var direction := Vector2i.ZERO
 var speed := 0.0
@@ -13,6 +20,7 @@ var team := TankConfig.Team.PLAYER
 
 func _ready() -> void:
 	body_entered.connect(on_body_entered)
+	area_entered.connect(on_area_entered)
 	scale_sprite()
 	pass
 
@@ -48,6 +56,24 @@ func is_out_of_bounds() -> bool:
 		or global_position.y < 0.0 \
 		or global_position.x > map_width \
 		or global_position.y > map_height
+
+
+func on_area_entered(area: Area2D) -> void:
+	if not area is BasicBullet:
+		return
+
+	var other := area as BasicBullet
+	if other.team == team:
+		return
+
+	# Only one bullet handles the collision to avoid double-free.
+	if get_instance_id() > other.get_instance_id():
+		return
+
+	Audio.play_sound(RandomUtils.random_ele(CLASH_SOUND_RESOURCES))
+	queue_free()
+	other.queue_free()
+	pass
 
 
 func on_body_entered(body: Node2D) -> void:
