@@ -14,6 +14,7 @@ var fire_interval: float
 var bullet_resource: String
 var fire_sound_resource: String
 var death_sound_resource: String
+var death_effect_resource: String
 var tank_resource: String
 var script_resource: String
 
@@ -68,6 +69,7 @@ func apply_data(data: TankConfig.TankData) -> void:
 	bullet_resource = data.bullet_resource
 	fire_sound_resource = data.fire_sound_resource
 	death_sound_resource = data.death_sound_resource
+	death_effect_resource = data.death_effect_resource
 	tank_resource = data.tank_resource
 	script_resource = data.script_resource
 	
@@ -106,7 +108,14 @@ func on_die() -> void:
 	if is_queued_for_deletion():
 		return
 
+	var death_pos := global_position
 	Audio.play_sound(death_sound_resource)
+	SpriteSheetEffect.spawn(
+		death_pos,
+		get_tree().current_scene,
+		death_effect_resource,
+		Vector2.ONE * TankConfig.tile_size * 2.5,
+	)
 	queue_free()
 	pass
 
