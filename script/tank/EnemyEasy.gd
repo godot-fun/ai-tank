@@ -3,7 +3,7 @@ class_name EnemyEasy
 
 const AI_THINK_INTERVAL := 0.6
 const RANDOM_MOVE_EXTRA_STEPS_MIN := 1
-const RANDOM_MOVE_EXTRA_STEPS_MAX := 3
+const RANDOM_MOVE_EXTRA_STEPS_MAX := 6
 
 var ai_think_timer := 0.0
 var ai_move_extra_steps := 0
