@@ -1,3 +1,70 @@
 [gd_scene format=3 uid="uid://cb3ya0m5mhk8q"]
 
-[node name="Main" type="Node2D" unique_id=264583349]
+[ext_resource type="Script" path="res://scene/Main.gd" id="1_main"]
+
+[node name="Main" type="Control" unique_id=264583349]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.1, 0.14, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 48
+alignment = 1
+
+[node name="HeaderRow" type="HBoxContainer" parent="CenterContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="TankArea" type="Control" parent="CenterContainer/VBox/HeaderRow"]
+custom_minimum_size = Vector2(240, 240)
+layout_mode = 2
+
+[node name="TankSprite" type="AnimatedSprite2D" parent="CenterContainer/VBox/HeaderRow/TankArea"]
+position = Vector2(120, 120)
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBox/HeaderRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 96
+text = "AI TANK"
+vertical_alignment = 1
+
+[node name="MenuButtons" type="VBoxContainer" parent="CenterContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "开始"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "退出"

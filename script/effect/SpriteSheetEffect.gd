@@ -27,6 +27,7 @@ func _ready() -> void:
 func _setup_sprite_frames() -> void:
 	var sheet: Texture2D = load(_sheet_resource)
 	var frames := SpriteFrames.new()
+	frames.add_animation(ANIMATION_NAME)
 	frames.set_animation_speed(ANIMATION_NAME, _animation_fps)
 	frames.set_animation_loop(ANIMATION_NAME, false)
 
