@@ -30,9 +30,6 @@ func blocks_bullet() -> bool:
 func take_damage(amount: int, attacker_team: int) -> void:
 	if not _alive or amount <= 0:
 		return
-	if attacker_team != TankConfig.Team.ENEMY:
-		return
-
 	_destroy()
 	pass
 
