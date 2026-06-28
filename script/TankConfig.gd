@@ -72,7 +72,7 @@ static var my_tank: TankData = TankData.new(
 	800.0,
 	1,
 	0.3,
-	"res://scene/bullet/BasicBullet.tscn",
+	"res://image/bullets/basic/blue/01.png",
 	"res://audio/sfx/shoot-basic/01.wav",
 	"res://audio/sfx/tank-death/01.wav",
 	"res://image/effects/tank-explosion_sheet.png",
@@ -90,11 +90,11 @@ static var partner_tank: TankData = TankData.new(
 	800.0,
 	1,
 	0.45,
-	"res://scene/bullet/BasicBullet.tscn",
+	"res://image/bullets/basic/red/01.png",
 	"res://audio/sfx/shoot-basic/01.wav",
 	"res://audio/sfx/tank-death/01.wav",
 	"res://image/effects/tank-explosion_sheet.png",
-	"res://image/characters/blue_tank_2.png",
+	"res://image/characters/red_tank_1.png",
 	"res://script/tank/PartnerTank.gd",
 )
 
@@ -108,11 +108,11 @@ static var enemy_easy: TankData = TankData.new(
 	800.0,
 	1,
 	2.0,
-	"res://scene/bullet/BasicBullet.tscn",
+	"res://image/bullets/basic/gray/01.png",
 	"",
 	"res://audio/sfx/tank-death/01.wav",
 	"res://image/effects/tank-explosion_sheet.png",
-	"res://image/characters/red_tank_1.png",
+	"res://image/characters/tank_1.png",
 	"res://script/tank/EnemyEasy.gd",
 )
 

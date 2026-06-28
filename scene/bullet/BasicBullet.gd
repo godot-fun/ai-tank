@@ -1,6 +1,7 @@
 class_name BasicBullet
 extends Area2D
 
+const SCENE := "res://scene/bullet/BasicBullet.tscn"
 const BULLET_SIZE_RATIO := 0.5
 
 var direction := Vector2i.ZERO
@@ -18,7 +19,16 @@ func _ready() -> void:
 	pass
 
 
-func launch(from: Vector2, dir: Vector2i, bullet_team: int, bullet_speed: float, bullet_damage: int) -> void:
+func launch(
+	from: Vector2,
+	dir: Vector2i,
+	bullet_team: int,
+	bullet_speed: float,
+	bullet_damage: int,
+	bullet_resource: String,
+) -> void:
+	sprite.texture = load(bullet_resource)
+	scale_sprite()
 	global_position = from
 	direction = dir
 	team = bullet_team

@@ -137,12 +137,12 @@ func try_shoot() -> void:
 	if not can_fire():
 		return
 
-	var bullet_scene: PackedScene = load(bullet_resource)
+	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
 	var bullet: BasicBullet = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
 
 	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage)
+	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_resource)
 	start_fire_cooldown()
 	Audio.play_sound(fire_sound_resource)
 	pass
