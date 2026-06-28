@@ -37,6 +37,21 @@ static func find_player() -> Tank:
 	return null
 
 
+static func find_nearest_enemy(from_tank: Tank) -> Tank:
+	var nearest: Tank = null
+	var nearest_dist := INF
+
+	for tank in _tanks:
+		if tank.team != TankConfig.Team.ENEMY or not tank.is_alive():
+			continue
+		var dist := absi(from_tank.grid_pos.x - tank.grid_pos.x) + absi(from_tank.grid_pos.y - tank.grid_pos.y)
+		if dist < nearest_dist:
+			nearest_dist = dist
+			nearest = tank
+
+	return nearest
+
+
 static func get_tank_grid(tank: Tank) -> Vector2i:
 	return TankConfig.world_to_grid(tank.global_position, tank.grid_size)
 

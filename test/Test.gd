@@ -6,6 +6,7 @@ func _ready() -> void:
 	EagleHelper.create_eagle()
 	
 	TankHelper.create_tank(TankConfig.my_tank, Vector2i(10, 10))
+	TankHelper.create_tank(TankConfig.partner_tank, Vector2i(7, 10))
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(0, 0))
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(6, 0))
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(9, 0))

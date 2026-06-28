@@ -80,6 +80,24 @@ static var my_tank: TankData = TankData.new(
 	"res://script/tank/MyTank.gd",
 )
 
+static var partner_tank: TankData = TankData.new(
+	2,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	10,
+	10,
+	360.0,
+	800.0,
+	1,
+	0.45,
+	"res://scene/bullet/BasicBullet.tscn",
+	"res://audio/sfx/shoot-basic/01.wav",
+	"res://audio/sfx/tank-death/01.wav",
+	"res://image/effects/tank-explosion_sheet.png",
+	"res://image/characters/blue_tank_2.png",
+	"res://script/tank/PartnerTank.gd",
+)
+
 static var enemy_easy: TankData = TankData.new(
 	1,
 	Team.ENEMY,
