@@ -2,8 +2,11 @@
 class_name EnemyEasy
 
 const AI_THINK_INTERVAL := 0.6
+const RANDOM_MOVE_EXTRA_STEPS_MIN := 1
+const RANDOM_MOVE_EXTRA_STEPS_MAX := 3
 
 var ai_think_timer := 0.0
+var ai_move_extra_steps := 0
 
 
 func start() -> void:
@@ -25,15 +28,20 @@ func update(delta: float) -> void:
 		ai_think_timer = AI_THINK_INTERVAL
 		var direction := pick_move_direction()
 		if direction != Vector2i.ZERO:
-			try_move(direction)
+			if ai_move_extra_steps > 0:
+				try_move(direction, ai_move_extra_steps)
+			else:
+				try_move(direction)
 	pass
 
 
 func pick_move_direction() -> Vector2i:
 	var player := TankHelper.find_player()
 	if player == null or randf() < 0.35:
+		ai_move_extra_steps = randi_range(RANDOM_MOVE_EXTRA_STEPS_MIN, RANDOM_MOVE_EXTRA_STEPS_MAX)
 		return pick_random_direction()
 
+	ai_move_extra_steps = 0
 	return pick_direction_toward(TankHelper.get_tank_grid(player))
 	pass
 
