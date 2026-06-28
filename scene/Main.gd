@@ -33,7 +33,8 @@ func _ready() -> void:
 
 func setup_tank_animation() -> void:
 	var frames := SpriteFrames.new()
-	frames.add_animation(INTRO_ANIMATION)
+	if not frames.has_animation(INTRO_ANIMATION):
+		frames.add_animation(INTRO_ANIMATION)
 	frames.set_animation_speed(INTRO_ANIMATION, TANK_ANIMATION_FPS)
 	frames.set_animation_loop(INTRO_ANIMATION, true)
 
@@ -77,6 +78,7 @@ func on_button_hover() -> void:
 
 func on_start_pressed() -> void:
 	Audio.play_sound("res://audio/sfx/ui-confirm/01.wav")
+	BattleProgress.start_new_game()
 	await SceneHelper.async_change_scene_to_file("res://scene/map/BattleMap.tscn")
 	pass
 

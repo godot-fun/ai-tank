@@ -5,6 +5,14 @@ const TANK_SCENE := "res://scene/Tank.tscn"
 static var _tanks: Array[Tank] = []
 
 
+static func get_alive_enemy_count() -> int:
+	var count := 0
+	for tank in _tanks:
+		if tank.team == TankConfig.Team.ENEMY and tank.is_alive():
+			count += 1
+	return count
+
+
 static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 	var scene: PackedScene = load(TANK_SCENE)
 	var tank: CharacterBody2D = scene.instantiate()
