@@ -34,7 +34,7 @@ func launch(
 	team = bullet_team
 	speed = bullet_speed
 	damage = bullet_damage
-	sprite.rotation = Vector2(direction).angle() + PI / 2.0
+	rotation = Vector2(direction).angle() + PI / 2.0
 	pass
 
 
