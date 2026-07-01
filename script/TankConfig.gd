@@ -17,7 +17,6 @@ class TankData:
 	var team: int
 	var grid_size: Vector2i
 	var hp: int
-	var max_hp: int
 	var speed: float
 	var bullet_speed: float
 	var bullet_damage: int
@@ -34,7 +33,6 @@ class TankData:
 		_team: int,
 		_grid_size: Vector2i,
 		_hp: int,
-		_max_hp: int,
 		_speed: float,
 		_bullet_speed: float,
 		_bullet_damage: int,
@@ -50,7 +48,6 @@ class TankData:
 		team = _team
 		grid_size = _grid_size
 		hp = _hp
-		max_hp = _max_hp
 		speed = _speed
 		bullet_speed = _bullet_speed
 		bullet_damage = _bullet_damage
@@ -67,7 +64,6 @@ static var my_tank: TankData = TankData.new(
 	Team.PLAYER,
 	Vector2i(2, 2),
 	10,
-	1,
 	400.0,
 	800.0,
 	1,
@@ -84,7 +80,6 @@ static var partner_tank: TankData = TankData.new(
 	2,
 	Team.PLAYER,
 	Vector2i(2, 2),
-	10,
 	10,
 	360.0,
 	800.0,
@@ -103,7 +98,6 @@ static var enemy_easy: TankData = TankData.new(
 	Team.ENEMY,
 	Vector2i(2, 2),
 	1,
-	1,
 	320.0,
 	800.0,
 	1,
@@ -121,7 +115,6 @@ static var only_fire_enemy: TankData = TankData.new(
 	Team.ENEMY,
 	Vector2i(2, 2),
 	10,
-	1,
 	320.0,
 	800.0,
 	1,

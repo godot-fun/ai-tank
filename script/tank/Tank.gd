@@ -6,7 +6,6 @@ var id: int
 var team: int
 var grid_size: Vector2i
 var hp: int
-var max_hp: int
 var speed: float
 var bullet_speed: float
 var bullet_damage: int
@@ -61,7 +60,6 @@ func apply_data(data: TankConfig.TankData) -> void:
 	team = data.team
 	grid_size = data.grid_size
 	hp = data.hp
-	max_hp = data.max_hp
 	speed = data.speed
 	bullet_speed = data.bullet_speed
 	bullet_damage = data.bullet_damage
