@@ -137,7 +137,7 @@ func start_fire_cooldown() -> void:
 	fire_cooldown = fire_interval
 
 
-func try_shoot() -> void:
+func fire() -> void:
 	if not can_fire():
 		return
 

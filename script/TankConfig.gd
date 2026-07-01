@@ -116,6 +116,24 @@ static var enemy_easy: TankData = TankData.new(
 	"res://script/tank/EnemyEasy.gd",
 )
 
+static var only_fire_enemy: TankData = TankData.new(
+	1,
+	Team.ENEMY,
+	Vector2i(2, 2),
+	10,
+	1,
+	320.0,
+	800.0,
+	1,
+	2.0,
+	"res://image/bullets/basic/gray/02.png",
+	"",
+	"res://audio/sfx/tank-death/02.wav",
+	"res://image/effects/tank-explosion_sheet.png",
+	"res://image/characters/tank_2.png",
+	"res://script/tank/OnlyFireEnemy.gd",
+)
+
 static func grid_to_world(grid: Vector2i, grid_size: Vector2i) -> Vector2:
 	return Vector2(
 		(grid.x + grid_size.x * 0.5) * tile_size,

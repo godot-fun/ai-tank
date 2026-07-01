@@ -2,6 +2,6 @@
 
 [ext_resource type="Script" uid="uid://737exiiytbv4" path="res://scene/map/AssistMap.gd" id="1_unovv"]
 
-[node name="BattleMap" type="Node2D" unique_id=2094860258]
+[node name="AssistMap" type="Node2D" unique_id=2094860258]
 script = ExtResource("1_unovv")
 show_grid = true

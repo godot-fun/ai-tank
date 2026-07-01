@@ -11,8 +11,7 @@ var ai_move_extra_steps := 0
 
 func start() -> void:
 	apply_data(TankConfig.enemy_easy)
-	facing = Vector2i.DOWN
-	update_facing(facing)
+	update_facing(Vector2i.DOWN)
 	ai_think_timer = AI_THINK_INTERVAL
 	pass
 
@@ -21,7 +20,7 @@ func update(delta: float) -> void:
 	ai_think_timer -= delta
 
 	if moving:
-		try_shoot()
+		fire()
 		return
 
 	if ai_think_timer <= 0.0:

@@ -9,7 +9,7 @@ func start() -> void:
 
 func update(_delta: float) -> void:
 	if Input.is_action_pressed("ui_accept"):
-		try_shoot()
+		fire()
 
 	if moving:
 		return

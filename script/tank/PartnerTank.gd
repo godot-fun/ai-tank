@@ -18,7 +18,7 @@ func update(delta: float) -> void:
 	ai_think_timer -= delta
 
 	if moving:
-		try_shoot()
+		fire()
 		return
 
 	if ai_think_timer <= 0.0:
