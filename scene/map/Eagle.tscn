@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bfdfx8ypy5viw"]
+[gd_scene format=3 uid="uid://c0wrx0h0hs17k"]
 
 [ext_resource type="Script" path="res://scene/map/Eagle.gd" id="1_eagle"]
 [ext_resource type="Texture2D" uid="uid://j6l43u3k4a4g" path="res://image/characters/eagle_base_1.png" id="2_eagle"]
