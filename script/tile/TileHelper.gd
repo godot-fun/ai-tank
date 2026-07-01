@@ -52,9 +52,6 @@ static func unregister_tile(tile: Tile) -> void:
 
 
 static func is_area_blocked_for_tank(grid: Vector2i, grid_size: Vector2i) -> bool:
-	if EagleHelper.is_area_blocked_for_tank(grid, grid_size):
-		return true
-
 	for x in range(grid_size.x):
 		for y in range(grid_size.y):
 			if is_grid_blocked_for_tank(grid + Vector2i(x, y)):

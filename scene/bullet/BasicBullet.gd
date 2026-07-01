@@ -93,8 +93,4 @@ func on_body_entered(body: Node2D) -> void:
 		tile.play_bullet_hit_sound()
 		tile.take_damage(damage)
 		queue_free()
-	elif body is Eagle:
-		var eagle := body as Eagle
-		eagle.take_damage(damage, team)
-		queue_free()
 	pass

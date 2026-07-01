@@ -56,3 +56,10 @@ static var ice: TileCell = TileCell.new(
 	"res://image/tiles/ice_3.png",
 	"res://script/tile/Ice.gd",
 )
+
+static var eagle: TileCell = TileCell.new(
+	5,
+	1,
+	"res://image/characters/eagle_base_1.png",
+	"res://script/tile/Eagle.gd",
+)

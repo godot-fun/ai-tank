@@ -36,7 +36,6 @@ func _process(delta: float) -> void:
 
 	if _spawn_timer <= 0.0:
 		_spawn_timer = SPAWN_INTERVAL
-		spawn_enemy_wave()
 	pass
 
 
@@ -49,7 +48,6 @@ func regenerate_map() -> void:
 	_spawn_timer = 0.0
 	_battle_active = true
 
-	MapGeneratorHelper.build(self, BattleProgress.level, _target_enemy_count)
 
 	hud.update_enemies_remaining(get_enemies_remaining())
 	hud.update_timer(_time_left)
@@ -82,17 +80,6 @@ func on_enemy_killed() -> void:
 		on_level_cleared()
 	pass
 
-
-func spawn_enemy_wave() -> void:
-	if _enemies_spawned >= _target_enemy_count:
-		return
-
-	for grid in MapGeneratorHelper.get_enemy_spawn_points():
-		if _enemies_spawned >= _target_enemy_count:
-			break
-		if MapGeneratorHelper.try_spawn_enemy_at(grid):
-			_enemies_spawned += 1
-	pass
 
 
 func on_level_cleared() -> void:
