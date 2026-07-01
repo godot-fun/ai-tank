@@ -8,6 +8,7 @@ var direction := Vector2i.ZERO
 var speed := 0.0
 var damage := 0
 var team := TankConfig.Team.PLAYER
+var sprite_bullet_resource := ""
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -19,7 +20,17 @@ func _ready() -> void:
 	pass
 
 
-func launch(
+func scale_sprite() -> void:
+	sprite.texture = load(sprite_bullet_resource)
+
+	var texture_size := sprite.texture.get_size()
+	var target_size := Vector2.ONE * TankConfig.tile_size * BULLET_SIZE_RATIO
+	scale = target_size / texture_size
+	
+	rotation = Vector2(direction).angle() + PI / 2.0
+	pass
+
+func apply_data(
 	from: Vector2,
 	dir: Vector2i,
 	bullet_team: int,
@@ -27,14 +38,12 @@ func launch(
 	bullet_damage: int,
 	bullet_resource: String,
 ) -> void:
-	sprite.texture = load(bullet_resource)
-	scale_sprite()
+	sprite_bullet_resource = bullet_resource
 	global_position = from
 	direction = dir
 	team = bullet_team
 	speed = bullet_speed
 	damage = bullet_damage
-	rotation = Vector2(direction).angle() + PI / 2.0
 	pass
 
 
@@ -42,13 +51,6 @@ func _physics_process(delta: float) -> void:
 	global_position += Vector2(direction) * speed * delta
 	if is_out_of_bounds():
 		queue_free()
-	pass
-
-
-func scale_sprite() -> void:
-	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2.ONE * TankConfig.tile_size * BULLET_SIZE_RATIO
-	scale = target_size / texture_size
 	pass
 
 

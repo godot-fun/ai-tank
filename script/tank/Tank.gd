@@ -1,4 +1,4 @@
-﻿extends CharacterBody2D
+extends CharacterBody2D
 class_name Tank
 
 # tank data property
@@ -29,6 +29,7 @@ var moving := false
 
 func _ready() -> void:
 	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
+	scale_tank()
 	start()
 	TankHelper.register_tank(self)
 	pass
@@ -70,15 +71,13 @@ func apply_data(data: TankConfig.TankData) -> void:
 	death_effect_resource = data.death_effect_resource
 	tank_resource = data.tank_resource
 	script_resource = data.script_resource
-	
-	sprite.texture = load(data.tank_resource)
-	
-	scale_tank()
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 func scale_tank() -> void:
+	sprite.texture = load(tank_resource)
+
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(grid_size) * TankConfig.tile_size
 	scale = target_size / texture_size
@@ -96,7 +95,7 @@ func take_damage(amount: int) -> void:
 	if not is_alive() or amount <= 0:
 		return
 
-	hp = maxi(hp - amount, 0)
+	hp = hp - amount
 	if hp <= 0:
 		on_die()
 	pass
@@ -141,10 +140,10 @@ func fire() -> void:
 
 	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
 	var bullet: BasicBullet = bullet_scene.instantiate()
+	var spawn_offset := Vector2(facing) * TankConfig.tile_size
+	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 
-	var spawn_offset := Vector2(facing) * TankConfig.tile_size
-	bullet.launch(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_resource)
 	start_fire_cooldown()
 	Audio.play_sound(fire_sound_resource)
 	pass
@@ -183,4 +182,3 @@ func on_move_finished(ice_slides_left: int) -> void:
 		try_move(facing, ice_slides_left - 1)
 		return
 	pass
-

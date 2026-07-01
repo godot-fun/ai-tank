@@ -15,8 +15,10 @@ static func get_alive_enemy_count() -> int:
 
 static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 	var scene: PackedScene = load(TANK_SCENE)
+	var script: Script = load(data.script_resource)
 	var tank: CharacterBody2D = scene.instantiate()
-	tank.set_script(load(data.script_resource))
+	tank.set_script(script)
+	tank.apply_data(data)
 	
 	var clamped_grid := TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
 	tank.global_position = TankConfig.grid_to_world(clamped_grid, data.grid_size)
