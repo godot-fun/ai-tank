@@ -2,7 +2,8 @@ class_name TileHelper
 
 const TILE_SCENE := "res://scene/Tile.tscn"
 
-static var _grid: Array = []
+# 一个二维数组
+static var grids: Array = []
 
 
 static func has_tile_at(grid: Vector2i) -> bool:
@@ -10,11 +11,11 @@ static func has_tile_at(grid: Vector2i) -> bool:
 		return false
 
 	_ensure_grid()
-	return _grid[grid.x][grid.y] != null
+	return grids[grid.x][grid.y] != null
 
 
 static func clear_grid() -> void:
-	_grid.clear()
+	grids.clear()
 	pass
 
 
@@ -36,17 +37,17 @@ static func register_tile(tile: Tile) -> void:
 	_ensure_grid()
 	var cell := tile.grid_pos
 	if _is_cell_in_bounds(cell):
-		_grid[cell.x][cell.y] = tile
+		grids[cell.x][cell.y] = tile
 	pass
 
 
 static func unregister_tile(tile: Tile) -> void:
-	if _grid.is_empty():
+	if grids.is_empty():
 		return
 
 	var cell := tile.grid_pos
-	if _is_cell_in_bounds(cell) and _grid[cell.x][cell.y] == tile:
-		_grid[cell.x][cell.y] = null
+	if _is_cell_in_bounds(cell) and grids[cell.x][cell.y] == tile:
+		grids[cell.x][cell.y] = null
 	pass
 
 
@@ -66,7 +67,7 @@ static func is_grid_blocked_for_tank(grid: Vector2i) -> bool:
 		return false
 
 	_ensure_grid()
-	var tile: Tile = _grid[grid.x][grid.y]
+	var tile: Tile = grids[grid.x][grid.y]
 	return tile != null and tile.blocks_tank()
 
 
@@ -83,19 +84,19 @@ static func is_grid_ice(grid: Vector2i) -> bool:
 		return false
 
 	_ensure_grid()
-	var tile: Tile = _grid[grid.x][grid.y]
+	var tile: Tile = grids[grid.x][grid.y]
 	return tile != null and tile.is_ice()
 
 
 static func _ensure_grid() -> void:
-	if not _grid.is_empty():
+	if not grids.is_empty():
 		return
 
-	_grid.resize(TankConfig.map_grid_width)
+	grids.resize(TankConfig.map_grid_width)
 	for x in range(TankConfig.map_grid_width):
 		var column: Array = []
 		column.resize(TankConfig.map_grid_height)
-		_grid[x] = column
+		grids[x] = column
 	pass
 
 
