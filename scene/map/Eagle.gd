@@ -8,44 +8,32 @@ const TEXTURE_DESTROYED := "res://image/characters/eagle_base_6.png"
 signal destroyed
 
 var grid_pos := Vector2i.ZERO
-var _alive := true
 
 @onready var sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
-	_setup_sprite(TEXTURE_INTACT)
-	_align_to_grid()
+	setup_sprite(TEXTURE_INTACT)
+	align_to_grid()
 	pass
 
 
-func is_alive() -> bool:
-	return _alive
-
-
-func blocks_bullet() -> bool:
-	return _alive
-
 
 func take_damage(amount: int, attacker_team: int) -> void:
-	if not _alive or amount <= 0:
+	if amount <= 0:
 		return
 	_destroy()
 	pass
 
 
 func _destroy() -> void:
-	if not _alive:
-		return
-
-	_alive = false
-	_setup_sprite(TEXTURE_DESTROYED)
+	setup_sprite(TEXTURE_DESTROYED)
 	destroyed.emit()
-	get_tree().paused = true
+#	get_tree().paused = true
 	pass
 
 
-func _setup_sprite(texture_path: String) -> void:
+func setup_sprite(texture_path: String) -> void:
 	sprite.texture = load(texture_path)
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(GRID_SIZE) * TankConfig.tile_size
@@ -53,7 +41,7 @@ func _setup_sprite(texture_path: String) -> void:
 	pass
 
 
-func _align_to_grid() -> void:
+func align_to_grid() -> void:
 	grid_pos = EagleHelper.grid_pos
 	global_position = TankConfig.grid_to_world(grid_pos, GRID_SIZE)
 	pass

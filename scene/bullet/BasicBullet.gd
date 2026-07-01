@@ -2,7 +2,7 @@ class_name BasicBullet
 extends Area2D
 
 const SCENE := "res://scene/bullet/BasicBullet.tscn"
-const BULLET_SIZE_RATIO := 0.5
+const BULLET_SIZE_RATIO := 0.6
 
 var direction := Vector2i.ZERO
 var speed := 0.0
