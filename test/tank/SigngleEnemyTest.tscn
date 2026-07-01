@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://88gjjqc7jwcx"]
+[gd_scene format=3 uid="uid://dx5la7l1j5giq"]
 
-[ext_resource type="Script" uid="uid://haun04xmv7kw" path="res://test/tank/signgle_enemy.gd" id="1_221vu"]
 [ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/map/AssistMap.tscn" id="1_gcpdx"]
+[ext_resource type="Script" path="res://test/tank/signgle_enemy_test.gd" id="1_ip12s"]
 
 [node name="SigngleEnemy" type="Node2D" unique_id=1597659567]
-script = ExtResource("1_221vu")
+script = ExtResource("1_ip12s")
 
 [node name="AssistMap" parent="." unique_id=2094860258 instance=ExtResource("1_gcpdx")]
