@@ -104,5 +104,5 @@ func play_hit_animatio() -> void:
 	EffectAnimation2D.spawn(global_position, 
 		get_tree().current_scene,
 		"res://image/effects/tank-hit_sheet.png", 
-		Vector2i(8, 1), 0.3)
+		Vector2i(8, 1), 0.3, 18)
 	pass
