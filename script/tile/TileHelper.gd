@@ -7,10 +7,10 @@ static var grids: Array = []
 
 
 static func has_tile_at(grid: Vector2i) -> bool:
-	if not _is_cell_in_bounds(grid):
+	if not is_cell_in_bounds(grid):
 		return false
 
-	_ensure_grid()
+	ensure_grid()
 	return grids[grid.x][grid.y] != null
 
 
@@ -35,9 +35,9 @@ static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 
 
 static func register_tile(tile: Tile) -> void:
-	_ensure_grid()
+	ensure_grid()
 	var cell := tile.grid_pos
-	if _is_cell_in_bounds(cell):
+	if is_cell_in_bounds(cell):
 		grids[cell.x][cell.y] = tile
 	pass
 
@@ -47,7 +47,7 @@ static func unregister_tile(tile: Tile) -> void:
 		return
 
 	var cell := tile.grid_pos
-	if _is_cell_in_bounds(cell) and grids[cell.x][cell.y] == tile:
+	if is_cell_in_bounds(cell) and grids[cell.x][cell.y] == tile:
 		grids[cell.x][cell.y] = null
 	pass
 
@@ -61,10 +61,10 @@ static func is_area_blocked_for_tank(grid: Vector2i, grid_size: Vector2i) -> boo
 
 
 static func is_grid_blocked_for_tank(grid: Vector2i) -> bool:
-	if not _is_cell_in_bounds(grid):
+	if not is_cell_in_bounds(grid):
 		return false
 
-	_ensure_grid()
+	ensure_grid()
 	var tile: Tile = grids[grid.x][grid.y]
 	return tile != null and tile.blocks_tank()
 
@@ -78,15 +78,15 @@ static func is_area_on_ice(grid: Vector2i, grid_size: Vector2i) -> bool:
 
 
 static func is_grid_ice(grid: Vector2i) -> bool:
-	if not _is_cell_in_bounds(grid):
+	if not is_cell_in_bounds(grid):
 		return false
 
-	_ensure_grid()
+	ensure_grid()
 	var tile: Tile = grids[grid.x][grid.y]
 	return tile != null and tile.is_ice()
 
 
-static func _ensure_grid() -> void:
+static func ensure_grid() -> void:
 	if not grids.is_empty():
 		return
 
@@ -98,6 +98,5 @@ static func _ensure_grid() -> void:
 	pass
 
 
-static func _is_cell_in_bounds(grid: Vector2i) -> bool:
-	return grid.x >= 0 and grid.x < TileConfig.MAP_GRID_WIDTH \
-		and grid.y >= 0 and grid.y < TileConfig.MAP_GRID_HEIGHT
+static func is_cell_in_bounds(grid: Vector2i) -> bool:
+	return grid.x >= 0 and grid.x < TileConfig.MAP_GRID_WIDTH and grid.y >= 0 and grid.y < TileConfig.MAP_GRID_HEIGHT

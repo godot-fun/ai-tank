@@ -4,8 +4,6 @@ class_name Eagle
 const TEXTURE := "res://image/characters/eagle_base_1.png"
 const TEXTURE_DESTROYED := "res://image/characters/eagle_base_6.png"
 
-signal destroyed
-
 @warning_ignore("integer_division")
 static var egale_first_grid_pos := Vector2i((TileConfig.MAP_GRID_WIDTH - 2) / 2, TileConfig.MAP_GRID_HEIGHT - 2)
 
@@ -31,5 +29,4 @@ static func create_base() -> void:
 
 func destroy() -> void:
 	egale_sprite.texture = load(TEXTURE_DESTROYED)
-	destroyed.emit()
 	pass
