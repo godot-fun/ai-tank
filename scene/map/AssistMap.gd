@@ -4,6 +4,7 @@ extends Node2D
 
 
 func _ready() -> void:
+	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
 	z_index = -10
 	queue_redraw()
 	pass

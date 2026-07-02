@@ -28,7 +28,6 @@ var moving := false
 
 
 func _ready() -> void:
-	Log.info("map size:[{} * {}]", TankConfig.map_grid_width, TankConfig.map_grid_height)
 	scale_tank()
 	start()
 	TankHelper.register_tank(self)

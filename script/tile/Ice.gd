@@ -1,9 +1,8 @@
 extends Tile
 class_name Ice
 
-func _ready() -> void:
+func start() -> void:
 	z_index = -5
-	apply_data(TileConfig.ice)
 	pass
 
 

@@ -1,8 +1,7 @@
 extends Tile
 class_name Forest
 
-func _ready() -> void:
-	apply_data(TileConfig.forest)
+func start() -> void:
 	z_index = 1
 	pass
 

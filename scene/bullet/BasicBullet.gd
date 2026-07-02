@@ -93,14 +93,13 @@ func on_body_entered(body: Node2D) -> void:
 		var tile := body as Tile
 		if not tile.blocks_bullet():
 			return
-		tile.play_bullet_hit_sound()
 		tile.take_damage(damage)
 		queue_free()
 		play_hit_animatio()
 	pass
 
 func play_hit_animatio() -> void:
-	Audio.play_sound(TileConfig.steel_wall.bullet_hit_sound_resource)
+	Audio.play_sound("res://audio/sfx/bullet-hit-steel/01.wav")
 	EffectAnimation2D.spawn(global_position, 
 		get_tree().current_scene,
 		"res://image/effects/tank-hit_sheet.png", 

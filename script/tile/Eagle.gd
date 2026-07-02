@@ -15,11 +15,6 @@ static func create_base() -> void:
 			TileHelper.create_tile(TileConfig.eagle, egale_first_grid_pos + Vector2i(x, y))
 
 
-func _ready() -> void:
-	apply_data(TileConfig.eagle)
-	pass
-
-
 func destroy() -> void:
 	sprite.texture = load(TEXTURE_DESTROYED)
 	destroyed.emit()
