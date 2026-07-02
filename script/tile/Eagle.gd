@@ -25,6 +25,17 @@ static func create_base() -> void:
 		for y in range(2):
 			TileHelper.create_tile(TileConfig.eagle, egale_first_grid_pos + Vector2i(x, y))
 
+	_create_base_bricks()
+
+
+static func _create_base_bricks() -> void:
+	var pos := egale_first_grid_pos
+	for x in range(-1, 3):
+		TileHelper.create_tile(TileConfig.brick_wall_eagle, pos + Vector2i(x, -1))
+	for y in range(2):
+		TileHelper.create_tile(TileConfig.brick_wall_eagle, pos + Vector2i(-1, y))
+		TileHelper.create_tile(TileConfig.brick_wall_eagle, pos + Vector2i(2, y))
+
 
 
 func destroy() -> void:
