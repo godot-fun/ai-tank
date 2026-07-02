@@ -87,6 +87,7 @@ func on_body_entered(body: Node2D) -> void:
 		if tank.team == team:
 			return
 		if !tank.on_die(damage):
+			Audio.play_sound("res://audio/sfx/bullet-hit-steel/01.wav")
 			play_hit_animatio()
 		queue_free()
 	elif body is Tile:
@@ -95,11 +96,14 @@ func on_body_entered(body: Node2D) -> void:
 			return
 		tile.take_damage(damage)
 		queue_free()
+		if tile is BrickWall:
+			Audio.play_sound("res://audio/sfx/bullet-hit-brick/01.wav")
+		else:
+			Audio.play_sound("audio/sfx/bullet-hit-steel/05.wav")
 		play_hit_animatio()
 	pass
 
 func play_hit_animatio() -> void:
-	Audio.play_sound("res://audio/sfx/bullet-hit-steel/01.wav")
 	EffectAnimation2D.spawn(global_position, 
 		get_tree().current_scene,
 		"res://image/effects/tank-hit_sheet.png", 
