@@ -5,6 +5,15 @@ enum Team {
 	ENEMY
 }
 
+const AUDIO_SHOOT_BASIC := "res://audio/sfx/shoot-basic/01.wav"
+const AUDIO_TANK_DEATH := "res://audio/sfx/tank-death/01.wav"
+const AUDIO_TANK_DEATH_ENEMY := "res://audio/sfx/tank-death/02.wav"
+
+const AUDIO_BULLET_EMP_HIT := "res://audio/sfx/emp-hit/01.wav"
+const AUDIO_BULLET_HIT_STEEL := "res://audio/sfx/bullet-hit-steel/01.wav"
+const AUDIO_BULLET_HIT_BRICK := "res://audio/sfx/bullet-hit-brick/01.wav"
+const AUDIO_BULLET_HIT_WALL := "res://audio/sfx/bullet-hit-steel/05.wav"
+
 class TankData:
 	var id: int
 	var team: int
@@ -62,8 +71,8 @@ static var my_tank: TankData = TankData.new(
 	1,
 	0.3,
 	"res://image/bullets/basic/blue/01.png",
-	"res://audio/sfx/shoot-basic/01.wav",
-	"res://audio/sfx/tank-death/01.wav",
+	AUDIO_SHOOT_BASIC,
+	AUDIO_TANK_DEATH,
 	"res://image/effects/tank-explosion_sheet.png",
 	"res://image/characters/blue_tank_1.png",
 	"res://script/tank/MyTank.gd",
@@ -79,8 +88,8 @@ static var partner_tank: TankData = TankData.new(
 	1,
 	0.45,
 	"res://image/bullets/basic/red/01.png",
-	"res://audio/sfx/shoot-basic/01.wav",
-	"res://audio/sfx/tank-death/01.wav",
+	AUDIO_SHOOT_BASIC,
+	AUDIO_TANK_DEATH,
 	"res://image/effects/tank-explosion_sheet.png",
 	"res://image/characters/red_tank_1.png",
 	"res://script/tank/PartnerTank.gd",
@@ -97,7 +106,7 @@ static var enemy_easy: TankData = TankData.new(
 	2.0,
 	"res://image/bullets/basic/gray/01.png",
 	"",
-	"res://audio/sfx/tank-death/01.wav",
+	AUDIO_TANK_DEATH_ENEMY,
 	"res://image/effects/tank-explosion_sheet.png",
 	"res://image/characters/tank_1.png",
 	"res://script/tank/EnemyEasy.gd",
@@ -114,7 +123,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	2.0,
 	"res://image/bullets/basic/gray/02.png",
 	"",
-	"res://audio/sfx/tank-death/02.wav",
+	AUDIO_TANK_DEATH_ENEMY,
 	"res://image/effects/tank-explosion_sheet.png",
 	"res://image/characters/tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",

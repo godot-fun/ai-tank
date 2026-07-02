@@ -75,7 +75,7 @@ func on_area_entered(area: Area2D) -> void:
 	if get_instance_id() > other.get_instance_id():
 		return
 
-	Audio.play_sound("audio/sfx/emp-hit/01.wav")
+	Audio.play_sound(TankConfig.AUDIO_BULLET_EMP_HIT)
 	play_hit_animatio()
 	queue_free()
 	other.queue_free()
@@ -88,7 +88,7 @@ func on_body_entered(body: Node2D) -> void:
 		if tank.team == team:
 			return
 		if !tank.on_die(damage):
-			Audio.play_sound("res://audio/sfx/bullet-hit-steel/01.wav")
+			Audio.play_sound(TankConfig.AUDIO_BULLET_HIT_STEEL)
 			play_hit_animatio()
 		queue_free()
 	elif body is Tile:
@@ -98,9 +98,9 @@ func on_body_entered(body: Node2D) -> void:
 		tile.take_damage(damage)
 		queue_free()
 		if tile is BrickWall:
-			Audio.play_sound("res://audio/sfx/bullet-hit-brick/01.wav")
+			Audio.play_sound(TankConfig.AUDIO_BULLET_HIT_BRICK)
 		else:
-			Audio.play_sound("audio/sfx/bullet-hit-steel/05.wav")
+			Audio.play_sound(TankConfig.AUDIO_BULLET_HIT_WALL)
 		play_hit_animatio()
 	pass
 
