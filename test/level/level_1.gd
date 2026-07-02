@@ -2,5 +2,4 @@ extends Node2D
 
 
 func _ready() -> void:
-	pass
-
+	LevelConfig.load_level(0)
