@@ -75,7 +75,7 @@ func on_area_entered(area: Area2D) -> void:
 	if get_instance_id() > other.get_instance_id():
 		return
 
-	Audio.play_sound(TileConfig.steel_wall.bullet_hit_sound_resource)
+	play_hit_animatio()
 	queue_free()
 	other.queue_free()
 	pass
@@ -95,12 +95,12 @@ func on_body_entered(body: Node2D) -> void:
 			return
 		tile.play_bullet_hit_sound()
 		tile.take_damage(damage)
-		play_hit_animatio()
 		queue_free()
+		play_hit_animatio()
 	pass
 
 func play_hit_animatio() -> void:
-	Audio.play_sound("res://audio/sfx/bullet-hit-steel/05.wav")
+	Audio.play_sound(TileConfig.steel_wall.bullet_hit_sound_resource)
 	SpriteSheetEffect.spawn(global_position, 
 		get_tree().current_scene,
 		"res://image/effects/tank-hit_sheet.png", 
