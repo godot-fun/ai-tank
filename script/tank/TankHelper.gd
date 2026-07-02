@@ -2,12 +2,12 @@
 
 const TANK_SCENE := "res://scene/Tank.tscn"
 
-static var _tanks: Array[Tank] = []
+static var tanks: Array[Tank] = []
 
 
 static func get_alive_enemy_count() -> int:
 	var count := 0
-	for tank in _tanks:
+	for tank in tanks:
 		if tank.team == TankConfig.Team.ENEMY and tank.is_alive():
 			count += 1
 	return count
@@ -31,17 +31,17 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 
 
 static func register_tank(tank: Tank) -> void:
-	_tanks.append(tank)
+	tanks.append(tank)
 	pass
 
 
 static func unregister_tank(tank: Tank) -> void:
-	_tanks.erase(tank)
+	tanks.erase(tank)
 	pass
 
 
 static func find_player() -> Tank:
-	for tank in _tanks:
+	for tank in tanks:
 		if tank.team == TankConfig.Team.PLAYER:
 			return tank
 	return null
@@ -51,7 +51,7 @@ static func find_nearest_enemy(from_tank: Tank) -> Tank:
 	var nearest: Tank = null
 	var nearest_dist := INF
 
-	for tank in _tanks:
+	for tank in tanks:
 		if tank.team != TankConfig.Team.ENEMY or not tank.is_alive():
 			continue
 		var dist := absi(from_tank.grid_pos.x - tank.grid_pos.x) + absi(from_tank.grid_pos.y - tank.grid_pos.y)
@@ -77,7 +77,7 @@ static func is_move_blocked(grid: Vector2i, grid_size: Vector2i, exclude: Tank =
 
 
 static func is_area_blocked_by_tank(grid: Vector2i, grid_size: Vector2i, exclude: Tank = null) -> bool:
-	for tank in _tanks:
+	for tank in tanks:
 		if tank == exclude:
 			continue
 		if _areas_overlap(grid, grid_size, tank.grid_pos, tank.grid_size):

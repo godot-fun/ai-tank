@@ -25,7 +25,7 @@ func update(delta: float) -> void:
 		ai_think_timer = AI_THINK_INTERVAL
 		var direction := pick_move_direction()
 		if direction != Vector2i.ZERO:
-			try_move(direction)
+			move(direction)
 	pass
 
 

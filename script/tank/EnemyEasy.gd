@@ -28,9 +28,9 @@ func update(delta: float) -> void:
 		var direction := pick_move_direction()
 		if direction != Vector2i.ZERO:
 			if ai_move_extra_steps > 0:
-				try_move(direction, ai_move_extra_steps)
+				move(direction, ai_move_extra_steps)
 			else:
-				try_move(direction)
+				move(direction)
 	pass
 
 

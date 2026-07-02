@@ -16,7 +16,7 @@ func update(_delta: float) -> void:
 
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
-		try_move(direction)
+		move(direction)
 	pass
 
 
@@ -35,5 +35,5 @@ func read_direction() -> Vector2i:
 func on_move_continue() -> void:
 	var direction := read_direction()
 	if direction != Vector2i.ZERO:
-		try_move(direction)
+		move(direction)
 	pass

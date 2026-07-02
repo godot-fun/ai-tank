@@ -114,21 +114,12 @@ func on_die(amount: int) -> bool:
 	return true
 
 # ----------------------------------------------------------------------------------------------------------------------
-func can_fire() -> bool:
-	return fire_cooldown <= 0.0
-
-
 func update_fire_cooldown(delta: float) -> void:
 	if fire_cooldown > 0.0:
 		fire_cooldown -= delta
 
-
-func start_fire_cooldown() -> void:
-	fire_cooldown = fire_interval
-
-
 func fire() -> void:
-	if not can_fire():
+	if fire_cooldown > 0.0:
 		return
 
 	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
@@ -137,7 +128,7 @@ func fire() -> void:
 	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 
-	start_fire_cooldown()
+	fire_cooldown = fire_interval
 	Audio.play_sound(fire_sound_resource)
 	pass
 
@@ -150,7 +141,7 @@ func update_facing(direction: Vector2i) -> void:
 	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 	pass
 
-func try_move(direction: Vector2i, ice_slides_left: int = -1) -> void:
+func move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 	update_facing(direction)
 
 	var target_grid := grid_pos + direction
@@ -172,6 +163,6 @@ func on_move_finished(ice_slides_left: int) -> void:
 	if ice_slides_left == -1 and TileHelper.is_area_on_ice(grid_pos, grid_size):
 		ice_slides_left = ICE_SLIDE_TILES
 	if ice_slides_left > 0:
-		try_move(facing, ice_slides_left - 1)
+		move(facing, ice_slides_left - 1)
 		return
 	pass
