@@ -75,6 +75,7 @@ func on_area_entered(area: Area2D) -> void:
 	if get_instance_id() > other.get_instance_id():
 		return
 
+	Audio.play_sound("audio/sfx/emp-hit/01.wav")
 	play_hit_animatio()
 	queue_free()
 	other.queue_free()
