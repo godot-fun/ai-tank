@@ -91,24 +91,17 @@ func is_alive() -> bool:
 	return hp > 0
 
 
-func take_damage(amount: int) -> void:
-	if not is_alive() or amount <= 0:
-		return
+func on_die(amount: int) -> bool:
+	if !is_alive() || amount <= 0 || is_queued_for_deletion():
+		return false
 
 	hp = hp - amount
-	if hp <= 0:
-		on_die()
-	pass
+	if hp > 0:
+		return false
 
-
-func on_die() -> void:
-	if is_queued_for_deletion():
-		return
-
-	var death_pos := global_position
 	Audio.play_sound(death_sound_resource)
 	SpriteSheetEffect.spawn(
-		death_pos,
+		global_position,
 		get_tree().current_scene,
 		death_effect_resource,
 		Vector2.ONE * TankConfig.tile_size * 2.5,
@@ -118,7 +111,7 @@ func on_die() -> void:
 		if battle_map != null and battle_map.has_method("on_enemy_killed"):
 			battle_map.call_deferred("on_enemy_killed")
 	queue_free()
-	pass
+	return true
 
 # ----------------------------------------------------------------------------------------------------------------------
 func can_fire() -> bool:

@@ -86,7 +86,8 @@ func on_body_entered(body: Node2D) -> void:
 		var tank := body as Tank
 		if tank.team == team:
 			return
-		tank.take_damage(damage)
+		if !tank.on_die(damage):
+			play_hit_animatio()
 		queue_free()
 	elif body is Tile:
 		var tile := body as Tile
@@ -94,5 +95,14 @@ func on_body_entered(body: Node2D) -> void:
 			return
 		tile.play_bullet_hit_sound()
 		tile.take_damage(damage)
+		play_hit_animatio()
 		queue_free()
+	pass
+
+func play_hit_animatio() -> void:
+	Audio.play_sound("res://audio/sfx/bullet-hit-steel/05.wav")
+	SpriteSheetEffect.spawn(global_position, 
+		get_tree().current_scene,
+		"res://image/effects/tank-hit_sheet.png", 
+		Vector2.ONE * TankConfig.tile_size)
 	pass
