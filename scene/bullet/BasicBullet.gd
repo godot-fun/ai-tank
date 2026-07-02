@@ -101,8 +101,8 @@ func on_body_entered(body: Node2D) -> void:
 
 func play_hit_animatio() -> void:
 	Audio.play_sound(TileConfig.steel_wall.bullet_hit_sound_resource)
-	SpriteSheetEffect.spawn(global_position, 
+	EffectAnimation2D.spawn(global_position, 
 		get_tree().current_scene,
 		"res://image/effects/tank-hit_sheet.png", 
-		Vector2.ONE * TankConfig.tile_size)
+		Vector2i(8, 1), 0.3)
 	pass

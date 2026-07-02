@@ -100,11 +100,11 @@ func on_die(amount: int) -> bool:
 		return false
 
 	Audio.play_sound(death_sound_resource)
-	SpriteSheetEffect.spawn(
+	EffectAnimation2D.spawn(
 		global_position,
 		get_tree().current_scene,
 		death_effect_resource,
-		Vector2.ONE * TankConfig.tile_size * 2.5,
+		Vector2i(8, 1), 0.6
 	)
 	if team == TankConfig.Team.ENEMY:
 		var battle_map := get_tree().current_scene
