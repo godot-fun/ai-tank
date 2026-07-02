@@ -24,7 +24,7 @@ func scale_sprite() -> void:
 	sprite.texture = load(sprite_bullet_resource)
 
 	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2.ONE * TankConfig.tile_size * BULLET_SIZE_RATIO
+	var target_size := Vector2.ONE * TileConfig.TILE_SIZE * BULLET_SIZE_RATIO
 	scale = target_size / texture_size
 	
 	rotation = Vector2(direction).angle() + PI / 2.0
@@ -55,8 +55,8 @@ func _physics_process(delta: float) -> void:
 
 
 func is_out_of_bounds() -> bool:
-	var map_width := TankConfig.map_grid_width * TankConfig.tile_size
-	var map_height := TankConfig.map_grid_height * TankConfig.tile_size
+	var map_width := TileConfig.MAP_GRID_WIDTH * TileConfig.TILE_SIZE
+	var map_height := TileConfig.MAP_GRID_HEIGHT * TileConfig.TILE_SIZE
 	return global_position.x < 0.0 \
 		or global_position.y < 0.0 \
 		or global_position.x > map_width \

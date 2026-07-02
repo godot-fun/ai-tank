@@ -90,14 +90,14 @@ static func _ensure_grid() -> void:
 	if not grids.is_empty():
 		return
 
-	grids.resize(TankConfig.map_grid_width)
-	for x in range(TankConfig.map_grid_width):
+	grids.resize(TileConfig.MAP_GRID_WIDTH)
+	for x in range(TileConfig.MAP_GRID_WIDTH):
 		var column: Array = []
-		column.resize(TankConfig.map_grid_height)
+		column.resize(TileConfig.MAP_GRID_HEIGHT)
 		grids[x] = column
 	pass
 
 
 static func _is_cell_in_bounds(grid: Vector2i) -> bool:
-	return grid.x >= 0 and grid.x < TankConfig.map_grid_width \
-		and grid.y >= 0 and grid.y < TankConfig.map_grid_height
+	return grid.x >= 0 and grid.x < TileConfig.MAP_GRID_WIDTH \
+		and grid.y >= 0 and grid.y < TileConfig.MAP_GRID_HEIGHT

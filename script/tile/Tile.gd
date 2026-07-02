@@ -36,7 +36,7 @@ func is_ice() -> bool:
 
 func scale_tile() -> void:
 	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2.ONE * TankConfig.tile_size
+	var target_size := Vector2.ONE * TileConfig.TILE_SIZE
 	scale = target_size / texture_size
 
 	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, Vector2i.ONE), Vector2i.ONE)

@@ -1,12 +1,5 @@
 ﻿class_name TankConfig
 
-const tile_size: int = 60
-
-# 地图的格子的长宽
-static var map_grid_width: int = ProjectSettings.get_setting("display/window/size/viewport_width") / tile_size
-static var map_grid_height: int = ProjectSettings.get_setting("display/window/size/viewport_height") / tile_size
-
-
 enum Team {
 	PLAYER,
 	ENEMY
@@ -128,26 +121,23 @@ static var only_fire_enemy: TankData = TankData.new(
 )
 
 static func grid_to_world(grid: Vector2i, grid_size: Vector2i) -> Vector2:
-	return Vector2(
-		(grid.x + grid_size.x * 0.5) * tile_size,
-		(grid.y + grid_size.y * 0.5) * tile_size,
-	)
+	return Vector2((grid.x + grid_size.x * 0.5) * TileConfig.TILE_SIZE, (grid.y + grid_size.y * 0.5) * TileConfig.TILE_SIZE)
 
 
 static func world_to_grid(world_pos: Vector2, grid_size: Vector2i) -> Vector2i:
 	return Vector2i(
-		floori(world_pos.x / tile_size - grid_size.x * 0.5),
-		floori(world_pos.y / tile_size - grid_size.y * 0.5),
+		floori(world_pos.x / TileConfig.TILE_SIZE - grid_size.x * 0.5),
+		floori(world_pos.y / TileConfig.TILE_SIZE - grid_size.y * 0.5),
 	)
 
 
 static func is_in_bounds(grid: Vector2i, grid_size: Vector2i) -> bool:
-	return grid.x >= 0 and grid.x + grid_size.x <= map_grid_width \
-		and grid.y >= 0 and grid.y + grid_size.y <= map_grid_height
+	return grid.x >= 0 and grid.x + grid_size.x <= TileConfig.MAP_GRID_WIDTH \
+		and grid.y >= 0 and grid.y + grid_size.y <= TileConfig.MAP_GRID_HEIGHT
 
 
 static func clamp_grid_to_bounds(grid: Vector2i, grid_size: Vector2i) -> Vector2i:
 	return Vector2i(
-		clampi(grid.x, 0, map_grid_width - grid_size.x),
-		clampi(grid.y, 0, map_grid_height - grid_size.y),
+		clampi(grid.x, 0, TileConfig.MAP_GRID_WIDTH - grid_size.x),
+		clampi(grid.y, 0, TileConfig.MAP_GRID_HEIGHT - grid_size.y),
 	)

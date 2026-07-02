@@ -1,5 +1,14 @@
 class_name TileConfig
 
+const TILE_SIZE: int = 60
+
+const ONE_GRID_SIZE: Vector2i = Vector2.ONE * TILE_SIZE
+
+# 地图的格子的长宽
+static var MAP_GRID_WIDTH: int = ProjectSettings.get_setting("display/window/size/viewport_width") / TILE_SIZE
+static var MAP_GRID_HEIGHT: int = ProjectSettings.get_setting("display/window/size/viewport_height") / TILE_SIZE
+
+
 class TileCell:
 	var id: int
 	var hp: int
@@ -55,6 +64,6 @@ static var ice: TileCell = TileCell.new(
 static var eagle: TileCell = TileCell.new(
 	5,
 	1,
-	"res://image/characters/eagle_base_1.png",
+	"res://image/transparent_512x512.png",
 	"res://script/tile/Eagle.gd",
 )

@@ -78,7 +78,7 @@ func scale_tank() -> void:
 	sprite.texture = load(tank_resource)
 
 	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2(grid_size) * TankConfig.tile_size
+	var target_size := Vector2(grid_size) * TileConfig.TILE_SIZE
 	scale = target_size / texture_size
 
 	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
@@ -123,7 +123,7 @@ func fire() -> void:
 
 	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
 	var bullet: BasicBullet = bullet_scene.instantiate()
-	var spawn_offset := Vector2(facing) * TankConfig.tile_size
+	var spawn_offset := Vector2(facing) * TileConfig.TILE_SIZE
 	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 
@@ -150,7 +150,7 @@ func move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 	grid_pos = target_grid
 	moving = true
 
-	var move_duration := TankConfig.tile_size / speed
+	var move_duration := TileConfig.TILE_SIZE / speed
 	var tween := create_tween()
 	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos, grid_size), move_duration)
 	tween.finished.connect(on_move_finished.bind(ice_slides_left))
