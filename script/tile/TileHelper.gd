@@ -15,8 +15,13 @@ static func has_tile_at(grid: Vector2i) -> bool:
 
 
 static func clear_grid() -> void:
+	for x in range(grids.size()):
+		var column: Array = grids[x]
+		for y in range(column.size()):
+			var tile: Tile = column[y]
+			if tile != null:
+				tile.queue_free()
 	grids.clear()
-	pass
 
 
 static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
