@@ -13,11 +13,13 @@ When this skill applies, read and follow [skill-dependency-manager](../../rules/
 
 ## Quick Start
 
-Default: **-14 LUFS**, **-1.5 dBTP**, output to `normalized/`:
+Default: **-14 LUFS**, **-1.5 dBTP**, output to a sibling `normalized/` folder (source files are read-only):
 
 ```bash
 .dependency/python/python .cursor/skills/audio-loudness-normalization/scripts/normalize.py path/to/audio_or_folder
 ```
+
+Example: `audio/sfx/tank/tank_move.wav` → `audio/sfx/tank/normalized/tank_move.wav`
 
 ## LUFS Targets
 
@@ -39,11 +41,13 @@ One category per folder. Mixed folders: split first, then batch with matching `-
 .dependency/python/python .cursor/skills/audio-loudness-normalization/scripts/normalize.py Audio/SFX -t -14 -r --dry-run
 ```
 
-Originals are never modified. Supported: `.wav`, `.mp3`, `.ogg`, `.flac`, `.aac`, `.m4a`, `.wma`.
+**Never overwrite source files.** The script writes only to `normalized/` (or `-o`). Supported: `.wav`, `.mp3`, `.ogg`, `.flac`, `.aac`, `.m4a`, `.wma`.
 
 ## Agent Notes
 
 1. Use the bundled script (two-pass `loudnorm`), not hand-written FFmpeg.
 2. Missing Python/FFmpeg → populate `.dependency/` per skill-dependency-manager, retry same command.
-3. Do not fix uneven levels with per-asset volume in game code — re-normalize sources.
-4. Engine bus defaults and rationale: [reference.md](reference.md)
+3. **Do not copy, move, or replace the source with the normalized output** — even after a successful run. Tell the user where `normalized/` files are; they swap assets manually when ready.
+4. Do not use `-o` pointing at the source folder; the script refuses output paths that would overwrite inputs.
+5. Do not fix uneven levels with per-asset volume in game code — re-normalize sources.
+6. Engine bus defaults and rationale: [reference.md](reference.md)

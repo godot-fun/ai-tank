@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Batch loudness-normalize audio files to a target LUFS using FFmpeg two-pass loudnorm."""
+"""Batch adjust audio volume up or down using FFmpeg volume filter."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -129,55 +128,20 @@ def find_source_collisions(
     return collisions
 
 
-def measure_loudnorm(
-    ffmpeg: Path, file_path: Path, target_lufs: float, true_peak: float
-) -> dict:
-    result = subprocess.run(
-        [
-            str(ffmpeg),
-            "-hide_banner",
-            "-nostats",
-            "-i",
-            str(file_path),
-            "-af",
-            f"loudnorm=I={target_lufs}:TP={true_peak}:LRA=11:print_format=json",
-            "-f",
-            "null",
-            "-",
-        ],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"FFmpeg analysis failed for: {file_path}\n{result.stderr.strip()}"
-        )
-
-    match = re.search(r"\{[\s\S]*\}", result.stderr)
-    if not match:
-        raise RuntimeError(f"Could not parse loudnorm JSON for: {file_path}")
-
-    return json.loads(match.group(0))
+def build_filter(decibels: float | None, gain: float | None) -> str:
+    if gain is not None:
+        if gain < 0:
+            raise ValueError("Gain must be zero or positive.")
+        return f"volume={gain:.6f}"
+    if decibels is None:
+        raise ValueError("Either decibels or gain must be set.")
+    return f"volume={decibels:.6f}dB"
 
 
-def normalize_file(
-    ffmpeg: Path,
-    file_path: Path,
-    out_path: Path,
-    target_lufs: float,
-    true_peak: float,
-    measured: dict,
+def adjust_file(
+    ffmpeg: Path, file_path: Path, out_path: Path, filter_str: str
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    filter_str = (
-        f"loudnorm=I={target_lufs}:TP={true_peak}:LRA=11"
-        f":measured_I={measured['input_i']}"
-        f":measured_LRA={measured['input_lra']}"
-        f":measured_TP={measured['input_tp']}"
-        f":measured_thresh={measured['input_thresh']}"
-        f":offset={measured['target_offset']}"
-        ":linear=true"
-    )
     result = subprocess.run(
         [
             str(ffmpeg),
@@ -194,33 +158,32 @@ def normalize_file(
         text=True,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"FFmpeg normalize failed for: {file_path}")
+        raise RuntimeError(f"FFmpeg volume adjust failed for: {file_path}")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Batch loudness-normalize audio files to a target LUFS."
+        description="Batch adjust audio volume with a fixed dB or linear gain."
     )
     parser.add_argument("input", help="Path to a single audio file or directory")
-    parser.add_argument(
-        "-t",
-        "--target-lufs",
+    gain_group = parser.add_mutually_exclusive_group(required=True)
+    gain_group.add_argument(
+        "-d",
+        "--decibels",
         type=float,
-        default=-14,
-        help="Target integrated loudness in LUFS (default: -14)",
+        help="Volume change in dB (negative reduces, positive boosts)",
     )
-    parser.add_argument(
-        "-tp",
-        "--true-peak",
+    gain_group.add_argument(
+        "-g",
+        "--gain",
         type=float,
-        default=-1.5,
-        help="True peak limit in dBTP (default: -1.5)",
+        help="Linear gain multiplier (e.g. 0.5 = half, 2.0 = double)",
     )
     parser.add_argument(
         "-o",
         "--output-dir",
         default="",
-        help="Output directory (must not overwrite sources; default: <input>/normalized)",
+        help="Output directory (must not overwrite sources; default: <input>/adjust)",
     )
     parser.add_argument(
         "-r", "--recurse", action="store_true", help="Process subdirectories"
@@ -232,6 +195,12 @@ def parse_args() -> argparse.Namespace:
         "--dry-run", action="store_true", help="Preview without writing files"
     )
     return parser.parse_args()
+
+
+def describe_gain(args: argparse.Namespace) -> str:
+    if args.gain is not None:
+        return f"gain {args.gain}"
+    return f"{args.decibels} dB"
 
 
 def main() -> int:
@@ -257,7 +226,7 @@ def main() -> int:
     output_dir = (
         Path(args.output_dir).resolve()
         if args.output_dir
-        else input_root / "normalized"
+        else input_root / "adjust"
     )
 
     initial_count = len(files)
@@ -266,7 +235,7 @@ def main() -> int:
         if initial_count:
             print(
                 "No source files to process: all inputs lie under the output directory. "
-                "Choose a separate output directory (default: normalized/).",
+                "Choose a separate output directory (default: adjust/).",
                 file=sys.stderr,
             )
             return 1
@@ -277,20 +246,26 @@ def main() -> int:
     if collisions:
         print(
             "Refusing to overwrite source files. Use a separate output directory "
-            "(default: normalized/).",
+            "(default: adjust/).",
             file=sys.stderr,
         )
         for source, dest in collisions:
             print(f"  {source} -> {dest}", file=sys.stderr)
         return 1
 
-    print(f"Input:       {args.input}")
-    print(f"Files:       {len(files)}")
-    print(f"Target LUFS: {args.target_lufs}")
-    print(f"True Peak:   {args.true_peak} dBTP")
-    print(f"Output:      {output_dir}")
+    try:
+        filter_str = build_filter(args.decibels, args.gain)
+    except ValueError as exc:
+        print(exc, file=sys.stderr)
+        return 1
+
+    print(f"Input:  {args.input}")
+    print(f"Files:  {len(files)}")
+    print(f"Gain:   {describe_gain(args)}")
+    print(f"Filter: {filter_str}")
+    print(f"Output: {output_dir}")
     if args.dry_run:
-        print("Mode:        DRY RUN")
+        print("Mode:   DRY RUN")
     print()
 
     ok = 0
@@ -313,17 +288,7 @@ def main() -> int:
 
         try:
             print(f"[run]  {rel}")
-            measured = measure_loudnorm(
-                ffmpeg, file_path, args.target_lufs, args.true_peak
-            )
-            normalize_file(
-                ffmpeg,
-                file_path,
-                out_path,
-                args.target_lufs,
-                args.true_peak,
-                measured,
-            )
+            adjust_file(ffmpeg, file_path, out_path, filter_str)
             ok += 1
         except RuntimeError as exc:
             print(f"[fail] {rel}")

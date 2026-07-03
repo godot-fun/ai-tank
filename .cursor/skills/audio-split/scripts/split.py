@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Batch loudness-normalize audio files to a target LUFS using FFmpeg two-pass loudnorm."""
+"""Split audio files into part 1 (before split) and part 2 (after split) using FFmpeg."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -75,6 +74,18 @@ def resolve_ffmpeg() -> Path:
     return resolve_tool_bin(repo_root, "ffmpeg")
 
 
+def resolve_ffprobe(ffmpeg: Path) -> Path:
+    probe = ffmpeg.parent / ("ffprobe.exe" if sys.platform == "win32" else "ffprobe")
+    if probe.is_file():
+        return probe
+    print(
+        f"ffprobe not found next to ffmpeg at {ffmpeg.parent}. "
+        "Install a full FFmpeg build that includes ffprobe.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+
 def get_audio_files(path: Path, recurse: bool) -> list[Path]:
     if path.is_file():
         if path.suffix.lower() not in AUDIO_EXTENSIONS:
@@ -99,86 +110,64 @@ def get_audio_files(path: Path, recurse: bool) -> list[Path]:
     return sorted(files)
 
 
-def relative_path(file_path: Path, input_root: Path) -> str:
-    try:
-        return file_path.relative_to(input_root).as_posix()
-    except ValueError:
-        return file_path.name
-
-
-def filter_output_files(files: list[Path], output_dir: Path) -> list[Path]:
-    out = output_dir.resolve()
-    kept: list[Path] = []
-    for file_path in files:
-        try:
-            file_path.resolve().relative_to(out)
-        except ValueError:
-            kept.append(file_path)
-    return kept
-
-
-def find_source_collisions(
-    files: list[Path], input_root: Path, output_dir: Path
-) -> list[tuple[Path, Path]]:
-    collisions: list[tuple[Path, Path]] = []
-    for file_path in files:
-        rel = relative_path(file_path, input_root)
-        out_path = output_dir / rel
-        if out_path.resolve() == file_path.resolve():
-            collisions.append((file_path, out_path))
-    return collisions
-
-
-def measure_loudnorm(
-    ffmpeg: Path, file_path: Path, target_lufs: float, true_peak: float
-) -> dict:
+def get_duration(ffprobe: Path, file_path: Path) -> float:
     result = subprocess.run(
         [
-            str(ffmpeg),
-            "-hide_banner",
-            "-nostats",
-            "-i",
+            str(ffprobe),
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
             str(file_path),
-            "-af",
-            f"loudnorm=I={target_lufs}:TP={true_peak}:LRA=11:print_format=json",
-            "-f",
-            "null",
-            "-",
         ],
         capture_output=True,
         text=True,
     )
     if result.returncode != 0:
-        raise RuntimeError(
-            f"FFmpeg analysis failed for: {file_path}\n{result.stderr.strip()}"
+        raise RuntimeError(f"Could not read duration for: {file_path}")
+    try:
+        return float(result.stdout.strip())
+    except ValueError as exc:
+        raise RuntimeError(f"Invalid duration for: {file_path}") from exc
+
+
+def resolve_split_seconds(
+    duration: float, split_at: float | None, percent: float | None
+) -> float:
+    if split_at is not None:
+        point = split_at
+    elif percent is not None:
+        point = duration * (percent / 100.0)
+    else:
+        point = duration * 0.5
+
+    if point <= 0:
+        raise ValueError("Split point must be after the start ( > 0 seconds ).")
+    if point >= duration:
+        raise ValueError(
+            f"Split point ({point:.3f}s) must be before file end ({duration:.3f}s)."
         )
-
-    match = re.search(r"\{[\s\S]*\}", result.stderr)
-    if not match:
-        raise RuntimeError(f"Could not parse loudnorm JSON for: {file_path}")
-
-    return json.loads(match.group(0))
+    return point
 
 
-def normalize_file(
-    ffmpeg: Path,
-    file_path: Path,
-    out_path: Path,
-    target_lufs: float,
-    true_peak: float,
-    measured: dict,
+def output_paths(out_dir: Path, file_path: Path, input_root: Path) -> tuple[Path, Path]:
+    rel = relative_path(file_path, input_root)
+    rel_parent = Path(rel).parent
+    stem = Path(rel).stem
+    suffix = file_path.suffix
+    base = out_dir / rel_parent / stem
+    return Path(f"{base}_part1{suffix}"), Path(f"{base}_part2{suffix}")
+
+
+def split_file(
+    ffmpeg: Path, file_path: Path, part1: Path, part2: Path, split_at: float
 ) -> None:
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    filter_str = (
-        f"loudnorm=I={target_lufs}:TP={true_peak}:LRA=11"
-        f":measured_I={measured['input_i']}"
-        f":measured_LRA={measured['input_lra']}"
-        f":measured_TP={measured['input_tp']}"
-        f":measured_thresh={measured['input_thresh']}"
-        f":offset={measured['target_offset']}"
-        ":linear=true"
-    )
-    result = subprocess.run(
+    part1.parent.mkdir(parents=True, exist_ok=True)
+    part2.parent.mkdir(parents=True, exist_ok=True)
+
+    result1 = subprocess.run(
         [
             str(ffmpeg),
             "-hide_banner",
@@ -186,42 +175,61 @@ def normalize_file(
             "-y",
             "-i",
             str(file_path),
-            "-af",
-            filter_str,
-            str(out_path),
+            "-t",
+            f"{split_at:.6f}",
+            str(part1),
         ],
         capture_output=True,
         text=True,
     )
-    if result.returncode != 0:
-        raise RuntimeError(f"FFmpeg normalize failed for: {file_path}")
+    if result1.returncode != 0:
+        raise RuntimeError(f"FFmpeg part 1 failed for: {file_path}")
+
+    result2 = subprocess.run(
+        [
+            str(ffmpeg),
+            "-hide_banner",
+            "-nostats",
+            "-y",
+            "-ss",
+            f"{split_at:.6f}",
+            "-i",
+            str(file_path),
+            str(part2),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result2.returncode != 0:
+        raise RuntimeError(f"FFmpeg part 2 failed for: {file_path}")
+
+
+def relative_path(file_path: Path, input_root: Path) -> str:
+    try:
+        return file_path.relative_to(input_root).as_posix()
+    except ValueError:
+        return file_path.name
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Batch loudness-normalize audio files to a target LUFS."
+        description="Split audio into part 1 (before split) and part 2 (after split)."
     )
     parser.add_argument("input", help="Path to a single audio file or directory")
-    parser.add_argument(
-        "-t",
-        "--target-lufs",
+    split = parser.add_mutually_exclusive_group()
+    split.add_argument(
+        "-s",
+        "--split-at",
         type=float,
-        default=-14,
-        help="Target integrated loudness in LUFS (default: -14)",
+        help="Split time in seconds (part 1 ends here; part 2 starts here)",
     )
-    parser.add_argument(
-        "-tp",
-        "--true-peak",
+    split.add_argument(
+        "-p",
+        "--percent",
         type=float,
-        default=-1.5,
-        help="True peak limit in dBTP (default: -1.5)",
+        help="Split position as percent of duration (default: 50)",
     )
-    parser.add_argument(
-        "-o",
-        "--output-dir",
-        default="",
-        help="Output directory (must not overwrite sources; default: <input>/normalized)",
-    )
+    parser.add_argument("-o", "--output-dir", default="", help="Output directory")
     parser.add_argument(
         "-r", "--recurse", action="store_true", help="Process subdirectories"
     )
@@ -234,9 +242,20 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def format_split_label(
+    split_at: float | None, percent: float | None, resolved: float
+) -> str:
+    if split_at is not None:
+        return f"{resolved:.3f}s (from -s {split_at})"
+    if percent is not None:
+        return f"{resolved:.3f}s ({percent}% of duration)"
+    return f"{resolved:.3f}s (50% default)"
+
+
 def main() -> int:
     args = parse_args()
     ffmpeg = resolve_ffmpeg()
+    ffprobe = resolve_ffprobe(ffmpeg)
 
     input_path = Path(args.input)
     if not input_path.exists():
@@ -254,43 +273,13 @@ def main() -> int:
     else:
         input_root = input_path
 
-    output_dir = (
-        Path(args.output_dir).resolve()
-        if args.output_dir
-        else input_root / "normalized"
-    )
+    output_dir = Path(args.output_dir).resolve() if args.output_dir else input_root / "split"
 
-    initial_count = len(files)
-    files = filter_output_files(files, output_dir)
-    if not files:
-        if initial_count:
-            print(
-                "No source files to process: all inputs lie under the output directory. "
-                "Choose a separate output directory (default: normalized/).",
-                file=sys.stderr,
-            )
-            return 1
-        print(f"No supported audio files found under: {args.input}")
-        return 0
-
-    collisions = find_source_collisions(files, input_root, output_dir)
-    if collisions:
-        print(
-            "Refusing to overwrite source files. Use a separate output directory "
-            "(default: normalized/).",
-            file=sys.stderr,
-        )
-        for source, dest in collisions:
-            print(f"  {source} -> {dest}", file=sys.stderr)
-        return 1
-
-    print(f"Input:       {args.input}")
-    print(f"Files:       {len(files)}")
-    print(f"Target LUFS: {args.target_lufs}")
-    print(f"True Peak:   {args.true_peak} dBTP")
-    print(f"Output:      {output_dir}")
+    print(f"Input:  {args.input}")
+    print(f"Files:  {len(files)}")
+    print(f"Output: {output_dir}")
     if args.dry_run:
-        print("Mode:        DRY RUN")
+        print("Mode:   DRY RUN")
     print()
 
     ok = 0
@@ -299,31 +288,37 @@ def main() -> int:
 
     for file_path in files:
         rel = relative_path(file_path, input_root)
-        out_path = output_dir / rel
+        part1, part2 = output_paths(output_dir, file_path, input_root)
 
-        if out_path.exists() and not args.overwrite and not args.dry_run:
+        if (
+            (part1.exists() or part2.exists())
+            and not args.overwrite
+            and not args.dry_run
+        ):
             print(f"[skip] {rel}")
             skip += 1
             continue
 
+        try:
+            duration = get_duration(ffprobe, file_path)
+            split_seconds = resolve_split_seconds(duration, args.split_at, args.percent)
+            label = format_split_label(args.split_at, args.percent, split_seconds)
+        except (RuntimeError, ValueError) as exc:
+            print(f"[fail] {rel}")
+            print(exc)
+            fail += 1
+            continue
+
         if args.dry_run:
-            print(f"[plan] {rel} -> {out_path}")
+            print(f"[plan] {rel} @ {label}")
+            print(f"       -> {part1.name}")
+            print(f"       -> {part2.name}")
             ok += 1
             continue
 
         try:
-            print(f"[run]  {rel}")
-            measured = measure_loudnorm(
-                ffmpeg, file_path, args.target_lufs, args.true_peak
-            )
-            normalize_file(
-                ffmpeg,
-                file_path,
-                out_path,
-                args.target_lufs,
-                args.true_peak,
-                measured,
-            )
+            print(f"[run]  {rel} @ {label}")
+            split_file(ffmpeg, file_path, part1, part2, split_seconds)
             ok += 1
         except RuntimeError as exc:
             print(f"[fail] {rel}")
