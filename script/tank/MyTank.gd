@@ -19,7 +19,7 @@ func update(_delta: float) -> void:
 		move(direction)
 		play_move_sound()
 	else:
-		Audio.stop_ambience()
+		Audio.stop_ambience(0.3)
 	pass
 
 
@@ -37,5 +37,5 @@ func read_direction() -> Vector2i:
 func play_move_sound() -> void:
 	if Audio.is_playing_ambience():
 		return
-	Audio.play_ambience(TankConfig.AUDIO_TANK_MOVE)
+	Audio.play_ambience(TankConfig.AUDIO_TANK_MOVE, 0.6)
 	pass
