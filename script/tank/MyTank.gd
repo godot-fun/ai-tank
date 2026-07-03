@@ -19,7 +19,7 @@ func update(_delta: float) -> void:
 		move(direction)
 		play_move_sound()
 	else:
-		Audio.stop_ambience(0.3)
+		Audio.stop_ambience(2)
 	pass
 
 
