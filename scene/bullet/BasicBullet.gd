@@ -100,7 +100,7 @@ func on_body_entered(body: Node2D) -> void:
 		if tile is BrickWall:
 			Audio.play_sound(TankConfig.AUDIO_BULLET_HIT_BRICK)
 		else:
-			Audio.play_sound(TankConfig.AUDIO_BULLET_HIT_WALL)
+			Audio.play_sound(TankConfig.AUDIO_BULLET_HIT_STEEL)
 		play_hit_animatio()
 	pass
 
