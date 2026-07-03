@@ -33,6 +33,7 @@ func read_direction() -> Vector2i:
 	return Vector2i.ZERO
 
 func play_move_sound() -> void:
-	Audio.stop_ambience()
+	if Audio.is_playing_ambience():
+		return
 	Audio.play_ambience_fade(TankConfig.AUDIO_TANK_MOVE, 0.6)
 	pass
