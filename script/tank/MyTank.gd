@@ -34,12 +34,37 @@ func read_direction() -> Vector2i:
 		return Vector2i.RIGHT
 	return Vector2i.ZERO
 
+########################################################################################################################
+# move sound
+var move_sound_fade_tween: Tween = null
+
 func play_move_sound() -> void:
-	if Audio.is_playing_ambience():
+	var audio: AudioStreamPlayer = Audio.audio_map[Audio.AudioBusType.Ambience]
+	if move_sound_fade_tween != null and move_sound_fade_tween.is_valid():
+		move_sound_fade_tween.kill()
+		move_sound_fade_tween = null
+		audio.volume_linear = 1.0
+	if Audio.is_playing_ambience() and audio.stream != null:
+		var remaining: float = audio.stream.get_length() - audio.get_playback_position()
+		if remaining > 1.0:
+			return
+		audio.volume_linear = 1.0
+		audio.seek(1.0)
 		return
 	Audio.play_ambience(TankConfig.AUDIO_TANK_MOVE)
 	pass
 
 func stop_move_sound() -> void:
-	Audio.stop_ambience()
+	if !Audio.is_playing_ambience():
+		return
+	if move_sound_fade_tween != null and move_sound_fade_tween.is_valid():
+		return
+	var audio: AudioStreamPlayer = Audio.audio_map[Audio.AudioBusType.Ambience]
+	move_sound_fade_tween = audio.create_tween()
+	move_sound_fade_tween.tween_property(audio, "volume_linear", 0.0, 0.5)
+	move_sound_fade_tween.tween_callback(func() -> void:
+		move_sound_fade_tween = null
+		Audio.stop_ambience()
+		audio.volume_linear = 1.0
+	)
 	pass
