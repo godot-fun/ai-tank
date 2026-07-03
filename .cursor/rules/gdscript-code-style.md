@@ -1,6 +1,5 @@
 ---
 description: GDScript code style
-globs: "**/*.gd"
 alwaysApply: true
 ---
 
