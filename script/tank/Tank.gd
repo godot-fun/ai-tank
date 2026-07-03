@@ -98,7 +98,7 @@ func on_die(amount: int) -> bool:
 	if hp > 0:
 		return false
 
-	Audio.play_sound(death_sound_resource)
+	Audios.play(death_sound_resource)
 	EffectAnimation2D.spawn(
 		global_position,
 		get_tree().current_scene,
@@ -128,7 +128,7 @@ func fire() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	fire_cooldown = fire_interval
-	Audio.play_sound(fire_sound_resource)
+	Audios.play(fire_sound_resource)
 	pass
 
 

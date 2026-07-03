@@ -72,18 +72,18 @@ func show_menu_buttons() -> void:
 
 
 func on_button_hover() -> void:
-	Audio.play_sound("res://audio/sfx/ui-select/01.wav")
+	Audios.play("res://audio/sfx/ui-select/01.wav")
 	pass
 
 
 func on_start_pressed() -> void:
-	Audio.play_sound("res://audio/sfx/ui-confirm/01.wav")
+	Audios.play("res://audio/sfx/ui-confirm/01.wav")
 	BattleProgress.start_new_game()
 	await SceneHelper.async_change_scene_to_file("res://scene/map/BattleMap.tscn")
 	pass
 
 
 func on_exit_pressed() -> void:
-	Audio.play_sound("res://audio/sfx/ui-select/01.wav")
+	Audios.play("res://audio/sfx/ui-select/01.wav")
 	await gdf.quit()
 	pass
