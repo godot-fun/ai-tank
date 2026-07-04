@@ -12,14 +12,13 @@ func _ready() -> void:
 
 
 func play_opening_video() -> void:
-	if ResourceLoader.exists(OPENING_VIDEO_PATH):
-		var stream := load(OPENING_VIDEO_PATH) as VideoStream
-		if stream != null:
-			opening_video.stream = stream
-			opening_video.visible = true
-			opening_video.play()
-			await opening_video.finished
-			opening_video.stop()
+	var stream := await ResourceHelper.async_load(OPENING_VIDEO_PATH) as VideoStream
+	if stream != null:
+		opening_video.stream = stream
+		opening_video.visible = true
+		opening_video.play()
+		await opening_video.finished
+		opening_video.stop()
 
 	await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
 	pass
