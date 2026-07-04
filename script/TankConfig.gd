@@ -101,7 +101,7 @@ static var partner_tank: TankData = TankData.new(
 static var enemy_easy: TankData = TankData.new(
 	1,
 	Team.ENEMY,
-	Vector2i(2, 2),
+	Vector2i(2, 2), 
 	1,
 	320.0,
 	800.0,
