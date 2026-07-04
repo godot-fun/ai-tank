@@ -12,7 +12,7 @@ const AUDIO_TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
 
 const AUDIO_BULLET_HIT_BULLET := "res://audio/sfx/emp-hit/01.wav"
 const AUDIO_BULLET_HIT_TANK := "res://audio/sfx/tank/bullet_hit_tank.wav"
-const AUDIO_BULLET_HIT_STEEL := "res://audio/sfx/bullet-hit-steel/01.wav"
+const AUDIO_BULLET_HIT_STEEL := "res://audio/sfx/tank/bullet_hit_steel.wav"
 const AUDIO_BULLET_HIT_BRICK := "res://audio/sfx/bullet-hit-brick/01.wav"
 
 const EFFECT_TANK_EXPLOSION := "res://image/effects/tank-explosion_sheet.png"
