@@ -43,6 +43,7 @@ offset_top = -120.0
 offset_right = 200.0
 offset_bottom = -48.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
 theme_override_font_sizes/font_size = 36
 text = "点击进入"
