@@ -10,9 +10,9 @@ Separate **framework**, **resources (by type)**, and **game code**. Do not mix t
 ```
 project-root/
 ├── zfoo/          # Framework only — sync/upgrade; no game business logic
-├── image/         # Image assets
+├── assets/        # Extra assets (video, fonts, 3D, …)
 ├── audio/         # Audio assets
-├── font/          # Fonts (optional)
+├── image/         # Image assets
 ├── config/        # CSV/JSON tables (optional)
 ├── shader/        # Custom shaders (optional)
 ├── scene/         # Runnable and instanced .tscn scenes
@@ -43,7 +43,17 @@ audio/
 └── voice/         # Voice-over and narration
 ```
 
-**Other resource roots** (add when needed): `font/`, `config/`, `shader/`.
+**`assets/`** — video, fonts, 3D, and other extra binary assets:
+
+```
+assets/
+├── video/         # Cutscenes, trailers, background video
+├── font/          # Font files (.ttf, .otf, …)
+├── 3d/            # Models, meshes, materials, animations
+└── …              # Other misc assets as needed
+```
+
+**Other resource roots** (add when needed): `config/`, `shader/`.
 
 ## Game code — `scene/` and `script/`
 

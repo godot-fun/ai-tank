@@ -42,21 +42,18 @@ Alert.alert("Network error", Colors.error)
 
 ---
 
-## Audio — play music, SFX, voice
+## Audio — play music, sound, voice，SoundEffect
 
 ```gdscript
 # Single track or playlist (auto cross-fade near end of track)
 Audio.play_music("res://audio/bgm.mp3")
 Audio.play_musics(["res://audio/a.mp3", "res://audio/b.mp3"])
 
-# One-shot SFX / voice
-await Audio.play_sound("res://audio/cheer.mp3")
+# One-shot sound / voice
 await Audio.play_voice("res://audio/narration.mp3")
 
-# Volume & control
-Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.5)
-Audio.stop_all()
-var playing := Audio.is_playing_voice()
+# Multi-channel SFX (overlapping sounds on SoundEffect bus)
+Audios.play("res://audio/click.mp3", 0.8)
 ```
 
 ---
