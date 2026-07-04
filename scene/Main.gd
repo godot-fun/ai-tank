@@ -1,5 +1,6 @@
 extends Control
 
+const OPENING_VIDEO_PATH := "res://assets/video/tank-opening-1.ogv"
 const INTRO_ANIMATION := "intro"
 const TANK_FRAME_PATHS: Array[String] = [
 	"res://image/characters/blue_tank_1.png",
@@ -12,6 +13,8 @@ const TANK_FRAME_PATHS: Array[String] = [
 const TANK_DISPLAY_SIZE := Vector2(240.0, 240.0)
 const TANK_ANIMATION_FPS := 5.0
 
+@onready var opening_video: VideoStreamPlayer = $OpeningVideo
+@onready var center_container: CenterContainer = $CenterContainer
 @onready var title_label: Label = $CenterContainer/VBox/HeaderRow/TitleLabel
 @onready var tank_sprite: AnimatedSprite2D = $CenterContainer/VBox/HeaderRow/TankArea/TankSprite
 @onready var menu_buttons: VBoxContainer = $CenterContainer/VBox/MenuButtons
@@ -27,7 +30,31 @@ func _ready() -> void:
 	start_button.mouse_entered.connect(on_button_hover)
 	exit_button.mouse_entered.connect(on_button_hover)
 	setup_tank_animation()
+	play_sequence()
+	pass
+
+
+func play_sequence() -> void:
+	await play_opening_video()
+	center_container.visible = true
 	play_intro()
+	pass
+
+
+func play_opening_video() -> void:
+	if not ResourceLoader.exists(OPENING_VIDEO_PATH):
+		return
+
+	var stream := load(OPENING_VIDEO_PATH) as VideoStream
+	if stream == null:
+		return
+
+	opening_video.stream = stream
+	opening_video.visible = true
+	opening_video.play()
+	await opening_video.finished
+	opening_video.stop()
+	opening_video.visible = false
 	pass
 
 
