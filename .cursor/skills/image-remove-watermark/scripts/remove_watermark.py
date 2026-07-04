@@ -1,4 +1,4 @@
-"""
+﻿"""
 Batch watermark removal via LaMa / IOPaint deep-learning inpainting.
 
 Semantically repaints watermark regions defined by a mask.
@@ -44,6 +44,10 @@ HD_MPS_LIMIT = 1536
 HD_CPU_LIMIT = 1024
 
 CORNER_CHOICES = ("bottom-right", "bottom-left", "top-right", "top-left", "center")
+AUTO_DETECT_CORNERS = ("top-left", "bottom-right")
+DEFAULT_AUTO_WIDTH = 0.28
+DEFAULT_AUTO_HEIGHT = 0.10
+DEFAULT_AUTO_MARGIN = 0.02
 
 
 def find_repo_root(start: Path) -> Path | None:
@@ -272,6 +276,58 @@ def corner_rect(
     return x0, y0, box_w, box_h
 
 
+def edge_energy(gray: np.ndarray) -> float:
+    values = gray.astype(np.float32)
+    gx = np.diff(values, axis=1)
+    gy = np.diff(values, axis=0)
+    return float(np.mean(gx * gx) + np.mean(gy * gy))
+
+
+def corner_watermark_score(
+    gray: np.ndarray,
+    corner: str,
+    width_frac: float,
+    height_frac: float,
+    margin_frac: float,
+) -> float:
+    height, width = gray.shape
+    x, y, patch_w, patch_h = corner_rect(
+        (width, height), corner, width_frac, height_frac, margin_frac
+    )
+    patch = gray[y : y + patch_h, x : x + patch_w]
+    if patch.size == 0:
+        return 0.0
+
+    if corner == "top-left":
+        ref = gray[y + patch_h : y + patch_h * 2, x + patch_w : x + patch_w * 2]
+    else:
+        ref = gray[max(0, y - patch_h) : y, max(0, x - patch_w) : x]
+
+    if ref.size == 0:
+        return edge_energy(patch)
+
+    edge_diff = edge_energy(patch) - edge_energy(ref)
+    std_diff = float(np.std(patch) - np.std(ref))
+    return max(0.0, edge_diff) + 0.35 * max(0.0, std_diff)
+
+
+def detect_watermark_corner(
+    image: Image.Image,
+    width_frac: float = DEFAULT_AUTO_WIDTH,
+    height_frac: float = DEFAULT_AUTO_HEIGHT,
+    margin_frac: float = DEFAULT_AUTO_MARGIN,
+) -> str:
+    gray = np.array(image.convert("L"))
+    scores = {
+        corner: corner_watermark_score(gray, corner, width_frac, height_frac, margin_frac)
+        for corner in AUTO_DETECT_CORNERS
+    }
+    top_left, bottom_right = scores["top-left"], scores["bottom-right"]
+    if abs(top_left - bottom_right) < 0.08 * max(top_left, bottom_right, 1e-6):
+        return "bottom-right"
+    return max(scores, key=scores.get)
+
+
 def make_rect_mask(image_size: tuple[int, int], rect: tuple[int, int, int, int]) -> Image.Image:
     x, y, w, h = rect
     mask = Image.new("L", image_size, 0)
@@ -322,8 +378,9 @@ def generate_masks(
     *,
     rect_spec: str | None,
     corner: str | None,
-    width_frac: float | None,
-    height_frac: float | None,
+    auto_detect: bool,
+    width_frac: float,
+    height_frac: float,
     margin_frac: float,
     expand: int,
 ) -> dict[Path, Path]:
@@ -336,12 +393,17 @@ def generate_masks(
 
         if rect_spec is not None:
             rect = parse_rect(rect_spec, size)
-        elif corner is not None:
-            if width_frac is None or height_frac is None:
-                raise ValueError("--corner requires --width and --height")
-            rect = corner_rect(size, corner, width_frac, height_frac, margin_frac)
+        elif auto_detect or corner is not None:
+            corner_name = corner
+            if auto_detect:
+                with Image.open(image_path) as image_for_detect:
+                    corner_name = detect_watermark_corner(
+                        image_for_detect, width_frac, height_frac, margin_frac
+                    )
+                print(f"  {image_path.name}: detected watermark at {corner_name}")
+            rect = corner_rect(size, corner_name, width_frac, height_frac, margin_frac)
         else:
-            raise RuntimeError("generate_masks called without rect or corner")
+            raise RuntimeError("generate_masks called without rect, corner, or auto-detect")
 
         mask = make_rect_mask(size, rect)
         mask = dilate_mask(mask, expand)
@@ -518,24 +580,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "--margin",
-        default="0",
-        help="Corner margin from edge as fraction or percent (default: 0)",
+        default="0.02",
+        help="Corner margin from edge as fraction or percent (default: 0.02 for auto-detect)",
     )
     return parser.parse_args(argv)
 
 
-def validate_mask_source(args: argparse.Namespace) -> None:
-    sources = [args.mask, args.mask_dir, args.rect, args.corner]
-    if not any(sources):
-        raise SystemExit(
-            "Mask source required: use --mask, --mask-dir, --rect, or --corner "
-            "(see SKILL.md)."
-        )
+def uses_auto_detect(args: argparse.Namespace) -> bool:
+    return not any((args.mask, args.mask_dir, args.rect, args.corner))
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
-    validate_mask_source(args)
+    auto_detect = uses_auto_detect(args)
 
     project_root = find_project_root()
     search_root, image_paths = resolve_input(
@@ -551,10 +608,21 @@ def main(argv: list[str] | None = None) -> int:
         print(f"No images found under {search_root} (pattern: {args.pattern})")
         return 1
 
-    width_frac = parse_fraction(args.width, "--width") if args.width else None
-    height_frac = parse_fraction(args.height, "--height") if args.height else None
+    uses_corner_mask = bool(args.corner or auto_detect)
+    width_frac = (
+        parse_fraction(args.width, "--width")
+        if args.width
+        else (DEFAULT_AUTO_WIDTH if uses_corner_mask else 0.0)
+    )
+    height_frac = (
+        parse_fraction(args.height, "--height")
+        if args.height
+        else (DEFAULT_AUTO_HEIGHT if uses_corner_mask else 0.0)
+    )
     margin_frac = (
-        parse_fraction(args.margin, "--margin", allow_zero=True) if args.corner else 0.0
+        parse_fraction(args.margin, "--margin", allow_zero=True)
+        if uses_corner_mask
+        else 0.0
     )
 
     device = detect_device(args.device)
@@ -564,6 +632,11 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"Target: {search_root}")
     print(f"Images: {len(image_paths)}, Model: {args.model}, Device: {device}")
+    if auto_detect:
+        print(
+            "Mask: auto-detect corner (top-left / bottom-right) "
+            f"size {width_frac:.0%} x {height_frac:.0%}, margin {margin_frac:.0%}"
+        )
     print(f"Output: {output_dir if output_dir else 'original file path (overwrite)'}")
 
     generated_mask_dir: Path | None = None
@@ -573,7 +646,7 @@ def main(argv: list[str] | None = None) -> int:
     config_temp_path: Path | None = None
 
     try:
-        if args.rect or args.corner:
+        if args.rect or args.corner or auto_detect:
             temp_ctx = tempfile.TemporaryDirectory(prefix="iopaint_masks_")
             generated_mask_dir = Path(temp_ctx.name)
             print(f"Generating masks in {generated_mask_dir} ...")
@@ -583,6 +656,7 @@ def main(argv: list[str] | None = None) -> int:
                 search_root,
                 rect_spec=args.rect,
                 corner=args.corner,
+                auto_detect=auto_detect,
                 width_frac=width_frac,
                 height_frac=height_frac,
                 margin_frac=margin_frac,
