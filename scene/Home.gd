@@ -28,6 +28,7 @@ func _ready() -> void:
 	exit_button.mouse_entered.connect(on_button_hover)
 	setup_tank_animation()
 	play_intro()
+	Audio.play_music(BgmConfig.BGM_OPENING_DEMO_PART2)
 	pass
 
 
