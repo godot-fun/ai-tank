@@ -2,6 +2,8 @@ extends Tank
 class_name PartnerTank
 
 const AI_THINK_INTERVAL := 0.5
+const RANDOM_MOVE_EXTRA_STEPS_MAX := 8
+
 
 var ai_think_timer := 0.0
 
@@ -25,7 +27,7 @@ func physics_update(delta: float) -> void:
 		ai_think_timer = AI_THINK_INTERVAL
 		var direction := pick_move_direction()
 		if direction != Vector2i.ZERO:
-			move(direction)
+			move(direction, RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
 	pass
 
 
