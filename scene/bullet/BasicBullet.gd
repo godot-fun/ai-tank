@@ -2,7 +2,7 @@ class_name BasicBullet
 extends Area2D
 
 const SCENE := "res://scene/bullet/BasicBullet.tscn"
-const BULLET_SIZE_RATIO := 0.6
+const BULLET_SIZE_RATIO := 1
 
 var direction := Vector2i.ZERO
 var speed := 0.0
@@ -108,5 +108,5 @@ func play_hit_animatio() -> void:
 	EffectAnimation2D.spawn(global_position, 
 		get_tree().current_scene,
 		"res://image/effects/tank-hit_sheet.png", 
-		Vector2i(8, 1), 0.2, 17 )
+		Vector2i(8, 1), 0.4, 17)
 	pass
