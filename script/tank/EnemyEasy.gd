@@ -2,11 +2,9 @@
 class_name EnemyEasy
 
 const AI_THINK_INTERVAL := 0.6
-const RANDOM_MOVE_EXTRA_STEPS_MIN := 1
-const RANDOM_MOVE_EXTRA_STEPS_MAX := 6
+const RANDOM_MOVE_EXTRA_STEPS_MAX := 8
 
 var ai_think_timer := 0.0
-var ai_move_extra_steps := 0
 
 
 func start() -> void:
@@ -27,10 +25,7 @@ func physics_update(delta: float) -> void:
 		ai_think_timer = AI_THINK_INTERVAL
 		var direction := pick_move_direction()
 		if direction != Vector2i.ZERO:
-			if ai_move_extra_steps > 0:
-				move(direction, ai_move_extra_steps)
-			else:
-				move(direction)
+			move(direction, RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
 		fire()
 	pass
 
@@ -38,10 +33,8 @@ func physics_update(delta: float) -> void:
 func pick_move_direction() -> Vector2i:
 	var player := TankHelper.find_player()
 	if player == null or randf() < 0.35:
-		ai_move_extra_steps = randi_range(RANDOM_MOVE_EXTRA_STEPS_MIN, RANDOM_MOVE_EXTRA_STEPS_MAX)
 		return pick_random_direction()
 
-	ai_move_extra_steps = 0
 	return pick_direction_toward(TankHelper.get_tank_grid(player))
 
 
@@ -78,4 +71,4 @@ func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
 		if not TankHelper.is_move_blocked(grid_pos + direction, grid_size, self):
 			return direction
 
-	return Vector2i.ZERO
+	return pick_random_direction()
