@@ -80,7 +80,7 @@ func on_button_hover() -> void:
 func on_start_pressed() -> void:
 	Audios.play("res://audio/sfx/ui-confirm/01.wav")
 	BattleProgress.start_new_game()
-	await SceneHelper.async_change_scene_to_file("res://scene/map/BattleMap.tscn")
+	await SceneHelper.async_change_scene_to_file("res://scene/ui/LevelBrief.tscn")
 	pass
 
 

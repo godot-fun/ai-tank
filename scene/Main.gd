@@ -9,7 +9,7 @@ const HOME_SCENE_PATH := "res://scene/Home.tscn"
 
 func _ready() -> void:
 	set_process_input(false)
-	Audio.play_music(BgmConfig.BGM_OPENING_DEMO_PART1)
+	Audio.play_music_fade(BgmConfig.BGM_OPENING_DEMO_PART1)
 	play_opening_video()
 	pass
 
