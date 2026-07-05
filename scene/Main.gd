@@ -9,7 +9,7 @@ const HOME_SCENE_PATH := "res://scene/Home.tscn"
 
 func _ready() -> void:
 	set_process_input(false)
-	Audio.play_music_fade(BgmConfig.BGM_OPENING_DEMO_PART1)
+	Audio.play_ambience_fade(BgmConfig.BGM_OPENING_DEMO_PART1)
 	play_opening_video()
 	pass
 
@@ -53,5 +53,6 @@ func _input(event: InputEvent) -> void:
 
 func on_enter_pressed() -> void:
 	Audios.play("res://audio/sfx/ui-confirm/01.wav")
+	Audio.stop_ambience_fade()
 	await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
 	pass

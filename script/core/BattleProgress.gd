@@ -4,12 +4,12 @@ const INITIAL_ENEMY_COUNT := 30
 const ENEMY_COUNT_PER_LEVEL := 5
 const TIME_LIMIT_SECONDS := 60.0
 
-static var level := 1
+static var level := 0
 
 static var score := 0
 
 static func get_enemy_count() -> int:
-	return INITIAL_ENEMY_COUNT + (level - 1) * ENEMY_COUNT_PER_LEVEL
+	return INITIAL_ENEMY_COUNT + level * ENEMY_COUNT_PER_LEVEL
 
 
 static func get_time_limit() -> float:
@@ -17,7 +17,7 @@ static func get_time_limit() -> float:
 
 
 static func start_new_game() -> void:
-	level = 1
+	level = 0
 	score = 0
 
 

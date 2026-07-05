@@ -9,10 +9,10 @@ const BATTLE_SCENE_PATH := "res://scene/map/BattleMap.tscn"
 
 func _ready() -> void:
 	set_process_input(false)
-	level_label.text = "第 %d 关" % BattleProgress.level
+	level_label.text = "第 %d 关" % (BattleProgress.level + 1)
 	score_label.text = "分数 %d" % BattleProgress.score
 	show_tap_prompt()
-	Audio.play_ambience(BgmConfig.BGM_STAGE_START)
+	Audios.play(BgmConfig.BGM_STAGE_START)
 	pass
 
 
