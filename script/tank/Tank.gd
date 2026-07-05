@@ -128,7 +128,8 @@ func fire() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	fire_cooldown = fire_interval
-	Audios.play(fire_sound_resource)
+	if StringUtils.is_not_blank(fire_sound_resource):
+		Audios.play(fire_sound_resource)
 	pass
 
 
