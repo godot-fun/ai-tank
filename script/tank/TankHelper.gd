@@ -27,6 +27,7 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 	parent.add_child(tank)
 
 	var result := tank as Tank
+	result.play_enter_animation()
 	return result
 
 

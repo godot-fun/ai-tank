@@ -82,6 +82,28 @@ func scale_tank() -> void:
 	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
+
+func play_enter_animation() -> void:
+	visible = false
+	moving = true
+	update_facing(Vector2i.DOWN)
+
+	var target_pos := global_position
+	global_position = Vector2(
+		target_pos.x,
+		target_pos.y + TileConfig.TILE_SIZE * 2,
+	)
+	visible = true
+
+	var duration := global_position.distance_to(target_pos) / speed
+	var tween := create_tween()
+	tween.tween_property(self, "global_position", target_pos, duration)
+	tween.finished.connect(func() -> void:
+		moving = false
+		global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+	)
+	pass
+
 # ----------------------------------------------------------------------------------------------------------------------
 func is_alive() -> bool:
 	return hp > 0
