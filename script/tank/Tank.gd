@@ -38,22 +38,19 @@ func _exit_tree() -> void:
 	TankHelper.unregister_tank(self)
 	pass
 
-
 func _physics_process(delta: float) -> void:
 	if not is_alive():
 		return
 	update_fire_cooldown(delta)
-	update(delta)
+	physics_update(delta)
 	pass
 
 
 func start() -> void:
 	pass
 
-
-func update(_delta: float) -> void:
+func physics_update(_delta: float) -> void:
 	pass
-
 
 func apply_data(data: TankConfig.TankData) -> void:
 	id = data.id

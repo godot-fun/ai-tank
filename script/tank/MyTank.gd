@@ -1,13 +1,39 @@
 extends Tank
 class_name MyTank
 
+const SHAKE_SHADER := "res://shader/tank_move_shake.gdshader"
+
+var shake_material: ShaderMaterial
+
 
 func start() -> void:
 	apply_data(TankConfig.my_tank)
+	setup_shake_material()
 	pass
 
 
-func update(_delta: float) -> void:
+func _process(_delta: float) -> void:
+	update_shake_shader()
+	pass
+
+
+func setup_shake_material() -> void:
+	shake_material = ShaderMaterial.new()
+	shake_material.shader = load(SHAKE_SHADER)
+	sprite.material = shake_material
+	update_shake_shader()
+	pass
+
+
+func update_shake_shader() -> void:
+	if shake_material == null:
+		return
+	shake_material.set_shader_parameter("move_amount", 1.0 if moving else 0.0)
+	shake_material.set_shader_parameter("world_scale", absf(scale.x))
+	pass
+
+
+func physics_update(_delta: float) -> void:
 	if Input.is_action_pressed("ui_accept"):
 		fire()
 
