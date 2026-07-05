@@ -1,13 +1,12 @@
-[gd_scene format=3 uid="uid://cbattlemap001"]
+[gd_scene format=3 uid="uid://ff2vw0u4dftw"]
 
 [ext_resource type="Script" path="res://scene/map/BattleMap.gd" id="1_battle_map"]
 [ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/map/AssistMap.tscn" id="2_assist_map"]
-[ext_resource type="PackedScene" uid="uid://c8battlehud001" path="res://scene/ui/BattleHud.tscn" id="3_battle_hud"]
+[ext_resource type="PackedScene" uid="uid://sn7h4hw54ab5" path="res://scene/ui/BattleHud.tscn" id="3_battle_hud"]
 
-[node name="BattleMap" type="Node2D"]
+[node name="BattleMap" type="Node2D" unique_id=1001338775]
 script = ExtResource("1_battle_map")
 
-[node name="AssistMap" parent="." instance=ExtResource("2_assist_map")]
-show_grid = false
+[node name="AssistMap" parent="." unique_id=1232125247 instance=ExtResource("2_assist_map")]
 
-[node name="BattleHud" parent="." instance=ExtResource("3_battle_hud")]
+[node name="BattleHud" parent="." unique_id=1129657200 instance=ExtResource("3_battle_hud")]

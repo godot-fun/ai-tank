@@ -6,6 +6,9 @@ extends Node2D
 func _ready() -> void:
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
+	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
+	TankHelper.create_tank(TankConfig.partner_tank, Eagle.partner_start_grid_pos)
+	
 	battle_hud.update_enemies_remaining(BattleProgress.get_enemy_count())
 	battle_hud.update_timer(BattleProgress.get_time_limit())
 	
