@@ -44,24 +44,3 @@ func pick_move_direction() -> Vector2i:
 		return Vector2i.ZERO
 
 	return pick_direction_toward(target_grid)
-	pass
-
-
-func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
-	var diff := target_grid - grid_pos
-	if diff == Vector2i.ZERO:
-		return Vector2i.ZERO
-
-	var candidates: Array[Vector2i] = []
-	if diff.x != 0:
-		candidates.append(Vector2i.RIGHT if signi(diff.x) > 0 else Vector2i.LEFT)
-	if diff.y != 0:
-		candidates.append(Vector2i.DOWN if signi(diff.y) > 0 else Vector2i.UP)
-
-	candidates.shuffle()
-	for direction in candidates:
-		if not TankHelper.is_move_blocked(grid_pos + direction, grid_size, self):
-			return direction
-
-	return Vector2i.ZERO
-	pass

@@ -36,39 +36,3 @@ func pick_move_direction() -> Vector2i:
 		return pick_random_direction()
 
 	return pick_direction_toward(TankHelper.get_tank_grid(player))
-
-
-func pick_random_direction() -> Vector2i:
-	var directions: Array[Vector2i] = [
-		Vector2i.UP,
-		Vector2i.DOWN,
-		Vector2i.LEFT,
-		Vector2i.RIGHT,
-	]
-	directions.shuffle()
-
-	for direction in directions:
-		var target_grid := grid_pos + direction
-		if not TankHelper.is_move_blocked(target_grid, grid_size, self):
-			return direction
-
-	return RandomUtils.random_ele(directions)
-
-
-func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
-	var diff := target_grid - grid_pos
-	if diff == Vector2i.ZERO:
-		return pick_random_direction()
-
-	var candidates: Array[Vector2i] = []
-	if diff.x != 0:
-		candidates.append(Vector2i.RIGHT if signi(diff.x) > 0 else Vector2i.LEFT)
-	if diff.y != 0:
-		candidates.append(Vector2i.DOWN if signi(diff.y) > 0 else Vector2i.UP)
-
-	candidates.shuffle()
-	for direction in candidates:
-		if not TankHelper.is_move_blocked(grid_pos + direction, grid_size, self):
-			return direction
-
-	return pick_random_direction()
