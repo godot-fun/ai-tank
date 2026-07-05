@@ -31,6 +31,7 @@ func physics_update(delta: float) -> void:
 				move(direction, ai_move_extra_steps)
 			else:
 				move(direction)
+		fire()
 	pass
 
 
@@ -42,7 +43,6 @@ func pick_move_direction() -> Vector2i:
 
 	ai_move_extra_steps = 0
 	return pick_direction_toward(TankHelper.get_tank_grid(player))
-	pass
 
 
 func pick_random_direction() -> Vector2i:
@@ -59,7 +59,7 @@ func pick_random_direction() -> Vector2i:
 		if not TankHelper.is_move_blocked(target_grid, grid_size, self):
 			return direction
 
-	return Vector2i.ZERO
+	return RandomUtils.random_ele(directions)
 
 
 func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
