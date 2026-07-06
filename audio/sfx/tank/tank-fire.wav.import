@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://kf3048pb3hfi"
-path="res://.godot/imported/02.wav-41a4ad62a27c03c9c5619787747b9cdf.sample"
+uid="uid://x1v0yu4jy2hg"
+path="res://.godot/imported/tank-fire.wav-62a4e043438db16757d2328aa73e98ad.sample"
 
 [deps]
 
-source_file="res://audio/sfx/fire-ready/02.wav"
-dest_files=["res://.godot/imported/02.wav-41a4ad62a27c03c9c5619787747b9cdf.sample"]
+source_file="res://audio/sfx/tank/tank-fire.wav"
+dest_files=["res://.godot/imported/tank-fire.wav-62a4e043438db16757d2328aa73e98ad.sample"]
 
 [params]
 

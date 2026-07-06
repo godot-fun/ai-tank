@@ -5,7 +5,7 @@ enum Team {
 	ENEMY
 }
 
-const AUDIO_TANK_FIRE := "res://audio/sfx/shoot-basic/01.wav"
+const AUDIO_TANK_FIRE := "res://audio/sfx/tank/tank-fire.wav"
 const AUDIO_TANK_DEATH := "res://audio/sfx/tank-death/01.wav"
 const AUDIO_TANK_DEATH_ENEMY := "res://audio/sfx/tank-death/02.wav"
 const AUDIO_TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
