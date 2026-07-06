@@ -12,6 +12,11 @@ from pathlib import Path
 
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".ogg", ".flac", ".aac", ".m4a", ".wma"}
 
+SAMPLE_RATE_44100 = 44100
+SAMPLE_RATE_48000 = 48000
+ALLOWED_SAMPLE_RATES = (SAMPLE_RATE_44100, SAMPLE_RATE_48000)
+OUTPUT_CODEC = "pcm_s16le"
+
 
 def find_repo_root(start: Path) -> Path | None:
     for parent in [start.resolve(), *start.resolve().parents]:
@@ -75,6 +80,64 @@ def resolve_ffmpeg() -> Path:
     return resolve_tool_bin(repo_root, "ffmpeg")
 
 
+def resolve_ffprobe(ffmpeg: Path) -> Path:
+    name = "ffprobe.exe" if sys.platform == "win32" else "ffprobe"
+    candidate = ffmpeg.with_name(name)
+    if candidate.is_file():
+        return candidate
+    raise FileNotFoundError(candidate)
+
+
+def probe_sample_rate(ffprobe: Path, file_path: Path) -> int | None:
+    result = subprocess.run(
+        [
+            str(ffprobe),
+            "-v",
+            "quiet",
+            "-print_format",
+            "json",
+            "-show_streams",
+            "-select_streams",
+            "a:0",
+            str(file_path),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return None
+
+    streams = payload.get("streams") or []
+    if not streams:
+        return None
+
+    sample_rate = streams[0].get("sample_rate")
+    try:
+        return int(sample_rate) if sample_rate else None
+    except (TypeError, ValueError):
+        return None
+
+
+def resolve_output_sample_rate(source_rate: int | None) -> int:
+    """Snap output to 44100 or 48000 Hz only."""
+    if source_rate is None or source_rate <= SAMPLE_RATE_44100:
+        return SAMPLE_RATE_44100
+    return SAMPLE_RATE_48000
+
+
+def describe_output_format(source_rate: int | None, output_rate: int) -> str:
+    if source_rate is None:
+        return f"{output_rate} Hz, 16-bit PCM WAV"
+    if source_rate == output_rate:
+        return f"{output_rate} Hz (preserved), 16-bit PCM WAV"
+    return f"{output_rate} Hz (from {source_rate} Hz), 16-bit PCM WAV"
+
+
 def get_audio_files(path: Path, recurse: bool) -> list[Path]:
     if path.is_file():
         if path.suffix.lower() not in AUDIO_EXTENSIONS:
@@ -106,6 +169,11 @@ def relative_path(file_path: Path, input_root: Path) -> str:
         return file_path.name
 
 
+def output_rel_path(file_path: Path, input_root: Path) -> str:
+    rel = relative_path(file_path, input_root)
+    return Path(rel).with_suffix(".wav").as_posix()
+
+
 def filter_output_files(files: list[Path], output_dir: Path) -> list[Path]:
     out = output_dir.resolve()
     kept: list[Path] = []
@@ -122,8 +190,8 @@ def find_source_collisions(
 ) -> list[tuple[Path, Path]]:
     collisions: list[tuple[Path, Path]] = []
     for file_path in files:
-        rel = relative_path(file_path, input_root)
-        out_path = output_dir / rel
+        out_rel = output_rel_path(file_path, input_root)
+        out_path = output_dir / out_rel
         if out_path.resolve() == file_path.resolve():
             collisions.append((file_path, out_path))
     return collisions
@@ -167,6 +235,8 @@ def normalize_file(
     target_lufs: float,
     true_peak: float,
     measured: dict,
+    sample_rate: int,
+    codec: str,
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     filter_str = (
@@ -178,23 +248,28 @@ def normalize_file(
         f":offset={measured['target_offset']}"
         ":linear=true"
     )
-    result = subprocess.run(
-        [
-            str(ffmpeg),
-            "-hide_banner",
-            "-nostats",
-            "-y",
-            "-i",
-            str(file_path),
-            "-af",
-            filter_str,
-            str(out_path),
-        ],
-        capture_output=True,
-        text=True,
-    )
+    cmd = [
+        str(ffmpeg),
+        "-hide_banner",
+        "-nostats",
+        "-y",
+        "-i",
+        str(file_path),
+        "-af",
+        filter_str,
+        "-ar",
+        str(sample_rate),
+        "-c:a",
+        codec,
+        str(out_path),
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
-        raise RuntimeError(f"FFmpeg normalize failed for: {file_path}")
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise RuntimeError(
+            f"FFmpeg normalize failed for: {file_path}"
+            + (f"\n{detail}" if detail else "")
+        )
 
 
 def parse_args() -> argparse.Namespace:
@@ -237,6 +312,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     ffmpeg = resolve_ffmpeg()
+    ffprobe = resolve_ffprobe(ffmpeg)
 
     input_path = Path(args.input)
     if not input_path.exists():
@@ -288,6 +364,7 @@ def main() -> int:
     print(f"Files:       {len(files)}")
     print(f"Target LUFS: {args.target_lufs}")
     print(f"True Peak:   {args.true_peak} dBTP")
+    print(f"Format:      {SAMPLE_RATE_44100} / {SAMPLE_RATE_48000} Hz, 16-bit PCM WAV")
     print(f"Output:      {output_dir}")
     if args.dry_run:
         print("Mode:        DRY RUN")
@@ -298,21 +375,26 @@ def main() -> int:
     fail = 0
 
     for file_path in files:
-        rel = relative_path(file_path, input_root)
-        out_path = output_dir / rel
+        src_rel = relative_path(file_path, input_root)
+        out_rel = output_rel_path(file_path, input_root)
+        out_path = output_dir / out_rel
 
         if out_path.exists() and not args.overwrite and not args.dry_run:
-            print(f"[skip] {rel}")
+            print(f"[skip] {out_rel}")
             skip += 1
             continue
 
+        source_rate = probe_sample_rate(ffprobe, file_path)
+        output_rate = resolve_output_sample_rate(source_rate)
+        format_plan = describe_output_format(source_rate, output_rate)
+
         if args.dry_run:
-            print(f"[plan] {rel} -> {out_path}")
+            print(f"[plan] {src_rel} -> {out_rel} ({format_plan})")
             ok += 1
             continue
 
         try:
-            print(f"[run]  {rel}")
+            print(f"[run]  {src_rel} -> {out_rel} ({format_plan})")
             measured = measure_loudnorm(
                 ffmpeg, file_path, args.target_lufs, args.true_peak
             )
@@ -323,10 +405,12 @@ def main() -> int:
                 args.target_lufs,
                 args.true_peak,
                 measured,
+                output_rate,
+                OUTPUT_CODEC,
             )
             ok += 1
         except RuntimeError as exc:
-            print(f"[fail] {rel}")
+            print(f"[fail] {out_rel}")
             print(exc)
             fail += 1
 
