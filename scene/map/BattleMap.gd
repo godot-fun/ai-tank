@@ -33,7 +33,7 @@ func _ready() -> void:
 	battle_hud.update_timer(battle_timer)
 
 	if Audio.musics.is_empty():
-		Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.4)
+		Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.5)
 		Audio.play_musics([BgmConfig.BGM_STAGE_1, BgmConfig.BGM_STAGE_2, BgmConfig.BGM_STAGE_3, BgmConfig.BGM_STAGE_4,
 			BgmConfig.BGM_STAGE_5, BgmConfig.BGM_STAGE_6])
 #		Audio.play_musics([BgmConfig.BGM_FC_STAGE_1, BgmConfig.BGM_FC_STAGE_2, BgmConfig.BGM_FC_STAGE_3, BgmConfig.BGM_FC_STAGE_4, BgmConfig.BGM_FC_STAGE_5])

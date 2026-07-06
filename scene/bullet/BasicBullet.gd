@@ -98,9 +98,9 @@ func on_body_entered(body: Node2D) -> void:
 		tile.take_damage(damage)
 		queue_free()
 		if tile is BrickWall:
-			Audios.play(TankConfig.AUDIO_BULLET_HIT_BRICK)
+			Audios.play(TankConfig.AUDIO_BULLET_HIT_BRICK, 0.5)
 		else:
-			Audios.play(TankConfig.AUDIO_BULLET_HIT_STEEL)
+			Audios.play(TankConfig.AUDIO_BULLET_HIT_STEEL, 0.6)
 		play_hit_animatio()
 	pass
 

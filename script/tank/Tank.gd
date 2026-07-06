@@ -148,7 +148,7 @@ func fire() -> void:
 
 	fire_cooldown = fire_interval
 	if StringUtils.is_not_blank(fire_sound_resource):
-		Audios.play(fire_sound_resource)
+		Audios.play(fire_sound_resource, 0.5)
 	pass
 
 
