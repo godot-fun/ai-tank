@@ -2,6 +2,8 @@
 zfoo/
 **/__pycache__/**
 *.pyc
+.dependency/
+
 
 # for godot
 .godot
