@@ -105,6 +105,8 @@ func end_level(cleared: bool) -> void:
 
 	level_ended = true
 	set_process(false)
+	set_physics_process(false)
+	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
 	
 	Audios.play(BgmConfig.BGM_STAGE_CLEAR)
 	Audio.pause_musics()

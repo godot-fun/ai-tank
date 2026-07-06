@@ -12,6 +12,7 @@ var _overlay_layer: CanvasLayer
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	z_index = 200
 	await get_tree().process_frame
 	await play_celebration()
@@ -42,8 +43,8 @@ func play_celebration() -> void:
 	_start_particles()
 	_spawn_banner()
 	await popup_tween.finished
-	await get_tree().create_timer(BANNER_DURATION).timeout
-	await get_tree().create_timer(HOLD_AFTER_ANIM).timeout
+	await get_tree().create_timer(BANNER_DURATION, true).timeout
+	await get_tree().create_timer(HOLD_AFTER_ANIM, true).timeout
 	_stop_particles()
 	pass
 
