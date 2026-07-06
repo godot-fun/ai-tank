@@ -2,6 +2,7 @@ extends Node2D
 
 const ENEMY_SPAWN_INTERVAL := 5.0
 const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
+const STAGE_CLEAR_EFFECT_SCENE := "res://scene/effects/StageClearEffect.tscn"
 
 @warning_ignore("integer_division")
 static var enemy_spawn_grids: Array[Vector2i] = [
@@ -34,6 +35,7 @@ func _ready() -> void:
 	if Audio.musics.is_empty():
 		Audio.play_musics([BgmConfig.BGM_STAGE_1, BgmConfig.BGM_STAGE_2, BgmConfig.BGM_STAGE_3, BgmConfig.BGM_STAGE_4,
 			BgmConfig.BGM_STAGE_5, BgmConfig.BGM_STAGE_6])
+#		Audio.play_musics([BgmConfig.BGM_FC_STAGE_1, BgmConfig.BGM_FC_STAGE_2, BgmConfig.BGM_FC_STAGE_3, BgmConfig.BGM_FC_STAGE_4, BgmConfig.BGM_FC_STAGE_5])
 	else:
 		Audio.resume_musics()
 
@@ -102,9 +104,14 @@ func end_level(cleared: bool) -> void:
 
 	level_ended = true
 	set_process(false)
+	Audio.pause_musics()
+
+	Audios.play(BgmConfig.BGM_STAGE_CLEAR)
+	var effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
+	add_child(effect)
+	await ThreadUtils.async_sleep(6000)
 
 	BattleProgress.next_level()
-	Audio.pause_musics()
-	Audios.play(BgmConfig.BGM_STAGE_CLEAR)
 	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
 	pass
+

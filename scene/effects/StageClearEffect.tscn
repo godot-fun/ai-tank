@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c8k3stageclearfx"]
+
+[ext_resource type="Script" path="res://scene/effects/StageClearEffect.gd" id="1_stage_clear"]
+
+[node name="StageClearEffect" type="Node2D"]
+z_index = 200
+script = ExtResource("1_stage_clear")

@@ -16,3 +16,11 @@ const BGM_STAGE_6_BOSS := "res://audio/bgm/ninja/remake/13-最終決戦・皇帝
 const BGM_STAGE_6_BOSS_PHASE_2 := "res://audio/bgm/ninja/remake/14-終焉の時-(ステージ6ボス戦-第2段階).ogg"
 const BGM_ENDING := "res://audio/bgm/ninja/remake/15-闇に生きる忍び-(エンディング~スタッフロール).ogg"
 const BGM_GAME_OVER := "res://audio/bgm/ninja/remake/16-ゲームオーバー.ogg"
+
+
+
+const BGM_FC_STAGE_1 := "res://audio/bgm/ninja/04-Stage-1.ogg"
+const BGM_FC_STAGE_2 := "res://audio/bgm/ninja/05-Stage-2.ogg"
+const BGM_FC_STAGE_3 := "res://audio/bgm/ninja/06-Stage-3.ogg"
+const BGM_FC_STAGE_4 := "res://audio/bgm/ninja/07-Stage-4.ogg"
+const BGM_FC_STAGE_5 := "res://audio/bgm/ninja/08-Stage-5.ogg"
