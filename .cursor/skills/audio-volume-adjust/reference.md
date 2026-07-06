@@ -37,18 +37,9 @@ Negative dB / gain < 1 reduces level; positive dB / gain > 1 increases it.
 
 Formula: `gain = 10^(dB / 20)`
 
-## Volume Adjust vs Other Skills
-
-| Skill | Role |
-|-------|------|
-| **Volume adjust** (this) | Fixed dB/gain offset on every sample |
-| **Loudness normalization** | Target integrated LUFS across heterogeneous assets |
-| **Fade** | Shape envelope at start/end only |
-| **Trim** | Remove silence or crop boundaries |
-
 ## Clipping When Boosting
 
-Boosting raises all samples proportionally. If the source already peaks near 0 dBFS, a +6 dB boost will clip. Prefer small boosts (+3 dB or less) or use `audio-loudness-normalization` for level matching with true-peak limiting.
+Boosting raises all samples proportionally. If the source already peaks near 0 dBFS, a +6 dB boost will clip. Prefer small boosts (+3 dB or less).
 
 ## Manual Fallback (single file)
 

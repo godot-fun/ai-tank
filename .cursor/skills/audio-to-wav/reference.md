@@ -66,12 +66,3 @@ Audio/SFX/wav/click.wav
 ```
 
 Batch with `-r` preserves subdirectory structure under the output root.
-
-## Related Skills
-
-| Skill | When to use after conversion |
-|-------|------------------------------|
-| **Loudness normalization** | Match levels across mixed assets |
-| **Trim** | Remove leading/trailing silence |
-| **Fade** | Shape attack/release |
-| **Volume adjust** | Fixed dB offset |

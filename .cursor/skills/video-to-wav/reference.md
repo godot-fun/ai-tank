@@ -58,13 +58,3 @@ Video/Clips/wav/intro.wav
 ```
 
 Batch with `-r` preserves subdirectory structure under the output root.
-
-## Related Skills
-
-| Skill | When to use after extraction |
-|-------|------------------------------|
-| **audio-loudness-normalization** | Match levels across mixed assets |
-| **audio-trim** | Remove leading/trailing silence |
-| **audio-fade** | Shape attack/release |
-| **audio-volume-adjust** | Fixed dB offset |
-| **audio-to-wav** | Convert standalone audio files (no video) |

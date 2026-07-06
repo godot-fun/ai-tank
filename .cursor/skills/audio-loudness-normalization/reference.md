@@ -1,4 +1,4 @@
-# Loudness Normalization Reference
+# Loudness Normalization — Reference
 
 ## Why LUFS, Not Peak
 
@@ -28,41 +28,6 @@ Keep assets within **±2 LUFS** inside each category.
 Two-pass flow:
 1. **Pass 1** — measure `measured_I`, `measured_LRA`, `measured_TP`, `measured_thresh`, `offset`
 2. **Pass 2** — apply with measured values for accurate normalization
-
-## Export Format (Default Output)
-
-All normalized files are written as **16-bit PCM WAV** (`pcm_s16le`), regardless of input format or extension. Output sample rate is **44100 or 48000 Hz only**.
-
-| Setting | Default output |
-|---------|----------------|
-| Sample rate | 44100 Hz if source ≤ 44100 Hz; 48000 Hz if source > 44100 Hz |
-| Bit depth | 16-bit PCM |
-| Format | WAV |
-| Channels | Preserved from source |
-
-| Rate | Typical use |
-|------|-------------|
-| 44100 Hz | Music, games, CD |
-| 48000 Hz | Games, film, video |
-
-Pass 2 encode shape:
-
-```bash
-# Source ≤ 44100 Hz
-ffmpeg -i input.mp3 -af loudnorm=... -ar 44100 -c:a pcm_s16le output.wav
-
-# Source > 44100 Hz
-ffmpeg -i input.flac -af loudnorm=... -ar 48000 -c:a pcm_s16le output.wav
-```
-
-## Export Format Recommendations
-
-| Setting | Recommendation |
-|---------|----------------|
-| Sample rate | 44100 or 48000 Hz only |
-| Bit depth | 16-bit (default output) or 24-bit (PC/console masters) |
-| Format | WAV for source; compress at build time |
-| Channels | Mono for most SFX; stereo for BGM |
 
 ## Game Engine Defaults (Post-Import)
 

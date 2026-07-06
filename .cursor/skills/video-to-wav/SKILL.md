@@ -63,6 +63,5 @@ Downconvert for project batch preset (48 kHz / 16-bit):
 4. Missing Python/FFmpeg → populate `.dependency/` per skill-dependency-manager, retry same command.
 5. **Do not copy, move, or replace the source with extracted output** — tell the user where `wav/` files are; they swap assets manually when ready.
 6. Need **48 kHz / 16-bit project batch** → pass `--standardize`.
-7. Need **level matching after extraction** → use `audio-loudness-normalization`.
-8. For pure audio files (no video), use `audio-to-wav` instead.
-9. FFmpeg codec and probing details: [reference.md](reference.md)
+7. This skill is for video containers only; standalone audio files are out of scope.
+8. FFmpeg codec and probing details: [reference.md](reference.md)

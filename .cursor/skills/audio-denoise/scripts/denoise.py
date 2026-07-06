@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Batch loudness-normalize audio files to a target LUFS using FFmpeg two-pass loudnorm."""
+"""Batch denoise and optionally de-clip audio files using FFmpeg."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -106,78 +105,34 @@ def relative_path(file_path: Path, input_root: Path) -> str:
         return file_path.name
 
 
-def filter_output_files(files: list[Path], output_dir: Path) -> list[Path]:
-    out = output_dir.resolve()
-    kept: list[Path] = []
-    for file_path in files:
-        try:
-            file_path.resolve().relative_to(out)
-        except ValueError:
-            kept.append(file_path)
-    return kept
-
-
-def find_source_collisions(
-    files: list[Path], input_root: Path, output_dir: Path
-) -> list[tuple[Path, Path]]:
-    collisions: list[tuple[Path, Path]] = []
-    for file_path in files:
-        rel = relative_path(file_path, input_root)
-        out_path = output_dir / rel
-        if out_path.resolve() == file_path.resolve():
-            collisions.append((file_path, out_path))
-    return collisions
-
-
-def measure_loudnorm(
-    ffmpeg: Path, file_path: Path, target_lufs: float, true_peak: float
-) -> dict:
-    result = subprocess.run(
-        [
-            str(ffmpeg),
-            "-hide_banner",
-            "-nostats",
-            "-i",
-            str(file_path),
-            "-af",
-            f"loudnorm=I={target_lufs}:TP={true_peak}:LRA=11:print_format=json",
-            "-f",
-            "null",
-            "-",
-        ],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"FFmpeg analysis failed for: {file_path}\n{result.stderr.strip()}"
+def build_filter(declip: bool, denoise: bool, nr: float, nf: float) -> str:
+    if not declip and not denoise:
+        print(
+            "Nothing to apply: enable denoise (default) and/or --declip / --declip-only.",
+            file=sys.stderr,
         )
+        sys.exit(1)
 
-    match = re.search(r"\{[\s\S]*\}", result.stderr)
-    if not match:
-        raise RuntimeError(f"Could not parse loudnorm JSON for: {file_path}")
+    parts: list[str] = []
+    if declip:
+        parts.append("adeclip")
+    if denoise:
+        parts.append(f"afftdn=nr={nr}:nf={nf}")
+    return ",".join(parts)
 
-    return json.loads(match.group(0))
+
+def describe_mode(declip: bool, denoise: bool) -> str:
+    if declip and denoise:
+        return "de-clip + denoise"
+    if declip:
+        return "de-clip only"
+    return "denoise only"
 
 
-def normalize_file(
-    ffmpeg: Path,
-    file_path: Path,
-    out_path: Path,
-    target_lufs: float,
-    true_peak: float,
-    measured: dict,
+def denoise_file(
+    ffmpeg: Path, file_path: Path, out_path: Path, filter_str: str
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    filter_str = (
-        f"loudnorm=I={target_lufs}:TP={true_peak}:LRA=11"
-        f":measured_I={measured['input_i']}"
-        f":measured_LRA={measured['input_lra']}"
-        f":measured_TP={measured['input_tp']}"
-        f":measured_thresh={measured['input_thresh']}"
-        f":offset={measured['target_offset']}"
-        ":linear=true"
-    )
     result = subprocess.run(
         [
             str(ffmpeg),
@@ -196,36 +151,44 @@ def normalize_file(
     if result.returncode != 0:
         detail = result.stderr.strip() or result.stdout.strip()
         raise RuntimeError(
-            f"FFmpeg normalize failed for: {file_path}"
+            f"FFmpeg denoise failed for: {file_path}"
             + (f"\n{detail}" if detail else "")
         )
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Batch loudness-normalize audio files to a target LUFS."
+        description="Batch denoise and optionally de-clip audio files."
     )
     parser.add_argument("input", help="Path to a single audio file or directory")
     parser.add_argument(
-        "-t",
-        "--target-lufs",
-        type=float,
-        default=-14,
-        help="Target integrated loudness in LUFS (default: -14)",
+        "--declip",
+        action="store_true",
+        help="Apply adeclip before denoise (clipped peaks)",
     )
     parser.add_argument(
-        "-tp",
-        "--true-peak",
-        type=float,
-        default=-1.5,
-        help="True peak limit in dBTP (default: -1.5)",
+        "--declip-only",
+        action="store_true",
+        help="Apply adeclip only (skip afftdn denoise)",
     )
     parser.add_argument(
-        "-o",
-        "--output-dir",
-        default="",
-        help="Output directory (must not overwrite sources; default: <input>/normalized)",
+        "--no-denoise",
+        action="store_true",
+        help="Skip afftdn denoise (use with --declip)",
     )
+    parser.add_argument(
+        "--nr",
+        type=float,
+        default=10,
+        help="afftdn noise reduction in dB (default: 10)",
+    )
+    parser.add_argument(
+        "--nf",
+        type=float,
+        default=-25,
+        help="afftdn noise floor in dB (default: -25)",
+    )
+    parser.add_argument("-o", "--output-dir", default="", help="Output directory")
     parser.add_argument(
         "-r", "--recurse", action="store_true", help="Process subdirectories"
     )
@@ -238,8 +201,26 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def resolve_modes(args: argparse.Namespace) -> tuple[bool, bool]:
+    if args.declip_only:
+        return True, False
+    declip = args.declip
+    denoise = not args.no_denoise
+    if not declip and not denoise:
+        denoise = True
+    return declip, denoise
+
+
 def main() -> int:
     args = parse_args()
+    if args.declip_only and (args.declip or args.no_denoise):
+        print("--declip-only cannot be combined with --declip or --no-denoise", file=sys.stderr)
+        return 1
+
+    declip, denoise = resolve_modes(args)
+    filter_str = build_filter(declip, denoise, args.nr, args.nf)
+    mode_label = describe_mode(declip, denoise)
+
     ffmpeg = resolve_ffmpeg()
 
     input_path = Path(args.input)
@@ -259,42 +240,18 @@ def main() -> int:
         input_root = input_path
 
     output_dir = (
-        Path(args.output_dir).resolve()
-        if args.output_dir
-        else input_root / "normalized"
+        Path(args.output_dir).resolve() if args.output_dir else input_root / "denoised"
     )
 
-    initial_count = len(files)
-    files = filter_output_files(files, output_dir)
-    if not files:
-        if initial_count:
-            print(
-                "No source files to process: all inputs lie under the output directory. "
-                "Choose a separate output directory (default: normalized/).",
-                file=sys.stderr,
-            )
-            return 1
-        print(f"No supported audio files found under: {args.input}")
-        return 0
-
-    collisions = find_source_collisions(files, input_root, output_dir)
-    if collisions:
-        print(
-            "Refusing to overwrite source files. Use a separate output directory "
-            "(default: normalized/).",
-            file=sys.stderr,
-        )
-        for source, dest in collisions:
-            print(f"  {source} -> {dest}", file=sys.stderr)
-        return 1
-
-    print(f"Input:       {args.input}")
-    print(f"Files:       {len(files)}")
-    print(f"Target LUFS: {args.target_lufs}")
-    print(f"True Peak:   {args.true_peak} dBTP")
-    print(f"Output:      {output_dir}")
+    print(f"Input:  {args.input}")
+    print(f"Files:  {len(files)}")
+    print(f"Mode:   {mode_label}")
+    if denoise:
+        print(f"afftdn: nr={args.nr} dB, nf={args.nf} dB")
+    print(f"Filter: {filter_str}")
+    print(f"Output: {output_dir}")
     if args.dry_run:
-        print("Mode:        DRY RUN")
+        print("Run:    DRY RUN")
     print()
 
     ok = 0
@@ -317,17 +274,7 @@ def main() -> int:
 
         try:
             print(f"[run]  {rel}")
-            measured = measure_loudnorm(
-                ffmpeg, file_path, args.target_lufs, args.true_peak
-            )
-            normalize_file(
-                ffmpeg,
-                file_path,
-                out_path,
-                args.target_lufs,
-                args.true_peak,
-                measured,
-            )
+            denoise_file(ffmpeg, file_path, out_path, filter_str)
             ok += 1
         except RuntimeError as exc:
             print(f"[fail] {rel}")

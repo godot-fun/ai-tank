@@ -72,6 +72,4 @@ Lower quality for UI sounds:
 4. Missing Python/FFmpeg → populate `.dependency/` per skill-dependency-manager, retry same command.
 5. **Do not copy, move, or replace the source with converted output** — tell the user where `ogg/` files are; they swap assets manually when ready.
 6. Need **48 kHz project batch** → pass `--standardize`.
-7. Need **level matching before or after conversion** → use `audio-loudness-normalization`.
-8. Need **lossless intermediates** → use `audio-to-wav` first, then normalize, then convert to OGG.
-9. FFmpeg codec and quality details: [reference.md](reference.md)
+7. FFmpeg codec and quality details: [reference.md](reference.md)

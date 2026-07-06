@@ -64,7 +64,5 @@ Use **dB** for perceptual steps; use **gain** when matching a known multiplier.
 3. Missing Python/FFmpeg → populate `.dependency/` per skill-dependency-manager, retry same command.
 4. **Do not copy, move, or replace the source with the adjusted output** — tell the user where `adjust/` files are; they swap assets manually when ready.
 5. Do not use `-o` pointing at the source folder; the script refuses output paths that would overwrite inputs.
-6. **Boosting** (+dB or gain > 1) can clip peaks — warn the user; suggest `audio-loudness-normalization` for safe level matching instead of large boosts.
-7. Need **consistent loudness across mixed assets** → use `audio-loudness-normalization`, not this skill.
-8. Need **fade at boundaries** → use `audio-fade`, not this skill.
-9. FFmpeg filter details and dB math: [reference.md](reference.md)
+6. **Boosting** (+dB or gain > 1) can clip peaks — warn the user; prefer small boosts (+3 dB or less).
+7. FFmpeg filter details and dB math: [reference.md](reference.md)
