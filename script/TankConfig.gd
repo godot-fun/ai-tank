@@ -5,7 +5,7 @@ enum Team {
 	ENEMY
 }
 
-const AUDIO_SHOOT_BASIC := "res://audio/sfx/shoot-basic/01.wav"
+const AUDIO_TANK_FIRE := "res://audio/sfx/shoot-basic/01.wav"
 const AUDIO_TANK_DEATH := "res://audio/sfx/tank-death/01.wav"
 const AUDIO_TANK_DEATH_ENEMY := "res://audio/sfx/tank-death/02.wav"
 const AUDIO_TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
@@ -68,13 +68,13 @@ static var my_tank: TankData = TankData.new(
 	0,
 	Team.PLAYER,
 	Vector2i(2, 2),
-	10,
+	1,
 	400.0,
 	800.0,
 	1,
 	0.3,
 	"res://image/bullets/basic/blue/01.png",
-	AUDIO_SHOOT_BASIC,
+	AUDIO_TANK_FIRE,
 	AUDIO_TANK_DEATH,
 	EFFECT_TANK_EXPLOSION,
 	"res://image/characters/blue_tank_1.png",
@@ -85,13 +85,13 @@ static var partner_tank: TankData = TankData.new(
 	2,
 	Team.PLAYER,
 	Vector2i(2, 2),
-	10,
+	1,
 	360.0,
 	800.0,
 	1,
 	0.45,
 	"res://image/bullets/basic/red/01.png",
-	AUDIO_SHOOT_BASIC,
+	"",
 	AUDIO_TANK_DEATH,
 	EFFECT_TANK_EXPLOSION,
 	"res://image/characters/red_tank_1.png",

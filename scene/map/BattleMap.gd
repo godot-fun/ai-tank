@@ -33,6 +33,7 @@ func _ready() -> void:
 	battle_hud.update_timer(battle_timer)
 
 	if Audio.musics.is_empty():
+		Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.3)
 		Audio.play_musics([BgmConfig.BGM_STAGE_1, BgmConfig.BGM_STAGE_2, BgmConfig.BGM_STAGE_3, BgmConfig.BGM_STAGE_4,
 			BgmConfig.BGM_STAGE_5, BgmConfig.BGM_STAGE_6])
 #		Audio.play_musics([BgmConfig.BGM_FC_STAGE_1, BgmConfig.BGM_FC_STAGE_2, BgmConfig.BGM_FC_STAGE_3, BgmConfig.BGM_FC_STAGE_4, BgmConfig.BGM_FC_STAGE_5])
@@ -109,7 +110,7 @@ func end_level(cleared: bool) -> void:
 	Audios.play(BgmConfig.BGM_STAGE_CLEAR)
 	var effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
 	add_child(effect)
-	await ThreadUtils.async_sleep(6000)
+	await ThreadUtils.async_sleep(5000)
 
 	BattleProgress.next_level()
 	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
