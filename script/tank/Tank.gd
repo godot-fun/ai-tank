@@ -86,7 +86,6 @@ func scale_tank() -> void:
 func play_enter_animation() -> void:
 	visible = false
 	moving = true
-	update_facing(Vector2i.UP)
 
 	var target_pos := global_position
 	global_position = Vector2(
