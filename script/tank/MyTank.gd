@@ -77,7 +77,7 @@ func play_move_sound() -> void:
 		audio.volume_linear = 1.0
 		audio.seek(1.0)
 		return
-	Audio.play_ambience(TankConfig.AUDIO_TANK_MOVE)
+	Audio.play_ambience(AudioConfig.TANK_MOVE)
 	pass
 
 func stop_move_sound() -> void:

@@ -1,4 +1,4 @@
-class_name BgmConfig
+class_name AudioConfig
 
 const BGM_OPENING_DEMO_PART1 := "res://audio/bgm/ninja/remake/01-光奪われし世界-(オープニングデモ-前半).ogg"
 const BGM_OPENING_DEMO_PART2 := "res://audio/bgm/ninja/remake/02-闇の仕事人現る-(オープニングデモ-後半).ogg"
@@ -17,10 +17,23 @@ const BGM_STAGE_6_BOSS_PHASE_2 := "res://audio/bgm/ninja/remake/14-終焉の時-
 const BGM_ENDING := "res://audio/bgm/ninja/remake/15-闇に生きる忍び-(エンディング~スタッフロール).ogg"
 const BGM_GAME_OVER := "res://audio/bgm/ninja/remake/16-ゲームオーバー.ogg"
 
-
-
 const BGM_FC_STAGE_1 := "res://audio/bgm/ninja/04-Stage-1.ogg"
 const BGM_FC_STAGE_2 := "res://audio/bgm/ninja/05-Stage-2.ogg"
 const BGM_FC_STAGE_3 := "res://audio/bgm/ninja/06-Stage-3.ogg"
 const BGM_FC_STAGE_4 := "res://audio/bgm/ninja/07-Stage-4.ogg"
 const BGM_FC_STAGE_5 := "res://audio/bgm/ninja/08-Stage-5.ogg"
+
+static var UI_SELECT := SoundEffect.new("res://audio/sfx/ui-select/01.wav")
+static var UI_CONFIRM := SoundEffect.new("res://audio/sfx/ui-confirm/01.wav")
+static var STAGE_START := SoundEffect.new(BGM_STAGE_START)
+static var STAGE_CLEAR := SoundEffect.new(BGM_STAGE_CLEAR)
+
+static var TANK_FIRE := SoundEffect.new("res://audio/sfx/tank/tank-fire.wav", 0.5)
+static var TANK_DEATH := SoundEffect.new("res://audio/sfx/tank/tank_explosion.wav")
+static var TANK_DEATH_ENEMY := SoundEffect.new("res://audio/sfx/tank/explosion-medium.wav")
+static var TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
+
+static var BULLET_HIT_BULLET := SoundEffect.new("res://audio/sfx/tank/explosion-small.wav")
+static var BULLET_HIT_TANK := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav")
+static var BULLET_HIT_STEEL := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav", 0.4)
+static var BULLET_HIT_BRICK := SoundEffect.new("res://audio/sfx/tank/bullet_hit_brick.wav", 0.4)

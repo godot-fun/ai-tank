@@ -33,10 +33,10 @@ func _ready() -> void:
 	battle_hud.update_timer(battle_timer)
 
 	if Audio.musics.is_empty():
-		Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.5)
-		Audio.play_musics([BgmConfig.BGM_STAGE_1, BgmConfig.BGM_STAGE_2, BgmConfig.BGM_STAGE_3, BgmConfig.BGM_STAGE_4,
-			BgmConfig.BGM_STAGE_5, BgmConfig.BGM_STAGE_6])
-#		Audio.play_musics([BgmConfig.BGM_FC_STAGE_1, BgmConfig.BGM_FC_STAGE_2, BgmConfig.BGM_FC_STAGE_3, BgmConfig.BGM_FC_STAGE_4, BgmConfig.BGM_FC_STAGE_5])
+		Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.6)
+		Audio.play_musics([AudioConfig.BGM_STAGE_1, AudioConfig.BGM_STAGE_2, AudioConfig.BGM_STAGE_3, AudioConfig.BGM_STAGE_4,
+			AudioConfig.BGM_STAGE_5, AudioConfig.BGM_STAGE_6])
+#		Audio.play_musics([AudioConfig.BGM_FC_STAGE_1, AudioConfig.BGM_FC_STAGE_2, AudioConfig.BGM_FC_STAGE_3, AudioConfig.BGM_FC_STAGE_4, AudioConfig.BGM_FC_STAGE_5])
 	else:
 		Audio.resume_musics()
 
@@ -108,7 +108,7 @@ func end_level(cleared: bool) -> void:
 	set_physics_process(false)
 	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
 	
-	Audios.play(BgmConfig.BGM_STAGE_CLEAR)
+	Audios.play_sfx(AudioConfig.STAGE_CLEAR)
 	Audio.pause_musics()
 	var effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
 	add_child(effect)

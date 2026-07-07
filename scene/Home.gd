@@ -28,7 +28,7 @@ func _ready() -> void:
 	exit_button.mouse_entered.connect(on_button_hover)
 	setup_tank_animation()
 	play_intro()
-	Audio.play_voice(BgmConfig.BGM_OPENING_DEMO_PART2)
+	Audio.play_voice(AudioConfig.BGM_OPENING_DEMO_PART2)
 	pass
 
 
@@ -73,12 +73,12 @@ func show_menu_buttons() -> void:
 
 
 func on_button_hover() -> void:
-	Audios.play("res://audio/sfx/ui-select/01.wav")
+	Audios.play_sfx(AudioConfig.UI_SELECT)
 	pass
 
 
 func on_start_pressed() -> void:
-	Audios.play("res://audio/sfx/ui-confirm/01.wav")
+	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	BattleProgress.start_new_game()
 	Audio.stop_voice_fade()
 	await SceneHelper.async_change_scene_to_file("res://scene/ui/LevelBrief.tscn")
@@ -86,6 +86,6 @@ func on_start_pressed() -> void:
 
 
 func on_exit_pressed() -> void:
-	Audios.play("res://audio/sfx/ui-select/01.wav")
+	Audios.play_sfx(AudioConfig.UI_SELECT)
 	await gdf.quit()
 	pass

@@ -5,15 +5,7 @@ enum Team {
 	ENEMY
 }
 
-const AUDIO_TANK_FIRE := "res://audio/sfx/tank/tank-fire.wav"
-const AUDIO_TANK_DEATH := "res://audio/sfx/tank/tank_explosion.wav"
-const AUDIO_TANK_DEATH_ENEMY := "res://audio/sfx/tank/explosion-medium.wav"
-const AUDIO_TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
 
-const AUDIO_BULLET_HIT_BULLET := "res://audio/sfx/tank/explosion-small.wav"
-const AUDIO_BULLET_HIT_TANK := "res://audio/sfx/tank/bullet_hit_tank.wav"
-const AUDIO_BULLET_HIT_STEEL := "res://audio/sfx/tank/bullet_hit_steel.wav"
-const AUDIO_BULLET_HIT_BRICK := "res://audio/sfx/tank/bullet_hit_brick.wav"
 
 const EFFECT_TANK_EXPLOSION := "res://image/effects/tank-explosion_sheet.png"
 
@@ -27,8 +19,8 @@ class TankData:
 	var bullet_damage: int
 	var fire_interval: float
 	var bullet_resource: String
-	var fire_sound_resource: String
-	var death_sound_resource: String
+	var fire_sound_resource: SoundEffect
+	var death_sound_resource: SoundEffect
 	var death_effect_resource: String
 	var tank_resource: String
 	var script_resource: String
@@ -43,8 +35,8 @@ class TankData:
 		_bullet_damage: int,
 		_fire_interval: float,
 		_bullet_resource: String,
-		_fire_sound_resource: String,
-		_death_sound_resource: String,
+		_fire_sound_resource: SoundEffect,
+		_death_sound_resource: SoundEffect,
 		_death_effect_resource: String,
 		_tank_resource: String,
 		_script_resource: String,
@@ -74,8 +66,8 @@ static var my_tank: TankData = TankData.new(
 	1,
 	0.3,
 	"res://image/bullets/basic/blue/01.png",
-	AUDIO_TANK_FIRE,
-	AUDIO_TANK_DEATH,
+	AudioConfig.TANK_FIRE,
+	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_EXPLOSION,
 	"res://image/characters/blue_tank_1.png",
 	"res://script/tank/MyTank.gd",
@@ -91,8 +83,8 @@ static var partner_tank: TankData = TankData.new(
 	1,
 	0.45,
 	"res://image/bullets/basic/red/01.png",
-	"",
-	AUDIO_TANK_DEATH,
+	null,
+	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_EXPLOSION,
 	"res://image/characters/red_tank_1.png",
 	"res://script/tank/PartnerTank.gd",
@@ -108,8 +100,8 @@ static var enemy_easy: TankData = TankData.new(
 	1,
 	2.0,
 	"res://image/bullets/basic/gray/01.png",
-	"",
-	AUDIO_TANK_DEATH_ENEMY,
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_EXPLOSION,
 	"res://image/characters/tank_1.png",
 	"res://script/tank/EnemyEasy.gd",
@@ -125,8 +117,8 @@ static var only_fire_enemy: TankData = TankData.new(
 	1,
 	2.0,
 	"res://image/bullets/basic/gray/02.png",
-	"",
-	AUDIO_TANK_DEATH_ENEMY,
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_EXPLOSION,
 	"res://image/characters/tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",

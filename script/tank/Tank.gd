@@ -11,8 +11,8 @@ var bullet_speed: float
 var bullet_damage: int
 var fire_interval: float
 var bullet_resource: String
-var fire_sound_resource: String
-var death_sound_resource: String
+var fire_sound_resource: SoundEffect
+var death_sound_resource: SoundEffect
 var death_effect_resource: String
 var tank_resource: String
 var script_resource: String
@@ -117,7 +117,7 @@ func on_die(amount: int) -> bool:
 	if hp > 0:
 		return false
 
-	Audios.play(death_sound_resource)
+	Audios.play_sfx(death_sound_resource)
 	EffectAnimation2D.spawn(
 		global_position,
 		get_tree().current_scene,
@@ -147,8 +147,8 @@ func fire() -> void:
 	get_tree().current_scene.add_child(bullet)
 
 	fire_cooldown = fire_interval
-	if StringUtils.is_not_blank(fire_sound_resource):
-		Audios.play(fire_sound_resource, 0.5)
+	if fire_sound_resource != null:
+		Audios.play_sfx(fire_sound_resource)
 	pass
 
 

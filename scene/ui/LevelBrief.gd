@@ -12,7 +12,7 @@ func _ready() -> void:
 	level_label.text = "第 %d 关" % (BattleProgress.level + 1)
 	score_label.text = "分数 %d" % BattleProgress.score
 	show_tap_prompt()
-	Audios.play(BgmConfig.BGM_STAGE_START)
+	Audios.play_sfx(AudioConfig.STAGE_START)
 	pass
 
 
@@ -41,6 +41,6 @@ func _input(event: InputEvent) -> void:
 
 
 func on_screen_tapped() -> void:
-	Audios.play("res://audio/sfx/ui-confirm/01.wav")
+	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	await SceneHelper.async_change_scene_to_file(BATTLE_SCENE_PATH)
 	pass
