@@ -24,15 +24,7 @@ func take_damage(amount: int) -> void:
 	if hp <= 0:
 		_play_destroy_break()
 	else:
-		_play_hit_flash()
-	pass
-
-
-## 轻伤反馈：不调父类 destroy，只闪一下颜色
-func _play_hit_flash() -> void:
-	var tween := create_tween()
-	sprite.modulate = Color(1.35, 1.2, 1.05)
-	tween.tween_property(sprite, "modulate", Color.WHITE, 0.08)
+		SpriteUtils.play_hit_flash(sprite)
 	pass
 
 

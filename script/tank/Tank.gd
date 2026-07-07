@@ -109,12 +109,14 @@ func is_alive() -> bool:
 	return hp > 0
 
 
-func on_die(amount: int) -> bool:
+# true is die
+func take_damage(amount: int) -> bool:
 	if !is_alive() || amount <= 0 || is_queued_for_deletion():
 		return false
 
 	hp = hp - amount
 	if hp > 0:
+		SpriteUtils.play_hit_flash(sprite)
 		return false
 
 	Audios.play_sfx(death_sound_resource)

@@ -87,7 +87,7 @@ func on_body_entered(body: Node2D) -> void:
 		var tank := body as Tank
 		if tank.team == team:
 			return
-		if !tank.on_die(damage):
+		if !tank.take_damage(damage):
 			Audios.play_sfx(AudioConfig.BULLET_HIT_TANK)
 			play_hit_animatio()
 		queue_free()
