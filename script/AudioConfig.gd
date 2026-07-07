@@ -35,5 +35,5 @@ static var TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
 
 static var BULLET_HIT_BULLET := SoundEffect.new("res://audio/sfx/tank/explosion-small.wav")
 static var BULLET_HIT_TANK := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav")
-static var BULLET_HIT_STEEL := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav", 0.4)
+static var BULLET_HIT_STEEL := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav", 0.3)
 static var BULLET_HIT_BRICK := SoundEffect.new("res://audio/sfx/tank/bullet_hit_brick.wav", 0.4)
