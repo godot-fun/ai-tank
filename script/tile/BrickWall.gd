@@ -1,6 +1,6 @@
 ## 可破坏砖墙
 ##
-## 【idle】brick_mortar 着色器：暖色砖面呼吸 + 砂浆加深 + 弱铆钉光（对比 SteelWall 冷金属）。
+## 【idle】brick_mortar 着色器：暗红砖面呼吸 + 砂浆加深 + 弱铆钉光（对比 SteelWall 冷金属）。
 ## 【击毁】BrickBreakEffect 切片飞散；轻伤 SpriteUtils.play_hit_flash。
 ##
 ## 【击毁流程】

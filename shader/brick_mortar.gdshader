@@ -6,7 +6,7 @@ uniform float breath_strength : hint_range(0.0, 0.2) = 0.06;
 uniform float mortar_depth : hint_range(0.0, 0.2) = 0.05;
 // Mortar lines also breathe (darken / lighten with sin).
 uniform float mortar_pulse : hint_range(0.0, 0.15) = 0.045;
-uniform float warm_tint : hint_range(0.0, 0.35) = 0.14;
+uniform float warm_tint : hint_range(0.0, 0.35) = 0.18;
 uniform float glint_speed : hint_range(0.1, 3.0) = 0.7;
 uniform float glint_strength : hint_range(0.0, 0.4) = 0.11;
 uniform float rivet_pulse : hint_range(0.0, 0.2) = 0.038;
@@ -39,7 +39,7 @@ void fragment() {
 	col.rgb += wave * mortar_pulse * mortar_mask;
 
 	float tint_mix = warm_tint * (0.55 + 0.45 * wave) * brick_mask;
-	col.rgb = mix(col.rgb, col.rgb * vec3(1.08, 0.96, 0.86), tint_mix);
+	col.rgb = mix(col.rgb, col.rgb * vec3(0.88, 0.28, 0.22), tint_mix);
 
 	float spark_a = sin(world_pos.x * 0.09 + world_pos.y * 0.07 + glint_t * 1.1);
 	float spark_b = sin(world_pos.x * 0.13 - world_pos.y * 0.1 + glint_t * 0.85 + 1.7);
@@ -50,7 +50,7 @@ void fragment() {
 	col.rgb += glint * glint_strength * highlight_mask;
 	col.rgb += glint * glint_strength * 0.35 * brick_mask;
 	col.rgb += pulse * highlight_mask;
-	col.rgb += glint * vec3(0.12, 0.06, 0.02) * highlight_mask * 0.06;
+	col.rgb += glint * vec3(0.16, 0.03, 0.02) * highlight_mask * 0.06;
 
 	COLOR = col;
 }
