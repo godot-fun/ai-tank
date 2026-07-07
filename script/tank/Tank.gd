@@ -119,6 +119,9 @@ func take_damage(amount: int) -> bool:
 		return false
 
 	Audios.play_sfx(death_sound_resource)
+
+	sprite.visible = false
+	TankBreakEffect.spawn(global_position, scale, grid_size, sprite.rotation, sprite.texture,  get_parent())
 	EffectAnimation2D.spawn(
 		global_position,
 		get_tree().current_scene,
