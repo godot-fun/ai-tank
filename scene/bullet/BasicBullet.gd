@@ -76,7 +76,10 @@ func on_area_entered(area: Area2D) -> void:
 		return
 
 	Audios.play_sfx(AudioConfig.BULLET_HIT_BULLET)
-	play_hit_animatio()
+	EffectAnimation2D.spawn(global_position, 
+		get_tree().current_scene,
+		TankConfig.EFFECT_BULLET_HIT_BULLET, 
+		Vector2i(4, 4), 0.3, 27)
 	queue_free()
 	other.queue_free()
 	pass
@@ -89,7 +92,10 @@ func on_body_entered(body: Node2D) -> void:
 			return
 		if !tank.take_damage(damage):
 			Audios.play_sfx(AudioConfig.BULLET_HIT_TANK)
-			play_hit_animatio()
+			EffectAnimation2D.spawn(global_position, 
+				get_tree().current_scene,
+				TankConfig.EFFECT_BULLET_HIT_ENEMY, 
+				Vector2i(6, 3), 0.3, 27)
 		queue_free()
 	elif body is Tile:
 		var tile := body as Tile
@@ -99,14 +105,15 @@ func on_body_entered(body: Node2D) -> void:
 		queue_free()
 		if tile is BrickWall:
 			Audios.play_sfx(AudioConfig.BULLET_HIT_BRICK)
+			EffectAnimation2D.spawn(global_position, 
+				get_tree().current_scene,
+				TankConfig.EFFECT_BULLET_HIT_BRICK, 
+				Vector2i(4, 4), 0.3, 27)
 		else:
 			Audios.play_sfx(AudioConfig.BULLET_HIT_STEEL)
-		play_hit_animatio()
+			EffectAnimation2D.spawn(global_position, 
+				get_tree().current_scene,
+				TankConfig.EFFECT_BULLET_HIT_STEEL, 
+				Vector2i(6, 3), 0.3, 27)
 	pass
 
-func play_hit_animatio() -> void:
-	EffectAnimation2D.spawn(global_position, 
-		get_tree().current_scene,
-		"res://image/effects/tank-hit_sheet.png", 
-		Vector2i(8, 1), 0.3, 17)
-	pass

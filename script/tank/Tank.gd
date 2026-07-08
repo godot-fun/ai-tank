@@ -126,7 +126,7 @@ func take_damage(amount: int) -> bool:
 		global_position,
 		get_tree().current_scene,
 		death_effect_resource,
-		Vector2i(8, 1), 0.6
+		Vector2i(4, 4), 0.5
 	)
 	if team == TankConfig.Team.ENEMY:
 		var battle_map := get_tree().current_scene

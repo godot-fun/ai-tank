@@ -7,7 +7,12 @@ enum Team {
 
 
 
-const EFFECT_TANK_EXPLOSION := "res://image/effects/tank-explosion_sheet.png"
+const EFFECT_TANK_PARTNER_EXPLOSION := "res://image/effects/tank_partnet_explosion.png"
+const EFFECT_TANK_ENEMY_EXPLOSION := "res://image/effects/tank_enemy_explosion.png"
+const EFFECT_BULLET_HIT_BULLET := "res://image/effects/bullet_hit_bullet.png"
+const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
+const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
+const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
 class TankData:
 	var id: int
@@ -68,7 +73,7 @@ static var my_tank: TankData = TankData.new(
 	"res://image/bullets/basic/blue/01.png",
 	AudioConfig.TANK_FIRE,
 	AudioConfig.TANK_DEATH,
-	EFFECT_TANK_EXPLOSION,
+	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/blue_tank_1.png",
 	"res://script/tank/MyTank.gd",
 )
@@ -85,7 +90,7 @@ static var partner_tank: TankData = TankData.new(
 	"res://image/bullets/basic/red/01.png",
 	null,
 	AudioConfig.TANK_DEATH,
-	EFFECT_TANK_EXPLOSION,
+	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/red_tank_1.png",
 	"res://script/tank/PartnerTank.gd",
 )
@@ -102,7 +107,7 @@ static var enemy_easy: TankData = TankData.new(
 	"res://image/bullets/basic/gray/01.png",
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
-	EFFECT_TANK_EXPLOSION,
+	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/tank_1.png",
 	"res://script/tank/EnemyEasy.gd",
 )
@@ -119,7 +124,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	"res://image/bullets/basic/gray/02.png",
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
-	EFFECT_TANK_EXPLOSION,
+	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",
 )
