@@ -22,6 +22,7 @@ class TankData:
 	var speed: float
 	var bullet_speed: float
 	var bullet_damage: int
+	var bullet_size: float
 	var fire_interval: float
 	var bullet_resource: String
 	var fire_sound_resource: SoundEffect
@@ -38,6 +39,7 @@ class TankData:
 		_speed: float,
 		_bullet_speed: float,
 		_bullet_damage: int,
+		_bullet_size: float,
 		_fire_interval: float,
 		_bullet_resource: String,
 		_fire_sound_resource: SoundEffect,
@@ -53,6 +55,7 @@ class TankData:
 		speed = _speed
 		bullet_speed = _bullet_speed
 		bullet_damage = _bullet_damage
+		bullet_size = _bullet_size
 		fire_interval = _fire_interval
 		bullet_resource = _bullet_resource
 		fire_sound_resource = _fire_sound_resource
@@ -69,6 +72,7 @@ static var my_tank: TankData = TankData.new(
 	400.0,
 	800.0,
 	1,
+	0.6,
 	0.3,
 	"res://image/bullets/basic/blue/01.png",
 	AudioConfig.TANK_FIRE,
@@ -86,6 +90,7 @@ static var partner_tank: TankData = TankData.new(
 	360.0,
 	800.0,
 	1,
+	0.6,
 	0.45,
 	"res://image/bullets/basic/red/01.png",
 	null,
@@ -103,6 +108,7 @@ static var enemy_easy: TankData = TankData.new(
 	320.0,
 	800.0,
 	1,
+	0.6,
 	2.0,
 	"res://image/bullets/basic/gray/01.png",
 	null,
@@ -120,6 +126,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	320.0,
 	800.0,
 	1,
+	0.6,
 	2.0,
 	"res://image/bullets/basic/gray/02.png",
 	null,

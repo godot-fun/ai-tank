@@ -1,6 +1,10 @@
 ﻿class_name Buff
 extends Area2D
 
+const FLASH_SHADER := "res://shader/buff_flash.gdshader"
+
+static var flash_material: ShaderMaterial
+
 var id: int
 var buff: int
 var grid_size: Vector2i
@@ -13,12 +17,10 @@ var grid_pos := Vector2i.ZERO
 
 func _ready() -> void:
 	sprite.texture = load(buff_resource)
+	setup_flash_material()
 	scale_buff()
 	start()
 	body_entered.connect(on_body_entered)
-	pass
-
-func start() -> void:
 	pass
 
 func apply_data(data: BuffConfig.BuffData) -> void:
@@ -28,6 +30,14 @@ func apply_data(data: BuffConfig.BuffData) -> void:
 	buff_resource = data.buff_resource
 	script_resource = data.script_resource
 	pass
+
+func setup_flash_material() -> void:
+	if flash_material == null:
+		flash_material = ShaderMaterial.new()
+		flash_material.shader = load(FLASH_SHADER)
+	sprite.material = flash_material
+	pass
+
 
 func scale_buff() -> void:
 	var texture_size := sprite.texture.get_size()
@@ -50,5 +60,11 @@ func on_body_entered(body: Node2D) -> void:
 	queue_free()
 	pass
 
+# Interface-Start
+func start() -> void:
+	pass
+	
+
 func trigger(tank: Tank) -> void:
 	pass
+# Interface-End

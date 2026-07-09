@@ -2,11 +2,11 @@ class_name BasicBullet
 extends Area2D
 
 const SCENE := "res://scene/bullet/BasicBullet.tscn"
-const BULLET_SIZE_RATIO := 0.6
 
 var direction := Vector2i.ZERO
 var speed := 0.0
 var damage := 0
+var bullet_size := 0.6
 var team := TankConfig.Team.PLAYER
 var sprite_bullet_resource := ""
 
@@ -24,7 +24,7 @@ func scale_sprite() -> void:
 	sprite.texture = load(sprite_bullet_resource)
 
 	var texture_size := sprite.texture.get_size()
-	var target_size := Vector2.ONE * TileConfig.TILE_SIZE * BULLET_SIZE_RATIO
+	var target_size := Vector2.ONE * TileConfig.TILE_SIZE * bullet_size
 	scale = target_size / texture_size
 	
 	rotation = Vector2(direction).angle() + PI / 2.0
@@ -36,6 +36,7 @@ func apply_data(
 	bullet_team: int,
 	bullet_speed: float,
 	bullet_damage: int,
+	_bullet_size: float,
 	bullet_resource: String,
 ) -> void:
 	sprite_bullet_resource = bullet_resource
@@ -44,6 +45,7 @@ func apply_data(
 	team = bullet_team
 	speed = bullet_speed
 	damage = bullet_damage
+	bullet_size = _bullet_size
 	pass
 
 

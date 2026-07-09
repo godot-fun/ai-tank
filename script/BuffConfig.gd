@@ -44,3 +44,11 @@ static var bullet_size_buff: BuffData = BuffData.new(
 	"res://image/buff/bullet_size.png",
 	"res://script/buff/BulletSizeBuff.gd",
 )
+
+static var bullet_speed_buff: BuffData = BuffData.new(
+	1,
+	Buff.BULLET_SPEED,
+	Vector2i(2, 2),
+	"res://image/buff/bullet_speed.png",
+	"res://script/buff/BulletSpeedBuff.gd",
+)

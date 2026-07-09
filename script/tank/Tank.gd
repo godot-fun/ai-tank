@@ -9,6 +9,7 @@ var hp: int
 var speed: float
 var bullet_speed: float
 var bullet_damage: int
+var bullet_size: float
 var fire_interval: float
 var bullet_resource: String
 var fire_sound_resource: SoundEffect
@@ -53,6 +54,7 @@ func apply_data(data: TankConfig.TankData) -> void:
 	speed = data.speed
 	bullet_speed = data.bullet_speed
 	bullet_damage = data.bullet_damage
+	bullet_size = data.bullet_size
 	fire_interval = data.fire_interval
 	bullet_resource = data.bullet_resource
 	fire_sound_resource = data.fire_sound_resource
@@ -148,7 +150,7 @@ func fire() -> void:
 	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
 	var bullet: BasicBullet = bullet_scene.instantiate()
 	var spawn_offset := Vector2(facing) * TileConfig.TILE_SIZE
-	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_resource)
+	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_size, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 
 	fire_cooldown = fire_interval
