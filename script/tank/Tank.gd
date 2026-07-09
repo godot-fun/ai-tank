@@ -193,14 +193,14 @@ func on_move_finished(ice_slides_left: int) -> void:
 
 # ----------------------------------------------------------------------------------------------------------------------
 # AI
+static var directions: Array[Vector2i] = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
 
 func pick_random_direction() -> Vector2i:
-	var directions: Array[Vector2i] = [
-		Vector2i.UP,
-		Vector2i.DOWN,
-		Vector2i.LEFT,
-		Vector2i.RIGHT,
-	]
+	directions.shuffle()
+	return RandomUtils.random_ele(directions)
+
+
+func pick_random_not_blocked_direction() -> Vector2i:
 	directions.shuffle()
 
 	for direction in directions:
@@ -209,7 +209,6 @@ func pick_random_direction() -> Vector2i:
 			return direction
 
 	return RandomUtils.random_ele(directions)
-
 
 func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
 	var diff := target_grid - grid_pos

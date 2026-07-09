@@ -32,9 +32,10 @@ func physics_update(delta: float) -> void:
 
 func pick_move_direction() -> Vector2i:
 	var player := TankHelper.find_player()
-	if player == null or randf() < 0.35:
+	if player == null:
 		return pick_random_direction()
-
+	if randf() < 0.35:
+		return pick_random_not_blocked_direction()
 	return pick_direction_toward(TankHelper.get_tank_grid(player))
 
 
