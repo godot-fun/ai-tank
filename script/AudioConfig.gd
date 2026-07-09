@@ -37,3 +37,8 @@ static var BULLET_HIT_BULLET := SoundEffect.new("res://audio/sfx/tank/explosion-
 static var BULLET_HIT_TANK := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav")
 static var BULLET_HIT_STEEL := SoundEffect.new("res://audio/sfx/tank/bullet_hit_steel.wav", 0.3)
 static var BULLET_HIT_BRICK := SoundEffect.new("res://audio/sfx/tank/bullet_hit_brick.wav", 0.4)
+
+
+static var BUFF_LEVEL_UP := SoundEffect.new("res://audio/sfx/buff/level-up.wav")
+static var BUFF_AIR_STRIKE := SoundEffect.new("res://audio/sfx/buff/air-strike.wav")
+static var AIR_RAID_ALARM := SoundEffect.new("res://audio/sfx/buff/air-raid-alarm.wav")

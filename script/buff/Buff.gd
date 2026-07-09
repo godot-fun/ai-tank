@@ -1,5 +1,5 @@
 ﻿class_name Buff
-extends StaticBody2D
+extends Area2D
 
 var id: int
 var buff: int
@@ -15,6 +15,7 @@ func _ready() -> void:
 	sprite.texture = load(buff_resource)
 	scale_buff()
 	start()
+	body_entered.connect(on_body_entered)
 	pass
 
 func start() -> void:
@@ -37,5 +38,17 @@ func scale_buff() -> void:
 	global_position = TankConfig.grid_to_world(grid_pos, Vector2i.ONE)
 	pass
 
+func on_body_entered(body: Node2D) -> void:
+	if not body is Tank:
+		return
+	var tank := body as Tank
+	if tank.team != TankConfig.Team.PLAYER:
+		return
+		
+	Audios.play_sfx(AudioConfig.BUFF_LEVEL_UP)
+	trigger(tank)
+	queue_free()
+	pass
 
-
+func trigger(tank: Tank) -> void:
+	pass

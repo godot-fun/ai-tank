@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://cy5mpt6be5bug"]
 
-[ext_resource type="Script" uid="uid://dvxmt3jse52mq" path="res://script/tile/BrickWall.gd" id="1_dx85d"]
+[ext_resource type="Script" uid="uid://c78170wwhmdyk" path="res://script/buff/BulletSpeedBuff.gd" id="1_dx85d"]
 [ext_resource type="Texture2D" uid="uid://bdaj0jififok2" path="res://image/buff/bullet_speed.png" id="2_dx85d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7itor"]
 size = Vector2(512, 512)
 
-[node name="Buff" type="StaticBody2D" unique_id=933329516]
+[node name="Buff" type="Area2D" unique_id=1181343441]
 script = ExtResource("1_dx85d")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2115809521]
