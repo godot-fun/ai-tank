@@ -15,8 +15,6 @@ enum Buff {
 	AIR_STRIKE,
 }
 
-
-
 class BuffData:
 	var id: int
 	var buff: int
@@ -37,3 +35,12 @@ class BuffData:
 		buff_resource = _buff_resource
 		script_resource = _script_resource
 	pass
+
+
+static var bullet_size_buff: BuffData = BuffData.new(
+	0,
+	Buff.BULLET_SIZE,
+	Vector2i(2, 2),
+	"res://image/buff/bullet_size.png",
+	"res://script/buff/BulletSizeBuff.gd",
+)

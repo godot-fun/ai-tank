@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ct3q1jd50pbpu"]
+
+[ext_resource type="Script" uid="uid://dnl85kp41s8k0" path="res://test/buff/buff_test.gd" id="1_87e8x"]
+[ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/map/AssistMap.tscn" id="2_532x3"]
+
+[node name="BuffTest" type="Node2D" unique_id=1800299605]
+script = ExtResource("1_87e8x")
+
+[node name="AssistMap" parent="." unique_id=2094860258 instance=ExtResource("2_532x3")]

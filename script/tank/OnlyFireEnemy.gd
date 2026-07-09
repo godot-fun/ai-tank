@@ -10,3 +10,6 @@ func start() -> void:
 func physics_update(delta: float) -> void:
 	fire()
 	pass
+
+func play_enter_animation() -> void:
+	pass
