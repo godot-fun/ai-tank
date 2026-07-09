@@ -36,11 +36,11 @@ func pick_move_direction() -> Vector2i:
 
 	var enemy := TankHelper.find_nearest_enemy(self)
 	if enemy != null:
-		target_grid = TankHelper.get_tank_grid(enemy)
+		target_grid = enemy.grid_pos
 	else:
 		var leader := TankHelper.find_player()
 		if leader != null and leader != self:
-			target_grid = TankHelper.get_tank_grid(leader)
+			target_grid = leader.grid_pos
 
 	if target_grid == Vector2i.ZERO:
 		return Vector2i.ZERO

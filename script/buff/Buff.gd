@@ -29,8 +29,8 @@ func apply_data(data: BuffConfig.BuffData, grid: Vector2i) -> void:
 	grid_size = data.grid_size
 	buff_resource = data.buff_resource
 	script_resource = data.script_resource
-	grid_pos = TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
-	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+	grid_pos = TileConfig.clamp_grid_to_bounds(grid, data.grid_size)
+	global_position = TileConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 func setup_flash_material() -> void:

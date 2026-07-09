@@ -136,24 +136,3 @@ static var only_fire_enemy: TankData = TankData.new(
 	"res://script/tank/OnlyFireEnemy.gd",
 )
 
-static func grid_to_world(grid: Vector2i, grid_size: Vector2i) -> Vector2:
-	return Vector2((grid.x + grid_size.x * 0.5) * TileConfig.TILE_SIZE, (grid.y + grid_size.y * 0.5) * TileConfig.TILE_SIZE)
-
-
-static func world_to_grid(world_pos: Vector2, grid_size: Vector2i) -> Vector2i:
-	return Vector2i(
-		floori(world_pos.x / TileConfig.TILE_SIZE - grid_size.x * 0.5),
-		floori(world_pos.y / TileConfig.TILE_SIZE - grid_size.y * 0.5),
-	)
-
-
-static func is_in_bounds(grid: Vector2i, grid_size: Vector2i) -> bool:
-	return grid.x >= 0 and grid.x + grid_size.x <= TileConfig.MAP_GRID_WIDTH \
-		and grid.y >= 0 and grid.y + grid_size.y <= TileConfig.MAP_GRID_HEIGHT
-
-
-static func clamp_grid_to_bounds(grid: Vector2i, grid_size: Vector2i) -> Vector2i:
-	return Vector2i(
-		clampi(grid.x, 0, TileConfig.MAP_GRID_WIDTH - grid_size.x),
-		clampi(grid.y, 0, TileConfig.MAP_GRID_HEIGHT - grid_size.y),
-	)

@@ -62,8 +62,8 @@ func apply_data(data: TankConfig.TankData, grid: Vector2i) -> void:
 	death_effect_resource = data.death_effect_resource
 	tank_resource = data.tank_resource
 	script_resource = data.script_resource
-	grid_pos = TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
-	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+	grid_pos = TileConfig.clamp_grid_to_bounds(grid, data.grid_size)
+	global_position = TileConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ func play_enter_animation() -> void:
 	tween.tween_property(self, "global_position", target_pos, duration)
 	tween.finished.connect(func() -> void:
 		moving = false
-		global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+		global_position = TileConfig.grid_to_world(grid_pos, grid_size)
 	)
 	pass
 
@@ -176,7 +176,7 @@ func move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 
 	var move_duration := TileConfig.TILE_SIZE / speed
 	var tween := create_tween()
-	tween.tween_property(self, "global_position", TankConfig.grid_to_world(grid_pos, grid_size), move_duration)
+	tween.tween_property(self, "global_position", TileConfig.grid_to_world(grid_pos, grid_size), move_duration)
 	tween.finished.connect(on_move_finished.bind(ice_slides_left))
 	pass
 

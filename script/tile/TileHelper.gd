@@ -3,7 +3,7 @@ class_name TileHelper
 const TILE_SCENE := "res://scene/Tile.tscn"
 
 # 一个二维数组
-static var grids: Array = []
+static var grids: Array[Array] = []
 
 
 static func has_tile_at(grid: Vector2i) -> bool:

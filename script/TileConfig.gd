@@ -76,3 +76,18 @@ static var eagle: TileCell = TileCell.new(
 	"res://image/transparent_512x512.png",
 	"res://script/tile/Eagle.gd",
 )
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+static func grid_to_world(grid: Vector2i, grid_size: Vector2i) -> Vector2:
+	return Vector2((grid.x + grid_size.x * 0.5) * TILE_SIZE, (grid.y + grid_size.y * 0.5) * TILE_SIZE)
+
+static func is_in_bounds(grid: Vector2i, grid_size: Vector2i) -> bool:
+	return grid.x >= 0 and grid.x + grid_size.x <= MAP_GRID_WIDTH \
+		and grid.y >= 0 and grid.y + grid_size.y <= MAP_GRID_HEIGHT
+
+static func clamp_grid_to_bounds(grid: Vector2i, grid_size: Vector2i) -> Vector2i:
+	return Vector2i(
+		clampi(grid.x, 0, MAP_GRID_WIDTH - grid_size.x),
+		clampi(grid.y, 0, MAP_GRID_HEIGHT - grid_size.y),
+	)

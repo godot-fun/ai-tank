@@ -35,7 +35,7 @@ func pick_move_direction() -> Vector2i:
 		return pick_random_direction()
 	if randf() < 0.35:
 		return pick_random_not_blocked_direction()
-	return pick_direction_toward(TankHelper.get_tank_grid(player))
+	return pick_direction_toward(player.grid_pos)
 
 
 func play_enter_animation() -> void:
@@ -55,6 +55,6 @@ func play_enter_animation() -> void:
 	tween.tween_property(self, "global_position", target_pos, duration)
 	tween.finished.connect(func() -> void:
 		moving = false
-		global_position = TankConfig.grid_to_world(grid_pos, grid_size)
+		global_position = TileConfig.grid_to_world(grid_pos, grid_size)
 	)
 	pass

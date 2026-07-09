@@ -30,7 +30,7 @@ static func create_eagle() -> void:
 	egale_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	egale_sprite.texture = load(TEXTURE)
 	egale_sprite.z_index = 1
-	egale_sprite.position = TankConfig.grid_to_world(egale_first_grid_pos, Vector2i.ONE) + TileConfig.ONE_GRID_SIZE * 0.5
+	egale_sprite.position = TileConfig.grid_to_world(egale_first_grid_pos, Vector2i.ONE) + TileConfig.ONE_GRID_SIZE * 0.5
 
 	var texture_size := egale_sprite.texture.get_size()
 	var target_size := Vector2(Vector2i.ONE * 2) * TileConfig.TILE_SIZE

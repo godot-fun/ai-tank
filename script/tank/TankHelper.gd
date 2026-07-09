@@ -58,13 +58,8 @@ static func find_nearest_enemy(from_tank: Tank) -> Tank:
 
 	return nearest
 
-
-static func get_tank_grid(tank: Tank) -> Vector2i:
-	return TankConfig.world_to_grid(tank.global_position, tank.grid_size)
-
-
 static func is_move_blocked(grid: Vector2i, grid_size: Vector2i, exclude: Tank = null) -> bool:
-	if not TankConfig.is_in_bounds(grid, grid_size):
+	if not TileConfig.is_in_bounds(grid, grid_size):
 		return true
 	if TileHelper.is_area_blocked_for_tank(grid, grid_size):
 		return true

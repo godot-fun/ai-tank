@@ -19,8 +19,8 @@ func apply_data(data: TileConfig.TileCell, grid: Vector2i) -> void:
 	id = data.id
 	hp = data.hp
 	tile_resource = data.tile_resource
-	grid_pos = TankConfig.clamp_grid_to_bounds(grid, Vector2i.ONE)
-	global_position = TankConfig.grid_to_world(grid_pos, Vector2i.ONE)
+	grid_pos = TileConfig.clamp_grid_to_bounds(grid, Vector2i.ONE)
+	global_position = TileConfig.grid_to_world(grid_pos, Vector2i.ONE)
 	pass
 
 func scale_tile() -> void:
