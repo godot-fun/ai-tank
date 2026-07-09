@@ -118,4 +118,3 @@ func on_body_entered(body: Node2D) -> void:
 				TankConfig.EFFECT_BULLET_HIT_STEEL, 
 				Vector2i(6, 3), 0.3, 27)
 	pass
-

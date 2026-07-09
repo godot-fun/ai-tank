@@ -18,10 +18,8 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 	var script: Script = load(data.script_resource)
 	var tank: Tank = scene.instantiate()
 	tank.set_script(script)
-	tank.apply_data(data)
-	
-	tank.grid_pos = TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
-	
+	tank.apply_data(data, grid)
+
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tank)
 

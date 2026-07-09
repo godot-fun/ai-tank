@@ -1,4 +1,4 @@
-﻿extends Tank
+extends Tank
 class_name EnemyEasy
 
 const AI_THINK_INTERVAL := 0.6
@@ -8,7 +8,6 @@ var ai_think_timer := 0.0
 
 
 func start() -> void:
-	apply_data(TankConfig.enemy_easy)
 	update_facing(Vector2i.DOWN)
 	ai_think_timer = AI_THINK_INTERVAL
 	pass

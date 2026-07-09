@@ -9,7 +9,6 @@ var ai_think_timer := 0.0
 
 
 func start() -> void:
-	apply_data(TankConfig.partner_tank)
 	facing = Vector2i.UP
 	update_facing(facing)
 	ai_think_timer = AI_THINK_INTERVAL

@@ -46,7 +46,7 @@ func _physics_process(delta: float) -> void:
 	physics_update(delta)
 	pass
 
-func apply_data(data: TankConfig.TankData) -> void:
+func apply_data(data: TankConfig.TankData, grid: Vector2i) -> void:
 	id = data.id
 	team = data.team
 	grid_size = data.grid_size
@@ -62,6 +62,8 @@ func apply_data(data: TankConfig.TankData) -> void:
 	death_effect_resource = data.death_effect_resource
 	tank_resource = data.tank_resource
 	script_resource = data.script_resource
+	grid_pos = TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
+	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -72,8 +74,6 @@ func scale_tank() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(grid_size) * TileConfig.TILE_SIZE
 	scale = target_size / texture_size
-
-	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 

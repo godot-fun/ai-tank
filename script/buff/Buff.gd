@@ -23,12 +23,14 @@ func _ready() -> void:
 	body_entered.connect(on_body_entered)
 	pass
 
-func apply_data(data: BuffConfig.BuffData) -> void:
+func apply_data(data: BuffConfig.BuffData, grid: Vector2i) -> void:
 	id = data.id
 	buff = data.buff
 	grid_size = data.grid_size
 	buff_resource = data.buff_resource
 	script_resource = data.script_resource
+	grid_pos = TankConfig.clamp_grid_to_bounds(grid, data.grid_size)
+	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 func setup_flash_material() -> void:
@@ -43,8 +45,6 @@ func scale_buff() -> void:
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(grid_size) * TileConfig.TILE_SIZE
 	scale = target_size / texture_size
-
-	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 
 func on_body_entered(body: Node2D) -> void:

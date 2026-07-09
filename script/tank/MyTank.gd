@@ -7,7 +7,6 @@ var shake_material: ShaderMaterial
 
 
 func start() -> void:
-	apply_data(TankConfig.my_tank)
 	setup_shake_material()
 	pass
 
