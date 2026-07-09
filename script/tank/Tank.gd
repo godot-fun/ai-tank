@@ -73,7 +73,6 @@ func scale_tank() -> void:
 	var target_size := Vector2(grid_size) * TileConfig.TILE_SIZE
 	scale = target_size / texture_size
 
-	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, grid_size), grid_size)
 	global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	pass
 

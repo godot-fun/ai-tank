@@ -26,12 +26,11 @@ static func clear_grid() -> void:
 
 static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 	var scene: PackedScene = load(TILE_SCENE)
-	var tile: StaticBody2D = scene.instantiate()
+	var tile: Tile = scene.instantiate()
 	tile.set_script(load(data.script_resource))
 	tile.apply_data(data)
 	
-	var clamped_grid := TankConfig.clamp_grid_to_bounds(grid, Vector2i.ONE)
-	tile.global_position = TankConfig.grid_to_world(clamped_grid, Vector2i.ONE)
+	tile.grid_pos = TankConfig.clamp_grid_to_bounds(grid, Vector2i.ONE)
 
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tile)

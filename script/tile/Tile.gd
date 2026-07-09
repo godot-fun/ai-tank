@@ -26,7 +26,6 @@ func scale_tile() -> void:
 	var target_size := Vector2.ONE * TileConfig.TILE_SIZE
 	scale = target_size / texture_size
 
-	grid_pos = TankConfig.clamp_grid_to_bounds(TankConfig.world_to_grid(global_position, Vector2i.ONE), Vector2i.ONE)
 	global_position = TankConfig.grid_to_world(grid_pos, Vector2i.ONE)
 	TileHelper.register_tile(self)
 	pass
