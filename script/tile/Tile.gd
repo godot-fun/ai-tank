@@ -15,24 +15,11 @@ func _ready() -> void:
 	start()
 	pass
 
-func start() -> void:
-	pass
-
 func apply_data(data: TileConfig.TileCell) -> void:
 	id = data.id
 	hp = data.hp
 	tile_resource = data.tile_resource
 	pass
-
-func blocks_tank() -> bool:
-	return true
-
-
-func blocks_bullet() -> bool:
-	return true
-
-func is_ice() -> bool:
-	return false
 
 func scale_tile() -> void:
 	var texture_size := sprite.texture.get_size()
@@ -49,6 +36,18 @@ func _exit_tree() -> void:
 	TileHelper.unregister_tile(self)
 	pass
 
+# Interface-Start
+func start() -> void:
+	pass
+
+func blocks_tank() -> bool:
+	return true
+
+func blocks_bullet() -> bool:
+	return true
+
+func is_ice() -> bool:
+	return false
 
 func take_damage(amount: int) -> void:
 	if amount <= 0:
@@ -59,7 +58,7 @@ func take_damage(amount: int) -> void:
 		destroy()
 	pass
 
-
 func destroy() -> void:
 	queue_free()
 	pass
+# Interface-End

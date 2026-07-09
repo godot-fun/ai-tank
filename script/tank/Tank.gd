@@ -45,13 +45,6 @@ func _physics_process(delta: float) -> void:
 	physics_update(delta)
 	pass
 
-
-func start() -> void:
-	pass
-
-func physics_update(_delta: float) -> void:
-	pass
-
 func apply_data(data: TankConfig.TankData) -> void:
 	id = data.id
 	team = data.team
@@ -101,6 +94,14 @@ func play_enter_animation() -> void:
 		moving = false
 		global_position = TankConfig.grid_to_world(grid_pos, grid_size)
 	)
+	pass
+
+# Interfac-Start
+# ----------------------------------------------------------------------------------------------------------------------
+func start() -> void:
+	pass
+
+func physics_update(_delta: float) -> void:
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -154,8 +155,6 @@ func fire() -> void:
 	if fire_sound_resource != null:
 		Audios.play_sfx(fire_sound_resource)
 	pass
-
-
 # ----------------------------------------------------------------------------------------------------------------------
 const ICE_SLIDE_TILES := 2
 
@@ -227,3 +226,4 @@ func pick_direction_toward(target_grid: Vector2i) -> Vector2i:
 			return direction
 
 	return pick_random_direction()
+# Interfac-End

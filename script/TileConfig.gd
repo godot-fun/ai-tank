@@ -4,6 +4,8 @@ const TILE_SIZE: int = 60
 
 const ONE_GRID_SIZE: Vector2i = Vector2.ONE * TILE_SIZE
 
+const GRID_2_2: Vector2i = Vector2.ONE * 2
+
 # 地图的格子的长宽
 static var MAP_GRID_WIDTH: int = ProjectSettings.get_setting("display/window/size/viewport_width") / TILE_SIZE
 static var MAP_GRID_HEIGHT: int = ProjectSettings.get_setting("display/window/size/viewport_height") / TILE_SIZE

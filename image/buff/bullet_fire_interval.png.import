@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cq4lcvxiosyhj"
-path="res://.godot/imported/bullet_file_interval.png-3850cd4ff48bc5451ed784dd561d3511.ctex"
+uid="uid://dn8di5aqqbyjr"
+path="res://.godot/imported/bullet_fire_interval.png-a29c35a2ee43a596698dace17c450bc7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/buff/bullet_file_interval.png"
-dest_files=["res://.godot/imported/bullet_file_interval.png-3850cd4ff48bc5451ed784dd561d3511.ctex"]
+source_file="res://image/buff/bullet_fire_interval.png"
+dest_files=["res://.godot/imported/bullet_fire_interval.png-a29c35a2ee43a596698dace17c450bc7.ctex"]
 
 [params]
 
