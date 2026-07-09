@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7itor"]
 size = Vector2(512, 512)
 
-[node name="BrickWall" type="StaticBody2D" unique_id=933329516]
+[node name="Tile" type="StaticBody2D" unique_id=933329516]
 script = ExtResource("1_0tnot")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2115809521]
