@@ -25,9 +25,8 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tank)
 
-	var result := tank as Tank
-	result.play_enter_animation()
-	return result
+	tank.play_enter_animation()
+	return tank
 
 
 static func register_tank(tank: Tank) -> void:
