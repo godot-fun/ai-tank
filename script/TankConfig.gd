@@ -1,4 +1,4 @@
-﻿class_name TankConfig
+class_name TankConfig
 
 enum Team {
 	PLAYER,
@@ -16,6 +16,8 @@ const EFFECT_BULLET_HIT_BULLET := "res://image/effects/bullet_hit_bullet.png"
 const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
 const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
+
+static var tank_datas: Dictionary[int, TankData] = {}
 
 class TankData:
 	var id: int
@@ -66,6 +68,14 @@ class TankData:
 		death_effect_resource = _death_effect_resource
 		tank_resource = _tank_resource
 		script_resource = _script_resource
+		add_to_tank_datas()
+	
+	func add_to_tank_datas() -> void:
+		if TankConfig.tank_datas.has(id):
+			Log.error("tank config duplicate id:[{}]", id)
+			return
+		TankConfig.tank_datas[id] = self
+		pass
 
 static var my_tank: TankData = TankData.new(
 	0,
@@ -104,7 +114,7 @@ static var partner_tank: TankData = TankData.new(
 )
 
 static var enemy_easy: TankData = TankData.new(
-	1,
+	10,
 	Team.ENEMY,
 	Vector2i(2, 2), 
 	1,
@@ -122,7 +132,7 @@ static var enemy_easy: TankData = TankData.new(
 )
 
 static var only_fire_enemy: TankData = TankData.new(
-	1,
+	11,
 	Team.ENEMY,
 	Vector2i(2, 2),
 	10,
@@ -138,4 +148,3 @@ static var only_fire_enemy: TankData = TankData.new(
 	"res://image/characters/tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",
 )
-
