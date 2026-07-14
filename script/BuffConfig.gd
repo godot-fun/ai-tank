@@ -58,5 +58,5 @@ static var bullet_fire_interval_buff: BuffData = BuffData.new(
 	Buff.BULLET_FIRE_INTERVAL,
 	Vector2i(2, 2),
 	"res://image/buff/bullet_fire_interval.png",
-	"res://script/buff/BulletFireInterval.gd",
+	"res://script/buff/BulletFireIntervalBuff.gd",
 )

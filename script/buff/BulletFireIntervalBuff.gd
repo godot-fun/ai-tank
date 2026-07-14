@@ -1,4 +1,4 @@
-﻿class_name BulletFireInterval
+﻿class_name BulletFireIntervalBuff
 extends Buff
 
 const BULLET_FIRE_INTERVAL_LEVEL_UP := 0.2
