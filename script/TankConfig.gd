@@ -6,8 +6,10 @@ enum Team {
 }
 
 
-const DEFAULT_SPEED := 400.0
-const DEFAULT_ENEMY_SPEED := 320.0
+const DEFAULT_TANK_SPEED := 400.0
+const DEFAULT_ENEMY_TANK_SPEED := 320.0
+const DEFAULT_TANK_HP: int = 1
+
 
 const DEFAULT_BULLET_SPEED := 800.0
 const DEFAULT_BULLET_SIZE := 0.6
@@ -85,8 +87,8 @@ static var my_tank: TankData = TankData.new(
 	0,
 	Team.PLAYER,
 	Vector2i(2, 2),
-	1,
-	DEFAULT_SPEED,
+	DEFAULT_TANK_HP,
+	DEFAULT_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
@@ -103,8 +105,8 @@ static var partner_tank: TankData = TankData.new(
 	2,
 	Team.PLAYER,
 	Vector2i(2, 2),
-	1,
-	DEFAULT_SPEED,
+	DEFAULT_TANK_HP,
+	DEFAULT_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
@@ -121,8 +123,8 @@ static var enemy_easy: TankData = TankData.new(
 	10,
 	Team.ENEMY,
 	Vector2i(2, 2), 
-	1,
-	DEFAULT_ENEMY_SPEED,
+	DEFAULT_TANK_HP,
+	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
@@ -140,7 +142,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	Team.ENEMY,
 	Vector2i(2, 2),
 	10,
-	DEFAULT_ENEMY_SPEED,
+	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,

@@ -2,7 +2,7 @@
 extends Buff
 
 const EFFECT_VALUE := 100.0
-static var limit: float = TankConfig.DEFAULT_SPEED + EFFECT_VALUE * 3
+static var limit: float = TankConfig.DEFAULT_TANK_SPEED + EFFECT_VALUE * 3
 
 func trigger(tank: Tank) -> void:
 	var value := minf(tank.speed + EFFECT_VALUE, limit)

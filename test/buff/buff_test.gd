@@ -20,4 +20,8 @@ func _ready() -> void:
 	BuffHelper.create_buff(BuffConfig.tank_speed_buff, Vector2i(10, 4))
 	BuffHelper.create_buff(BuffConfig.tank_speed_buff, Vector2i(10, 6))
 	BuffHelper.create_buff(BuffConfig.tank_speed_buff, Vector2i(10, 8))
+	
+	BuffHelper.create_buff(BuffConfig.tank_hp_buff, Vector2i(13, 4))
+	BuffHelper.create_buff(BuffConfig.tank_hp_buff, Vector2i(13, 6))
+	BuffHelper.create_buff(BuffConfig.tank_hp_buff, Vector2i(13, 8))
 	pass

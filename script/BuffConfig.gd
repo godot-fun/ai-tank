@@ -15,6 +15,8 @@ enum Buff {
 	AIR_STRIKE,
 }
 
+const DEFAULT_GRID_SIZE: Vector2i = Vector2i(2, 2)
+
 class BuffData:
 	var id: int
 	var buff: int
@@ -40,7 +42,7 @@ class BuffData:
 static var bullet_size_buff: BuffData = BuffData.new(
 	0,
 	Buff.BULLET_SIZE,
-	Vector2i(2, 2),
+	DEFAULT_GRID_SIZE,
 	"res://image/buff/bullet_size.png",
 	"res://script/buff/BulletSizeBuff.gd",
 )
@@ -48,7 +50,7 @@ static var bullet_size_buff: BuffData = BuffData.new(
 static var bullet_speed_buff: BuffData = BuffData.new(
 	1,
 	Buff.BULLET_SPEED,
-	Vector2i(2, 2),
+	DEFAULT_GRID_SIZE,
 	"res://image/buff/bullet_speed.png",
 	"res://script/buff/BulletSpeedBuff.gd",
 )
@@ -56,15 +58,23 @@ static var bullet_speed_buff: BuffData = BuffData.new(
 static var bullet_fire_interval_buff: BuffData = BuffData.new(
 	2,
 	Buff.BULLET_FIRE_INTERVAL,
-	Vector2i(2, 2),
+	DEFAULT_GRID_SIZE,
 	"res://image/buff/bullet_fire_interval.png",
 	"res://script/buff/BulletFireIntervalBuff.gd",
 )
 
 static var tank_speed_buff: BuffData = BuffData.new(
-	1,
+	3,
 	Buff.TANK_SPEED,
-	Vector2i(2, 2),
+	DEFAULT_GRID_SIZE,
 	"res://image/buff/tank_speed.png",
 	"res://script/buff/TankSpeedBuff.gd",
+)
+
+static var tank_hp_buff: BuffData = BuffData.new(
+	4,
+	Buff.TANK_HP,
+	DEFAULT_GRID_SIZE,
+	"res://image/buff/tank_hp.png",
+	"res://script/buff/TankHpBuff.gd",
 )
