@@ -5,7 +5,8 @@ enum Team {
 	ENEMY
 }
 
-
+const DEFAULT_BULLET_SPEED := 800.0
+const DEFAULT_BULLET_SIZE := 0.6
 
 const EFFECT_TANK_PARTNER_EXPLOSION := "res://image/effects/tank_partnet_explosion.png"
 const EFFECT_TANK_ENEMY_EXPLOSION := "res://image/effects/tank_enemy_explosion.png"
@@ -70,9 +71,9 @@ static var my_tank: TankData = TankData.new(
 	Vector2i(2, 2),
 	1,
 	400.0,
-	800.0,
+	DEFAULT_BULLET_SPEED,
 	1,
-	0.6,
+	DEFAULT_BULLET_SIZE,
 	0.3,
 	"res://image/bullets/basic/blue/01.png",
 	AudioConfig.TANK_FIRE,
@@ -88,9 +89,9 @@ static var partner_tank: TankData = TankData.new(
 	Vector2i(2, 2),
 	1,
 	360.0,
-	800.0,
+	DEFAULT_BULLET_SPEED,
 	1,
-	0.6,
+	DEFAULT_BULLET_SIZE,
 	0.45,
 	"res://image/bullets/basic/red/01.png",
 	null,
@@ -106,9 +107,9 @@ static var enemy_easy: TankData = TankData.new(
 	Vector2i(2, 2), 
 	1,
 	320.0,
-	800.0,
+	DEFAULT_BULLET_SPEED,
 	1,
-	0.6,
+	DEFAULT_BULLET_SIZE,
 	2.0,
 	"res://image/bullets/basic/gray/01.png",
 	null,
@@ -124,9 +125,9 @@ static var only_fire_enemy: TankData = TankData.new(
 	Vector2i(2, 2),
 	10,
 	320.0,
-	800.0,
+	DEFAULT_BULLET_SPEED,
 	1,
-	0.6,
+	DEFAULT_BULLET_SIZE,
 	2.0,
 	"res://image/bullets/basic/gray/02.png",
 	null,
