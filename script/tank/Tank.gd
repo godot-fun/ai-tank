@@ -10,7 +10,7 @@ var speed: float
 var bullet_speed: float
 var bullet_damage: int
 var bullet_size: float
-var fire_interval: float
+var bullet_fire_interval: float
 var bullet_resource: String
 var fire_sound_resource: SoundEffect
 var death_sound_resource: SoundEffect
@@ -55,7 +55,7 @@ func apply_data(data: TankConfig.TankData, grid: Vector2i) -> void:
 	bullet_speed = data.bullet_speed
 	bullet_damage = data.bullet_damage
 	bullet_size = data.bullet_size
-	fire_interval = data.fire_interval
+	bullet_fire_interval = data.bullet_fire_interval
 	bullet_resource = data.bullet_resource
 	fire_sound_resource = data.fire_sound_resource
 	death_sound_resource = data.death_sound_resource
@@ -152,7 +152,7 @@ func fire() -> void:
 	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_size, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 
-	fire_cooldown = fire_interval
+	fire_cooldown = bullet_fire_interval
 	if fire_sound_resource != null:
 		Audios.play_sfx(fire_sound_resource)
 	pass

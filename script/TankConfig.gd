@@ -7,6 +7,8 @@ enum Team {
 
 const DEFAULT_BULLET_SPEED := 800.0
 const DEFAULT_BULLET_SIZE := 0.6
+const DEFAULT_BULLET_FIRE_INTERVAL := 1
+const DEFAULT_ENEMY_BULLET_FIRE_INTERVAL := 3
 
 const EFFECT_TANK_PARTNER_EXPLOSION := "res://image/effects/tank_partnet_explosion.png"
 const EFFECT_TANK_ENEMY_EXPLOSION := "res://image/effects/tank_enemy_explosion.png"
@@ -24,7 +26,7 @@ class TankData:
 	var bullet_speed: float
 	var bullet_damage: int
 	var bullet_size: float
-	var fire_interval: float
+	var bullet_fire_interval: float
 	var bullet_resource: String
 	var fire_sound_resource: SoundEffect
 	var death_sound_resource: SoundEffect
@@ -41,7 +43,7 @@ class TankData:
 		_bullet_speed: float,
 		_bullet_damage: int,
 		_bullet_size: float,
-		_fire_interval: float,
+		_bullet_fire_interval: float,
 		_bullet_resource: String,
 		_fire_sound_resource: SoundEffect,
 		_death_sound_resource: SoundEffect,
@@ -57,7 +59,7 @@ class TankData:
 		bullet_speed = _bullet_speed
 		bullet_damage = _bullet_damage
 		bullet_size = _bullet_size
-		fire_interval = _fire_interval
+		bullet_fire_interval = _bullet_fire_interval
 		bullet_resource = _bullet_resource
 		fire_sound_resource = _fire_sound_resource
 		death_sound_resource = _death_sound_resource
@@ -74,7 +76,7 @@ static var my_tank: TankData = TankData.new(
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
-	0.3,
+	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/basic/blue/01.png",
 	AudioConfig.TANK_FIRE,
 	AudioConfig.TANK_DEATH,
@@ -92,7 +94,7 @@ static var partner_tank: TankData = TankData.new(
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
-	0.45,
+	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/basic/red/01.png",
 	null,
 	AudioConfig.TANK_DEATH,
@@ -110,7 +112,7 @@ static var enemy_easy: TankData = TankData.new(
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
-	2.0,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/basic/gray/01.png",
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
@@ -128,7 +130,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	DEFAULT_BULLET_SPEED,
 	1,
 	DEFAULT_BULLET_SIZE,
-	2.0,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/basic/gray/02.png",
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
