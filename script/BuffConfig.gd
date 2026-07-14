@@ -2,9 +2,9 @@
 
 
 enum Buff {
-	BULLET_FIRE_INTERVAL,
 	BULLET_SIZE,
 	BULLET_SPEED,
+	BULLET_FIRE_INTERVAL,
 	
 	TANK_SPEED,
 	TANK_HP,
@@ -59,4 +59,12 @@ static var bullet_fire_interval_buff: BuffData = BuffData.new(
 	Vector2i(2, 2),
 	"res://image/buff/bullet_fire_interval.png",
 	"res://script/buff/BulletFireIntervalBuff.gd",
+)
+
+static var tank_speed_buff: BuffData = BuffData.new(
+	1,
+	Buff.TANK_SPEED,
+	Vector2i(2, 2),
+	"res://image/buff/tank_speed.png",
+	"res://script/buff/TankSpeedBuff.gd",
 )
