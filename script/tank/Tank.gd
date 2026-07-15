@@ -151,10 +151,7 @@ func take_damage(amount: int) -> bool:
 		Vector2i(4, 4), 0.5
 	)
 	if team == TankConfig.Team.ENEMY:
-		var battle_map := get_tree().current_scene
-		if battle_map != null and battle_map.has_method("on_enemy_killed"):
-			battle_map.call_deferred("on_enemy_killed")
-	EventBus.events.tank_death.emit(self)	
+		EventBus.events.enemy_tank_death.emit(self)	
 	queue_free()
 	return true
 

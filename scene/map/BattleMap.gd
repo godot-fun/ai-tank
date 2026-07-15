@@ -1,22 +1,11 @@
 extends Node2D
 
-const ENEMY_SPAWN_INTERVAL := 5.0
 const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
 const STAGE_CLEAR_EFFECT_SCENE := "res://scene/effects/StageClearEffect.tscn"
 
-@warning_ignore("integer_division")
-static var enemy_spawn_grids: Array[Vector2i] = [
-	Vector2i(0, 0),
-	Vector2i((TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x) / 2, 0),
-	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
-]
-
 @onready var battle_hud: BattleHud = $BattleHud
 
-var total_enemies := 0
-var enemies_spawned := 0
-var enemies_killed := 0
-var spawn_timer := 0.0
+var enemy_spawner := EnemySpawner.new()
 var battle_timer := 0.0
 
 
@@ -27,7 +16,7 @@ func _ready() -> void:
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
 	TankHelper.create_tank(TankConfig.partner_tank, Eagle.partner_start_grid_pos)
 
-	total_enemies = BattleProgress.get_enemy_count()
+	enemy_spawner.setup(BattleProgress.get_enemy_count())
 	battle_timer = BattleProgress.get_time_limit()
 	refresh_enemy_hud()
 	battle_hud.update_timer(battle_timer)
@@ -40,9 +29,13 @@ func _ready() -> void:
 	else:
 		Audio.resume_musics()
 
-	spawn_enemy_wave()
+	enemy_spawner.spawn_initial_wave()
+	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
 	pass
 
+func _exit_tree() -> void:
+	EventBus.events.enemy_tank_death.disconnect(on_enemy_tank_death)
+	pass
 
 func _process(delta: float) -> void:
 	if BattleProgress.level_ended:
@@ -51,12 +44,9 @@ func _process(delta: float) -> void:
 	battle_timer = maxf(battle_timer - delta, 0.0)
 	battle_hud.update_timer(battle_timer)
 
-	spawn_timer += delta
-	if spawn_timer >= ENEMY_SPAWN_INTERVAL:
-		spawn_timer = 0.0
-		spawn_enemy_wave()
+	enemy_spawner.update(delta)
 
-	if enemies_killed >= total_enemies:
+	if enemy_spawner.all_enemies_killed():
 		end_level(true)
 		return
 
@@ -65,37 +55,14 @@ func _process(delta: float) -> void:
 	pass
 
 
-func spawn_enemy_wave() -> void:
-	if enemies_spawned >= total_enemies:
-		return
-
-	for grid in enemy_spawn_grids:
-		if enemies_spawned >= total_enemies:
-			break
-		if try_spawn_enemy_at(grid):
-			enemies_spawned += 1
-	pass
-
-
-func try_spawn_enemy_at(grid: Vector2i) -> bool:
-	var grid_size := TankConfig.enemy_easy.grid_size
-	if TankHelper.is_move_blocked(grid, grid_size):
-		return false
-
-	TankHelper.create_tank(TankConfig.enemy_easy, grid)
-	return true
-
-
-func on_enemy_killed() -> void:
-	enemies_killed += 1
+func on_enemy_tank_death(tank: Tank) -> void:
+	enemy_spawner.on_enemy_tank_death()
 	refresh_enemy_hud()
-	if not BattleProgress.level_ended and enemies_killed >= total_enemies:
-		end_level(true)
 	pass
 
 
 func refresh_enemy_hud() -> void:
-	battle_hud.update_enemies_remaining(total_enemies - enemies_killed)
+	battle_hud.update_enemies_remaining(enemy_spawner.get_remaining_count())
 	pass
 
 
@@ -117,4 +84,3 @@ func end_level(cleared: bool) -> void:
 	BattleProgress.next_level()
 	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
 	pass
-

@@ -4,4 +4,4 @@ static var events := Events.new()
 
 
 class Events:
-	signal tank_death(tank: Tank)
+	signal enemy_tank_death(tank: Tank)
