@@ -45,7 +45,7 @@ func _process(delta: float) -> void:
 	battle_timer = maxf(battle_timer - delta, 0.0)
 	battle_hud.update_timer(battle_timer)
 
-	enemy_spawner.update(delta)
+	enemy_spawner.update(delta, battle_timer)
 
 	if enemy_spawner.all_enemies_killed():
 		end_level(true)

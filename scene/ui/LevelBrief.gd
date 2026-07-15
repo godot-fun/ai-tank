@@ -33,7 +33,7 @@ func show_tap_prompt() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	if event.is_pressed() and not event.is_echo():
 		get_viewport().set_input_as_handled()
 		set_process_input(false)
 		on_screen_tapped()

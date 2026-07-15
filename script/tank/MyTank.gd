@@ -89,7 +89,7 @@ func stop_move_sound() -> void:
 	if move_sound_fade_tween != null and move_sound_fade_tween.is_valid():
 		return
 	var audio: AudioStreamPlayer = Audio.audio_map[Audio.AudioBusType.Ambience]
-	move_sound_fade_tween = audio.create_tween()
+	move_sound_fade_tween = create_tween()
 	move_sound_fade_tween.tween_property(audio, "volume_linear", 0.0, 0.5)
 	move_sound_fade_tween.tween_callback(func() -> void:
 		move_sound_fade_tween = null

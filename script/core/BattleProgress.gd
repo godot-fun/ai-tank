@@ -1,6 +1,6 @@
 class_name BattleProgress
 
-const INITIAL_ENEMY_COUNT := 30
+const INITIAL_ENEMY_COUNT := 20
 const ENEMY_COUNT_PER_LEVEL := 5
 
 const TIME_LIMIT_SECONDS_MAX := 60.0
