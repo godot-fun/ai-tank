@@ -79,7 +79,7 @@ func on_button_hover() -> void:
 
 func on_start_pressed() -> void:
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
-	BattleProgress.start_new_game()
+	GameManager.init()
 	Audio.stop_voice_fade()
 	await SceneHelper.async_change_scene_to_file("res://scene/ui/LevelBrief.tscn")
 	pass

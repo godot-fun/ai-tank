@@ -75,7 +75,6 @@ class TankData:
 		death_effect_resource = _death_effect_resource
 		tank_resource = _tank_resource
 		script_resource = _script_resource
-		add_to_tank_datas()
 
 	func clone() -> TankData:
 		return TankData.new(
@@ -95,13 +94,6 @@ class TankData:
 			tank_resource,
 			script_resource
 		)
-	
-	func add_to_tank_datas() -> void:
-		if TankConfig.tank_datas.has(id):
-			Log.error("tank config duplicate id:[{}]", id)
-			return
-		TankConfig.tank_datas[id] = self
-		pass
 
 static var my_tank: TankData = TankData.new(
 	0,
@@ -175,13 +167,21 @@ static var only_fire_enemy: TankData = TankData.new(
 	"res://script/tank/OnlyFireEnemy.gd",
 )
 
+static func add_to_tank_datas(tank: TankData) -> void:
+	var id := tank.id
+	if TankConfig.tank_datas.has(id):
+		Log.error("tank config duplicate id:[{}]", id)
+		return
+	tank_datas[id] = tank
+	pass
+
 static func init_datas() -> void:
 	if !clone_tank_datas.is_empty():
 		return
-	tank_datas[my_tank.id] = my_tank
-	tank_datas[partner_tank.id] = partner_tank
-	tank_datas[enemy_easy.id] = enemy_easy
-	tank_datas[only_fire_enemy.id] = only_fire_enemy
+	add_to_tank_datas(my_tank)
+	add_to_tank_datas(partner_tank)
+	add_to_tank_datas(enemy_easy)
+	add_to_tank_datas(only_fire_enemy)
 	for data: TankData in tank_datas.values():
 		clone_tank_datas[data.id] = data.clone()
 	pass
