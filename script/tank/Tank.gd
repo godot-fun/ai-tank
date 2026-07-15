@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name Tank
 
-const HP_COLOR_DARKEN_STEP := 0.06
 const MIN_HP_COLOR_BRIGHTNESS := 0.45
 
 # tank data property
@@ -82,10 +81,12 @@ func scale_tank() -> void:
 
 
 func update_hp_color() -> void:
-	var brightness := maxf(
-		1.0 - float(maxi(hp - TankConfig.DEFAULT_TANK_HP, 0)) * HP_COLOR_DARKEN_STEP,
-		MIN_HP_COLOR_BRIGHTNESS,
+	var hp_ratio := inverse_lerp(
+		float(TankConfig.DEFAULT_TANK_HP),
+		float(TankHpBuff.limit),
+		float(clampi(hp, TankConfig.DEFAULT_TANK_HP, TankHpBuff.limit)),
 	)
+	var brightness := lerpf(1.0, MIN_HP_COLOR_BRIGHTNESS, hp_ratio)
 	sprite.self_modulate = Color(brightness, brightness, brightness)
 	pass
 
