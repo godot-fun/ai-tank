@@ -17,8 +17,8 @@ static func init() -> void:
 static func on_enemy_tank_death(tank: Tank) -> void:
 	var id := tank.id
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[id]
-	if tank_config.team != TankConfig.Team.PLAYER:
+	if tank_config.team == TankConfig.Team.PLAYER:
 		return
 	if id in range(TankConfig.ENEMY_RED_ID_RANGE.x, TankConfig.ENEMY_RED_ID_RANGE.y):
-		BuffHelper.create_buff(BuffConfig.random_buff(), tank.grid_pos)
+		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), tank.grid_pos))
 	pass
