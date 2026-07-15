@@ -24,6 +24,7 @@ const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
 static var tank_datas: Dictionary[int, TankData] = {}
+static var clone_tank_datas: Dictionary[int, TankData] = {}
 
 class TankData:
 	var id: int
@@ -75,6 +76,25 @@ class TankData:
 		tank_resource = _tank_resource
 		script_resource = _script_resource
 		add_to_tank_datas()
+
+	func clone() -> TankData:
+		return TankData.new(
+			id,
+			team,
+			grid_size,
+			hp,
+			speed,
+			bullet_speed,
+			bullet_damage,
+			bullet_size,
+			bullet_fire_interval,
+			bullet_resource,
+			fire_sound_resource,
+			death_sound_resource,
+			death_effect_resource,
+			tank_resource,
+			script_resource
+		)
 	
 	func add_to_tank_datas() -> void:
 		if TankConfig.tank_datas.has(id):
@@ -154,3 +174,25 @@ static var only_fire_enemy: TankData = TankData.new(
 	"res://image/characters/tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",
 )
+
+static func init_datas() -> void:
+	if !clone_tank_datas.is_empty():
+		return
+	tank_datas[my_tank.id] = my_tank
+	tank_datas[partner_tank.id] = partner_tank
+	tank_datas[enemy_easy.id] = enemy_easy
+	tank_datas[only_fire_enemy.id] = only_fire_enemy
+	for data: TankData in tank_datas.values():
+		clone_tank_datas[data.id] = data.clone()
+	pass
+
+static func refresh_datas() -> void:
+	my_tank = clone_tank_datas[my_tank.id]
+	partner_tank = clone_tank_datas[partner_tank.id]
+	enemy_easy = clone_tank_datas[enemy_easy.id]
+	only_fire_enemy = clone_tank_datas[only_fire_enemy.id]
+	
+	tank_datas.clear()
+	clone_tank_datas.clear()
+	init_datas()
+	pass

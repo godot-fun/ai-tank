@@ -25,6 +25,8 @@ static func start_new_game() -> void:
 	level = 0
 	score = 0
 	level_ended = false
+	TankConfig.init_datas()
+	TankConfig.refresh_datas()
 	pass
 
 
