@@ -203,6 +203,7 @@ static func init_datas() -> void:
 	add_to_tank_datas(partner_tank)
 	add_to_tank_datas(enemy_easy)
 	add_to_tank_datas(only_fire_enemy)
+	add_to_tank_datas(enemy_red_easy)
 	for data: TankData in tank_datas.values():
 		clone_tank_datas[data.id] = data.clone()
 	pass
@@ -212,6 +213,7 @@ static func refresh_datas() -> void:
 	partner_tank = clone_tank_datas[partner_tank.id]
 	enemy_easy = clone_tank_datas[enemy_easy.id]
 	only_fire_enemy = clone_tank_datas[only_fire_enemy.id]
+	enemy_red_easy = clone_tank_datas[enemy_red_easy.id]
 	
 	tank_datas.clear()
 	clone_tank_datas.clear()
