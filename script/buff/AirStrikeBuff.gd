@@ -63,16 +63,18 @@ func trigger(tank: Tank) -> void:
 
 		var explosion_tween := parent.create_tween()
 		for enemy in enemies:
-			explosion_tween.tween_callback(func() -> void:
-				if is_instance_valid(enemy) and enemy.is_alive():
-					enemy.take_damage(enemy.hp)
-			)
+			explosion_tween.tween_callback(_kill_enemy.bind(enemy))
 			explosion_tween.tween_interval(ENEMY_EXPLOSION_INTERVAL)
 
 		for aircraft in aircrafts:
 			if is_instance_valid(aircraft):
 				aircraft.queue_free()
 	)
+
+
+func _kill_enemy(enemy: Tank) -> void:
+	if is_instance_valid(enemy) and enemy.is_alive():
+		enemy.take_damage(enemy.hp)
 
 
 func _build_lane_xs(min_x: float, max_x: float, aircraft_width: float) -> Array[float]:
