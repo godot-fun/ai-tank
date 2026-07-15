@@ -1,7 +1,5 @@
 class_name EnemySpawner
 
-const SPAWN_INTERVAL := 5.0
-
 @warning_ignore("integer_division")
 static var spawn_grids: Array[Vector2i] = [
 	Vector2i(0, 0),
@@ -13,13 +11,20 @@ var total_enemies := 0
 var enemies_spawned := 0
 var enemies_killed := 0
 var spawn_timer := 0.0
+var spawn_interval := 0.0
 
 
-func setup(total: int) -> void:
+func setup(total: int, time_limit: float) -> void:
 	total_enemies = total
 	enemies_spawned = 0
 	enemies_killed = 0
 	spawn_timer = 0.0
+
+	var wave_count := ceili(float(total) / float(spawn_grids.size()))
+	if wave_count <= 1:
+		spawn_interval = time_limit
+	else:
+		spawn_interval = time_limit / float(wave_count - 1)
 
 
 func spawn_initial_wave() -> void:
@@ -28,7 +33,7 @@ func spawn_initial_wave() -> void:
 
 func update(delta: float) -> void:
 	spawn_timer += delta
-	if spawn_timer >= SPAWN_INTERVAL:
+	if spawn_timer >= spawn_interval:
 		spawn_timer = 0.0
 		spawn_wave()
 

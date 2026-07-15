@@ -16,8 +16,9 @@ func _ready() -> void:
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
 	TankHelper.create_tank(TankConfig.partner_tank, Eagle.partner_start_grid_pos)
 
-	enemy_spawner.setup(BattleProgress.get_enemy_count())
-	battle_timer = BattleProgress.get_time_limit()
+	var time_limit := BattleProgress.get_time_limit()
+	enemy_spawner.setup(BattleProgress.get_enemy_count(), BattleProgress.get_time_limit())
+	battle_timer = time_limit
 	refresh_enemy_hud()
 	battle_hud.update_timer(battle_timer)
 
