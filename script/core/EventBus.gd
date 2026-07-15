@@ -4,4 +4,4 @@ static var events := Events.new()
 
 
 class Events:
-	signal tank_death(id: int)
+	signal tank_death(parent: Node, id: int)

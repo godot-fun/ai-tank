@@ -10,15 +10,21 @@ static func init() -> void:
 
 
 
-static func on_tank_death(id: int) -> void:
-	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
+static func on_tank_death(parent: Node, id: int) -> void:
+	var tank_config: TankConfig.TankData = TankConfig.tank_datas[id]
 	if tank_config.team != TankConfig.Team.PLAYER:
 		return
 	var respawn_time := my_tank_respawn_time if tank_config.id == 0 else partner_tank_respawn_time
 	
-	SchedulerBus.schedule(on_respawn.bind(tank_config), respawn_time * TimeUtils.MILLIS_PER_SECOND)
+	parent.create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
 	pass
 
 
 static func on_respawn(tank_config: TankConfig.TankData) -> void:
+	if BattleProgress.level_ended:
+		return
+	if tank_config.id == 0:
+		TankHelper.create_tank(tank_config, Eagle.my_tank_start_grid_pos)
+	else:
+		TankHelper.create_tank(tank_config, Eagle.partner_start_grid_pos)
 	pass

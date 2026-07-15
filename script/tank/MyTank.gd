@@ -2,17 +2,21 @@ extends Tank
 class_name MyTank
 
 const SHAKE_SHADER := "res://shader/tank_move_shake.gdshader"
+const RELOAD_INDICATOR_MARGIN := 8.0
 
 var shake_material: ShaderMaterial
+var reload_indicator: ReloadIndicator
 
 
 func start() -> void:
 	setup_shake_material()
+	setup_reload_indicator()
 	pass
 
 
 func _process(_delta: float) -> void:
 	update_shake_shader()
+	update_reload_indicator()
 	pass
 
 
@@ -93,3 +97,30 @@ func stop_move_sound() -> void:
 		audio.volume_linear = 1.0
 	)
 	pass
+
+
+########################################################################################################################
+# fire cool down
+func setup_reload_indicator() -> void:
+	reload_indicator = ReloadIndicator.new()
+	add_child(reload_indicator)
+	pass
+
+
+func update_reload_indicator() -> void:
+	if reload_indicator == null:
+		return
+
+	var tank_half_height := float(grid_size.y * TileConfig.TILE_SIZE) * 0.5
+	var indicator_position := global_position + Vector2(
+		0.0,
+		-tank_half_height - ReloadIndicator.RADIUS - RELOAD_INDICATOR_MARGIN,
+	)
+	reload_indicator.update_reload(
+		indicator_position,
+		fire_cooldown,
+		bullet_fire_interval,
+	)
+	pass
+	
+########################################################################################################################
