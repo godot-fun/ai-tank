@@ -22,7 +22,6 @@ var battle_timer := 0.0
 
 func _ready() -> void:
 	BattleProgress.level_ended = false
-	RespawnManager.init()
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
