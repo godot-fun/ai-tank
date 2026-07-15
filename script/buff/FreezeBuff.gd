@@ -1,7 +1,7 @@
 ﻿class_name FreezeBuff
 extends Buff
 
-const EFFECT_DURATION := 10.0
+const EFFECT_DURATION := 7.0
 
 
 func trigger(tank: Tank) -> void:
