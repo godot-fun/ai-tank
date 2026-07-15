@@ -14,12 +14,12 @@ static func init() -> void:
 	if initialized:
 		return
 	initialized = true
-	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
+	EventBus.events.player_tank_death.connect(on_player_tank_death)
 	pass
 
 
 
-static func on_enemy_tank_death(tank: Tank) -> void:
+static func on_player_tank_death(tank: Tank) -> void:
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
 	if tank_config.team != TankConfig.Team.PLAYER:
 		return

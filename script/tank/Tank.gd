@@ -152,6 +152,8 @@ func take_damage(amount: int) -> bool:
 	)
 	if team == TankConfig.Team.ENEMY:
 		EventBus.events.enemy_tank_death.emit(self)	
+	else:
+		EventBus.events.player_tank_death.emit(self)
 	queue_free()
 	return true
 

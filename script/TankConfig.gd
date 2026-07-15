@@ -184,7 +184,7 @@ static var enemy_red_easy: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/red_tank_2.png",
+	"res://image/characters/red_tank_4.png",
 	SCRIPT_ENEMY_EASY
 )
 
