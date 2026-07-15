@@ -31,6 +31,7 @@ static var STAGE_CLEAR := SoundEffect.new(BGM_STAGE_CLEAR)
 static var TANK_FIRE := SoundEffect.new("res://audio/sfx/tank/tank-fire.wav", 0.5)
 static var TANK_DEATH := SoundEffect.new("res://audio/sfx/tank/tank_explosion.wav")
 static var TANK_DEATH_ENEMY := SoundEffect.new("res://audio/sfx/tank/explosion-medium.wav")
+static var TANK_RELOAD := SoundEffect.new("res://audio/sfx/tank/tank-reload.wav")
 static var TANK_MOVE := "res://audio/sfx/tank/tank_move_fade.wav"
 
 static var BULLET_HIT_BULLET := SoundEffect.new("res://audio/sfx/tank/explosion-small.wav")

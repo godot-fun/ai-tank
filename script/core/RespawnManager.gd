@@ -4,7 +4,12 @@ static var my_tank_respawn_time: float = 15.0
 
 static var partner_tank_respawn_time: float = 15.0
 
+static var initialized: bool = false
+
 static func init() -> void:
+	if initialized:
+		return
+	initialized = true
 	EventBus.events.tank_death.connect(on_tank_death)
 	pass
 
@@ -27,4 +32,5 @@ static func on_respawn(tank_config: TankConfig.TankData) -> void:
 		TankHelper.create_tank(tank_config, Eagle.my_tank_start_grid_pos)
 	else:
 		TankHelper.create_tank(tank_config, Eagle.partner_start_grid_pos)
+	Audios.play_sfx(AudioConfig.TANK_RELOAD)
 	pass
