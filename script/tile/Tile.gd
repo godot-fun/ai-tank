@@ -46,9 +46,6 @@ func blocks_tank() -> bool:
 func blocks_bullet() -> bool:
 	return true
 
-func is_ice() -> bool:
-	return false
-
 func take_damage(amount: int) -> void:
 	if amount <= 0:
 		return

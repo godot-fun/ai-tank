@@ -27,10 +27,5 @@ func blocks_tank() -> bool:
 func blocks_bullet() -> bool:
 	return false
 
-
-func is_ice() -> bool:
-	return true
-
-
 func take_damage(_amount: int) -> void:
 	pass

@@ -1,4 +1,4 @@
-﻿class_name TankSizeBuff
+﻿class_name TankRespawnBuff
 extends Buff
 
 const EFFECT_VALUE := 8.0

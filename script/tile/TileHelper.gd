@@ -3,7 +3,17 @@ class_name TileHelper
 const TILE_SCENE := "res://scene/Tile.tscn"
 
 # 一个二维数组
-static var grids: Array[Array] = []
+static var grids: Array[Array] = create_grids()
+
+
+static func create_grids() -> Array[Array]:
+	var result: Array[Array] = []
+	result.resize(TileConfig.MAP_GRID_WIDTH)
+	for x in range(TileConfig.MAP_GRID_WIDTH):
+		var column: Array = []
+		column.resize(TileConfig.MAP_GRID_HEIGHT)
+		result[x] = column
+	return result
 
 
 static func clear_grid() -> void:
@@ -13,7 +23,7 @@ static func clear_grid() -> void:
 			var tile: Tile = column[y]
 			if tile != null:
 				tile.queue_free()
-	grids.clear()
+	grids = create_grids()
 
 
 static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
@@ -29,7 +39,6 @@ static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 
 
 static func register_tile(tile: Tile) -> void:
-	ensure_grid()
 	var cell := tile.grid_pos
 	if is_cell_in_bounds(cell):
 		grids[cell.x][cell.y] = tile
@@ -58,7 +67,6 @@ static func is_grid_blocked_for_tank(grid: Vector2i) -> bool:
 	if not is_cell_in_bounds(grid):
 		return false
 
-	ensure_grid()
 	var tile: Tile = grids[grid.x][grid.y]
 	return tile != null and tile.blocks_tank()
 
@@ -66,30 +74,13 @@ static func is_grid_blocked_for_tank(grid: Vector2i) -> bool:
 static func is_area_on_ice(grid: Vector2i, grid_size: Vector2i) -> bool:
 	for x in range(grid_size.x):
 		for y in range(grid_size.y):
-			if is_grid_ice(grid + Vector2i(x, y)):
+			var cell := grid + Vector2i(x, y)
+			if not is_cell_in_bounds(cell):
+				continue
+			var tile: Tile = grids[cell.x][cell.y]
+			if tile != null and tile is Ice:
 				return true
 	return false
-
-
-static func is_grid_ice(grid: Vector2i) -> bool:
-	if not is_cell_in_bounds(grid):
-		return false
-
-	ensure_grid()
-	var tile: Tile = grids[grid.x][grid.y]
-	return tile != null and tile.is_ice()
-
-
-static func ensure_grid() -> void:
-	if not grids.is_empty():
-		return
-
-	grids.resize(TileConfig.MAP_GRID_WIDTH)
-	for x in range(TileConfig.MAP_GRID_WIDTH):
-		var column: Array = []
-		column.resize(TileConfig.MAP_GRID_HEIGHT)
-		grids[x] = column
-	pass
 
 
 static func is_cell_in_bounds(grid: Vector2i) -> bool:
