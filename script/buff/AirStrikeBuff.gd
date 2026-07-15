@@ -6,6 +6,7 @@ const AIRCRAFT_SHADER := "res://shader/aircraft_flight.gdshader"
 const FLIGHT_DURATION := 3.0
 const AIRCRAFT_INTERVAL := 0.4
 const AIRCRAFT_WIDTH_RATIO := 0.22
+const ENEMY_EXPLOSION_INTERVAL := 0.25
 
 
 func trigger(tank: Tank) -> void:
@@ -57,12 +58,27 @@ func trigger(tank: Tank) -> void:
 		tween.tween_property(aircraft, "global_position", end_pos, FLIGHT_DURATION).set_delay(delay)
 
 	tween.finished.connect(func() -> void:
-		for target in TankHelper.tanks.duplicate():
+		var enemies: Array[Tank] = []
+		for target in TankHelper.tanks:
 			if is_instance_valid(target) and target.team == TankConfig.Team.ENEMY and target.is_alive():
-				target.take_damage(target.hp)
+				enemies.append(target)
+		enemies.sort_custom(func(a: Tank, b: Tank) -> bool:
+			return a.global_position.y > b.global_position.y
+		)
+
+		var explosion_tween := parent.create_tween()
+		for enemy in enemies:
+			explosion_tween.tween_callback(_kill_enemy.bind(enemy))
+			explosion_tween.tween_interval(ENEMY_EXPLOSION_INTERVAL)
+
 		for aircraft in aircrafts:
 			aircraft.queue_free()
 	)
+
+
+func _kill_enemy(enemy: Tank) -> void:
+	if is_instance_valid(enemy) and enemy.is_alive():
+		enemy.take_damage(enemy.hp)
 
 
 func _build_lane_xs(min_x: float, max_x: float, aircraft_width: float) -> Array[float]:
