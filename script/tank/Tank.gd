@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Tank
 
-const MIN_HP_COLOR_BRIGHTNESS := 0.45
+const MIN_HP_COLOR_BRIGHTNESS := 0.7
 
 # tank data property
 var id: int
