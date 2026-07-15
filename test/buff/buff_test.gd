@@ -33,4 +33,12 @@ func _ready() -> void:
 	BuffHelper.create_buff(BuffConfig.tank_respawn_buff, Vector2i(19, 4))
 	BuffHelper.create_buff(BuffConfig.tank_respawn_buff, Vector2i(19, 6))
 	BuffHelper.create_buff(BuffConfig.tank_respawn_buff, Vector2i(19, 8))
+	
+	BuffHelper.create_buff(BuffConfig.freeze_buff, Vector2i(22, 4))
+	BuffHelper.create_buff(BuffConfig.freeze_buff, Vector2i(22, 6))
+	BuffHelper.create_buff(BuffConfig.freeze_buff, Vector2i(22, 8))
+	
+	BuffHelper.create_buff(BuffConfig.air_strike_buff, Vector2i(25, 4))
+	BuffHelper.create_buff(BuffConfig.air_strike_buff, Vector2i(25, 6))
+	BuffHelper.create_buff(BuffConfig.air_strike_buff, Vector2i(25, 8))
 	pass
