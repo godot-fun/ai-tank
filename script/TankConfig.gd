@@ -111,7 +111,7 @@ static var partner_tank: TankData = TankData.new(
 	1,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/basic/red/01.png",
+	"res://image/bullets/basic/green/01.png",
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
