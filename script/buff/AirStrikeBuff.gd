@@ -34,7 +34,6 @@ func trigger(tank: Tank) -> void:
 		aircraft.texture = texture
 		aircraft.scale = Vector2.ONE * aircraft_scale
 		aircraft.z_index = 100
-		aircraft.visible = false
 
 		var flight_material := ShaderMaterial.new()
 		flight_material.shader = shader
@@ -51,13 +50,9 @@ func trigger(tank: Tank) -> void:
 		aircrafts.append(aircraft)
 
 		var delay := i * AIRCRAFT_INTERVAL
-		tween.tween_callback(func() -> void:
-			if is_instance_valid(aircraft):
-				aircraft.visible = true
-		).set_delay(delay)
 		tween.tween_property(aircraft, "global_position", end_pos, FLIGHT_DURATION).set_delay(delay)
 
-	tween.finished.connect(func() -> void:
+	tween.chain().tween_callback(func() -> void:
 		var enemies: Array[Tank] = []
 		for target in TankHelper.tanks:
 			if is_instance_valid(target) and target.team == TankConfig.Team.ENEMY and target.is_alive():
@@ -68,17 +63,16 @@ func trigger(tank: Tank) -> void:
 
 		var explosion_tween := parent.create_tween()
 		for enemy in enemies:
-			explosion_tween.tween_callback(_kill_enemy.bind(enemy))
+			explosion_tween.tween_callback(func() -> void:
+				if is_instance_valid(enemy) and enemy.is_alive():
+					enemy.take_damage(enemy.hp)
+			)
 			explosion_tween.tween_interval(ENEMY_EXPLOSION_INTERVAL)
 
 		for aircraft in aircrafts:
-			aircraft.queue_free()
+			if is_instance_valid(aircraft):
+				aircraft.queue_free()
 	)
-
-
-func _kill_enemy(enemy: Tank) -> void:
-	if is_instance_valid(enemy) and enemy.is_alive():
-		enemy.take_damage(enemy.hp)
 
 
 func _build_lane_xs(min_x: float, max_x: float, aircraft_width: float) -> Array[float]:

@@ -49,7 +49,7 @@ func try_spawn_at(grid: Vector2i) -> bool:
 	if TankHelper.is_move_blocked(grid, grid_size):
 		return false
 
-	var tank_data: TankConfig.TankData = TankConfig.enemy_red_easy if enemies_spawned > 0 && enemies_spawned % 9 == 0 else TankConfig.enemy_easy
+	var tank_data: TankConfig.TankData = TankConfig.enemy_red_easy if enemies_spawned > 0 && enemies_spawned % 8 == 0 else TankConfig.enemy_easy
 	TankHelper.create_tank(tank_data, grid)
 	return true
 

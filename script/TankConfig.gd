@@ -174,7 +174,7 @@ static var enemy_red_easy: TankData = TankData.new(
 	300,
 	Team.ENEMY,
 	Vector2i(2, 2),
-	3,
+	2,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
