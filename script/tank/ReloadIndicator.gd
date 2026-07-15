@@ -53,7 +53,7 @@ func _draw() -> void:
 		start_angle,
 		start_angle + TAU * progress,
 		48,
-		Color(1.0, 0.82, 0.15),
+		Color(0.55, 0.92, 0.45),
 		LINE_WIDTH,
 		true,
 	)

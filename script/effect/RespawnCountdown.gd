@@ -36,7 +36,7 @@ func setup_label() -> void:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", FONT_SIZE)
-	label.add_theme_color_override("font_color", Color(1.0, 0.82, 0.15))
+	label.add_theme_color_override("font_color", Color(0.55, 0.92, 0.45))
 
 	var size := Vector2(RADIUS * 2.0, RADIUS * 2.0)
 	label.custom_minimum_size = size
@@ -106,7 +106,7 @@ func _draw() -> void:
 		start_angle,
 		start_angle + TAU * progress,
 		48,
-		Color(1.0, 0.82, 0.15),
+		Color(0.55, 0.92, 0.45),
 		LINE_WIDTH,
 		true,
 	)
