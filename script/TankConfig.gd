@@ -23,6 +23,9 @@ const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
 const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
+const ENEMY_RED_ID_RANGE := Vector2i(300, 400)
+const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
+
 static var tank_datas: Dictionary[int, TankData] = {}
 static var clone_tank_datas: Dictionary[int, TankData] = {}
 
@@ -146,7 +149,7 @@ static var enemy_easy: TankData = TankData.new(
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/tank_1.png",
-	"res://script/tank/EnemyEasy.gd",
+	SCRIPT_ENEMY_EASY
 )
 
 static var only_fire_enemy: TankData = TankData.new(
@@ -165,6 +168,24 @@ static var only_fire_enemy: TankData = TankData.new(
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",
+)
+
+static var enemy_red_easy: TankData = TankData.new(
+	300,
+	Team.ENEMY,
+	Vector2i(2, 2),
+	3,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/basic/red/01.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/red_tank_2.png",
+	SCRIPT_ENEMY_EASY
 )
 
 static func add_to_tank_datas(tank: TankData) -> void:

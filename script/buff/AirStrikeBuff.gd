@@ -2,7 +2,10 @@
 extends Buff
 
 const AIRCRAFT_TEXTURE := "res://image/buff/air_strike.png"
+const AIRCRAFT_SHADER := "res://shader/aircraft_flight.gdshader"
 const FLIGHT_DURATION := 3.0
+const AIRCRAFT_INTERVAL := 0.4
+const AIRCRAFT_WIDTH_RATIO := 0.22
 
 
 func trigger(tank: Tank) -> void:
@@ -10,25 +13,64 @@ func trigger(tank: Tank) -> void:
 		return
 
 	var texture: Texture2D = load(AIRCRAFT_TEXTURE)
+	var shader: Shader = load(AIRCRAFT_SHADER)
 	var map_width := TileConfig.MAP_GRID_WIDTH * TileConfig.TILE_SIZE
 	var map_height := TileConfig.MAP_GRID_HEIGHT * TileConfig.TILE_SIZE
-	var aircraft_scale := map_width * 0.75 / texture.get_size().x
+	var aircraft_scale := map_width * AIRCRAFT_WIDTH_RATIO / texture.get_size().x
+	var half_width := texture.get_size().x * aircraft_scale * 0.5
 	var half_height := texture.get_size().y * aircraft_scale * 0.5
+	var lane_xs := _build_lane_xs(half_width, map_width - half_width, half_width * 2.0)
 
-	var aircraft := Sprite2D.new()
-	aircraft.texture = texture
-	aircraft.scale = Vector2.ONE * aircraft_scale
-	aircraft.z_index = 100
-	aircraft.global_position = Vector2(map_width * 0.5, map_height + half_height)
-	tank.get_parent().add_child(aircraft)
-	
-	Audios.play_sfx(AudioConfig.BUFF_AIR_STRIKE)
+	var count := randi_range(5, 9)
+	var parent := tank.get_parent()
+	var tween := parent.create_tween()
+	tween.set_parallel(true)
+	var aircrafts: Array[Sprite2D] = []
 
-	var tween := tank.get_parent().create_tween()
-	tween.tween_property(aircraft, "global_position", Vector2(map_width * 0.5, -half_height), FLIGHT_DURATION)
+	for i in count:
+		Audios.play_sfx(AudioConfig.BUFF_AIR_STRIKE)
+		var aircraft := Sprite2D.new()
+		aircraft.texture = texture
+		aircraft.scale = Vector2.ONE * aircraft_scale
+		aircraft.z_index = 100
+		aircraft.visible = false
+
+		var flight_material := ShaderMaterial.new()
+		flight_material.shader = shader
+		flight_material.set_shader_parameter("phase_offset", randf_range(0.0, TAU))
+		flight_material.set_shader_parameter("world_scale", aircraft_scale)
+		aircraft.material = flight_material
+
+		parent.add_child(aircraft)
+
+		var aircraft_x: float = lane_xs[i % lane_xs.size()]
+		var start_pos := Vector2(aircraft_x, map_height + half_height)
+		var end_pos := Vector2(aircraft_x, -half_height)
+		aircraft.global_position = start_pos
+		aircrafts.append(aircraft)
+
+		var delay := i * AIRCRAFT_INTERVAL
+		tween.tween_callback(func() -> void:
+			if is_instance_valid(aircraft):
+				aircraft.visible = true
+		).set_delay(delay)
+		tween.tween_property(aircraft, "global_position", end_pos, FLIGHT_DURATION).set_delay(delay)
+
 	tween.finished.connect(func() -> void:
 		for target in TankHelper.tanks.duplicate():
 			if is_instance_valid(target) and target.team == TankConfig.Team.ENEMY and target.is_alive():
 				target.take_damage(target.hp)
-		aircraft.queue_free()
+		for aircraft in aircrafts:
+			aircraft.queue_free()
 	)
+
+
+func _build_lane_xs(min_x: float, max_x: float, aircraft_width: float) -> Array[float]:
+	var available := maxf(max_x - min_x, 0.0)
+	var lane_count := maxi(1, int(available / aircraft_width) + 1)
+	var xs: Array[float] = []
+	for i in lane_count:
+		var t := 0.0 if lane_count == 1 else float(i) / float(lane_count - 1)
+		xs.append(lerpf(min_x, max_x, t))
+	xs.shuffle()
+	return xs

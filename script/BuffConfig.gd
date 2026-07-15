@@ -17,6 +17,8 @@ enum Buff {
 
 const DEFAULT_GRID_SIZE: Vector2i = Vector2i(2, 2)
 
+static var buff_datas: Dictionary[int, BuffData] = {}
+
 class BuffData:
 	var id: int
 	var buff: int
@@ -36,6 +38,7 @@ class BuffData:
 		grid_size = _grid_size
 		buff_resource = _buff_resource
 		script_resource = _script_resource
+		BuffConfig.buff_datas[id] = self
 	pass
 
 
@@ -110,3 +113,7 @@ static var air_strike_buff: BuffData = BuffData.new(
 	"res://image/buff/buff_air_strike.png",
 	"res://script/buff/AirStrikeBuff.gd",
 )
+
+
+static func random_buff() -> BuffData:
+	return RandomUtils.random_ele(buff_datas.values())
