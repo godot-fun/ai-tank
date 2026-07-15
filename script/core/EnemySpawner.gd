@@ -23,6 +23,7 @@ func setup(total: int, time_limit: float) -> void:
 	enemies_killed = 0
 	spawn_timer = 0.0
 	remaining_time = time_limit
+	_calculate_spawn_interval(time_limit)
 
 
 func spawn_initial_wave() -> void:
@@ -31,7 +32,12 @@ func spawn_initial_wave() -> void:
 
 func update(delta: float, time_remaining: float) -> void:
 	remaining_time = time_remaining
+
+	if enemies_spawned >= total_enemies:
+		return
+
 	if time_remaining <= SPAWN_FINISH_EARLY_SECONDS:
+		spawn_wave()
 		return
 
 	spawn_timer += delta
@@ -50,24 +56,14 @@ func spawn_wave() -> void:
 		if try_spawn_at(grid):
 			enemies_spawned += 1
 
-	_update_spawn_interval()
 
-
-func _update_spawn_interval() -> void:
-	var remaining := total_enemies - enemies_spawned
-	if remaining <= 0:
-		return
-
-	var spawn_budget := maxf(remaining_time - SPAWN_FINISH_EARLY_SECONDS, 0.0)
-	if spawn_budget <= 0.0:
-		spawn_interval = 0.0
-		return
-
-	var wave_count := ceili(float(remaining) / float(spawn_grids.size()))
-	if wave_count <= 1:
-		spawn_interval = spawn_budget
+func _calculate_spawn_interval(time_limit: float) -> void:
+	var spawn_window := maxf(time_limit - SPAWN_FINISH_EARLY_SECONDS, 0.0)
+	var total_waves := ceili(float(total_enemies) / float(spawn_grids.size()))
+	if total_waves <= 1:
+		spawn_interval = spawn_window
 	else:
-		spawn_interval = spawn_budget / float(wave_count - 1)
+		spawn_interval = spawn_window / float(total_waves - 1)
 
 
 func try_spawn_at(grid: Vector2i) -> bool:
