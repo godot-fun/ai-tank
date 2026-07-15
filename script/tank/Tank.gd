@@ -134,7 +134,7 @@ func take_damage(amount: int) -> bool:
 		var battle_map := get_tree().current_scene
 		if battle_map != null and battle_map.has_method("on_enemy_killed"):
 			battle_map.call_deferred("on_enemy_killed")
-	EventBus.events.tank_death.emit(self.get_parent(), id)	
+	EventBus.events.tank_death.emit(self)	
 	queue_free()
 	return true
 

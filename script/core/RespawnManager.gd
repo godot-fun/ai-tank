@@ -15,13 +15,13 @@ static func init() -> void:
 
 
 
-static func on_tank_death(parent: Node, id: int) -> void:
-	var tank_config: TankConfig.TankData = TankConfig.tank_datas[id]
+static func on_tank_death(tank: Tank) -> void:
+	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
 	if tank_config.team != TankConfig.Team.PLAYER:
 		return
 	var respawn_time := my_tank_respawn_time if tank_config.id == 0 else partner_tank_respawn_time
 	
-	parent.create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
+	tank.get_parent().create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
 	pass
 
 
