@@ -20,8 +20,9 @@ static func on_tank_death(tank: Tank) -> void:
 	if tank_config.team != TankConfig.Team.PLAYER:
 		return
 	var respawn_time := my_tank_respawn_time if tank_config.id == 0 else partner_tank_respawn_time
-	
-	tank.get_parent().create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
+	var parent := tank.get_parent()
+	RespawnCountdown.spawn(tank.global_position, respawn_time, parent)
+	parent.create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
 	pass
 
 
