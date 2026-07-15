@@ -94,3 +94,19 @@ static var tank_size_buff: BuffData = BuffData.new(
 	"res://image/buff/tank_size.png",
 	"res://script/buff/TankSizeBuff.gd",
 )
+
+static var freeze_buff: BuffData = BuffData.new(
+	7,
+	Buff.FREEZE,
+	DEFAULT_GRID_SIZE,
+	"res://image/buff/buff_freeze.png",
+	"res://script/buff/FreezeBuff.gd",
+)
+
+static var air_strike_buff: BuffData = BuffData.new(
+	8,
+	Buff.AIR_STRIKE,
+	DEFAULT_GRID_SIZE,
+	"res://image/buff/buff_air_strike.png",
+	"res://script/buff/AirStrikeBuff.gd",
+)
