@@ -29,7 +29,3 @@ void vertex() {
 		VERTEX = rotated * pulse + jitter;
 	}
 }
-
-void fragment() {
-	COLOR = texture(TEXTURE, UV);
-}
