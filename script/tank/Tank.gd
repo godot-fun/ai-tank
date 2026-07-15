@@ -1,6 +1,9 @@
 extends CharacterBody2D
 class_name Tank
 
+const HP_COLOR_DARKEN_STEP := 0.06
+const MIN_HP_COLOR_BRIGHTNESS := 0.45
+
 # tank data property
 var id: int
 var team: int
@@ -30,6 +33,7 @@ var moving := false
 
 func _ready() -> void:
 	scale_tank()
+	update_hp_color()
 	start()
 	TankHelper.register_tank(self)
 	pass
@@ -77,6 +81,15 @@ func scale_tank() -> void:
 	pass
 
 
+func update_hp_color() -> void:
+	var brightness := maxf(
+		1.0 - float(maxi(hp - TankConfig.DEFAULT_TANK_HP, 0)) * HP_COLOR_DARKEN_STEP,
+		MIN_HP_COLOR_BRIGHTNESS,
+	)
+	sprite.self_modulate = Color(brightness, brightness, brightness)
+	pass
+
+
 func play_enter_animation() -> void:
 	visible = false
 	moving = true
@@ -118,6 +131,7 @@ func take_damage(amount: int) -> bool:
 	hp = hp - amount
 	if hp > 0:
 		SpriteUtils.play_hit_flash(sprite)
+		update_hp_color()
 		return false
 
 	Audios.play_sfx(death_sound_resource)

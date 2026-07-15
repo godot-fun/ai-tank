@@ -10,4 +10,5 @@ func trigger(tank: Tank) -> void:
 	
 	tank_config.hp = value
 	tank.hp = tank.hp + EFFECT_VALUE
+	tank.update_hp_color()
 	pass
