@@ -18,10 +18,10 @@ var enemies_spawned := 0
 var enemies_killed := 0
 var spawn_timer := 0.0
 var battle_timer := 0.0
-var level_ended := false
 
 
 func _ready() -> void:
+	BattleProgress.level_ended = false
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
@@ -45,7 +45,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if level_ended:
+	if BattleProgress.level_ended:
 		return
 
 	battle_timer = maxf(battle_timer - delta, 0.0)
@@ -89,7 +89,7 @@ func try_spawn_enemy_at(grid: Vector2i) -> bool:
 func on_enemy_killed() -> void:
 	enemies_killed += 1
 	refresh_enemy_hud()
-	if not level_ended and enemies_killed >= total_enemies:
+	if not BattleProgress.level_ended and enemies_killed >= total_enemies:
 		end_level(true)
 	pass
 
@@ -100,10 +100,10 @@ func refresh_enemy_hud() -> void:
 
 
 func end_level(cleared: bool) -> void:
-	if level_ended:
+	if BattleProgress.level_ended:
 		return
 
-	level_ended = true
+	BattleProgress.level_ended = true
 	set_process(false)
 	set_physics_process(false)
 	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
