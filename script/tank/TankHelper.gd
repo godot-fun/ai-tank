@@ -72,11 +72,7 @@ static func is_area_blocked_by_tank(grid: Vector2i, grid_size: Vector2i, exclude
 	for tank in tanks:
 		if tank == exclude:
 			continue
-		if _areas_overlap(grid, grid_size, tank.grid_pos, tank.grid_size):
+		if grid.x < tank.grid_pos.x + tank.grid_size.x and grid.x + grid_size.x > tank.grid_pos.x \
+			and grid.y < tank.grid_pos.y + tank.grid_size.y and grid.y + grid_size.y > tank.grid_pos.y:
 			return true
 	return false
-
-
-static func _areas_overlap(a_grid: Vector2i, a_size: Vector2i, b_grid: Vector2i, b_size: Vector2i) -> bool:
-	return a_grid.x < b_grid.x + b_size.x and a_grid.x + a_size.x > b_grid.x \
-		and a_grid.y < b_grid.y + b_size.y and a_grid.y + a_size.y > b_grid.y
