@@ -79,6 +79,14 @@ static var tank_hp_buff: BuffData = BuffData.new(
 	"res://script/buff/TankHpBuff.gd",
 )
 
+static var tank_respawn_buff: BuffData = BuffData.new(
+	5,
+	Buff.TANK_RESPAWN,
+	DEFAULT_GRID_SIZE,
+	"res://image/buff/tank_respawn.png",
+	"res://script/buff/TankRespawnBuff.gd",
+)
+
 static var tank_size_buff: BuffData = BuffData.new(
 	6,
 	Buff.TANK_SIZE,

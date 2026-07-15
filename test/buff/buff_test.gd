@@ -29,4 +29,8 @@ func _ready() -> void:
 	BuffHelper.create_buff(BuffConfig.tank_size_buff, Vector2i(16, 4))
 	BuffHelper.create_buff(BuffConfig.tank_size_buff, Vector2i(16, 6))
 	BuffHelper.create_buff(BuffConfig.tank_size_buff, Vector2i(16, 8))
+	
+	BuffHelper.create_buff(BuffConfig.tank_respawn_buff, Vector2i(19, 4))
+	BuffHelper.create_buff(BuffConfig.tank_respawn_buff, Vector2i(19, 6))
+	BuffHelper.create_buff(BuffConfig.tank_respawn_buff, Vector2i(19, 8))
 	pass

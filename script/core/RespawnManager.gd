@@ -1,12 +1,16 @@
 ﻿class_name RespawnManager
 
-static var my_tank_respawn_time: float = 15.0
+const DEFAULT_RESPAWN_TIME: float = 15.0
 
-static var partner_tank_respawn_time: float = 15.0
+static var my_tank_respawn_time: float = DEFAULT_RESPAWN_TIME
+
+static var partner_tank_respawn_time: float = DEFAULT_RESPAWN_TIME
 
 static var initialized: bool = false
 
 static func init() -> void:
+	my_tank_respawn_time = DEFAULT_RESPAWN_TIME
+	partner_tank_respawn_time = DEFAULT_RESPAWN_TIME
 	if initialized:
 		return
 	initialized = true
