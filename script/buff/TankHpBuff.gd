@@ -7,8 +7,10 @@ static var limit: int = TankConfig.DEFAULT_TANK_HP + EFFECT_VALUE * 3
 func trigger(tank: Tank) -> void:
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
 	var value := mini(tank_config.hp + EFFECT_VALUE, limit)
-	
+	if tank_config.hp == limit:
+		return
 	tank_config.hp = value
 	tank.hp = tank.hp + EFFECT_VALUE
 	tank.update_hp_color()
+	queue_free()
 	pass

@@ -7,7 +7,9 @@ static var limit: float = TankConfig.DEFAULT_TANK_SPEED + EFFECT_VALUE * 3
 func trigger(tank: Tank) -> void:
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
 	var value := minf(tank_config.speed + EFFECT_VALUE, limit)
-	
+	if tank_config.speed == limit:
+		return	
 	tank_config.speed = value
 	tank.speed = value
+	queue_free()
 	pass

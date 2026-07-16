@@ -57,7 +57,6 @@ func on_body_entered(body: Node2D) -> void:
 		
 	Audios.play_sfx(AudioConfig.BUFF_LEVEL_UP)
 	trigger(tank)
-	queue_free()
 	pass
 
 # Interface-Start

@@ -49,6 +49,7 @@ func trigger(tank: Tank) -> void:
 		tween.tween_callback(func() -> void: aircraft.queue_free())
 
 	SchedulerBus.schedule(kill_all, FLIGHT_DURATION * TimeUtils.MILLIS_PER_SECOND)
+	queue_free()
 	pass
 
 static func kill_all() -> void:

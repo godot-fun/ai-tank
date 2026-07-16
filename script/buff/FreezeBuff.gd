@@ -16,3 +16,5 @@ func trigger(tank: Tank) -> void:
 			if is_instance_valid(enemy):
 				enemy.set_physics_process(true)
 	)
+	queue_free()
+	pass

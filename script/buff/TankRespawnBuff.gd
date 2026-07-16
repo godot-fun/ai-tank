@@ -12,8 +12,13 @@ func trigger(tank: Tank) -> void:
 	
 	if tank_config.id == 0:
 		var value := maxf(RespawnManager.my_tank_respawn_time - EFFECT_VALUE, limit)
+		if RespawnManager.my_tank_respawn_time == limit:
+			return
 		RespawnManager.my_tank_respawn_time = value
 	else:
 		var value := maxf(RespawnManager.partner_tank_respawn_time - EFFECT_VALUE, limit)
+		if RespawnManager.partner_tank_respawn_time == limit:
+			return		
 		RespawnManager.partner_tank_respawn_time = value
+	queue_free()
 	pass
