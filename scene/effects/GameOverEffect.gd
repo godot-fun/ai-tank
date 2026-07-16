@@ -1,11 +1,18 @@
 extends Node2D
 class_name GameOverEffect
 
+enum FailReason {
+	EAGLE_DESTROYED,
+	TIME_UP,
+}
+
 const SCENE := "res://scene/effects/GameOverEffect.tscn"
 const BANNER_DURATION := 2.0
-const HOLD_AFTER_ANIM := 1.0
+const HOLD_AFTER_ANIM := 3.0
 const DROP_DURATION := 0.7
 const DROP_START_OFFSET := 200.0
+
+var fail_reason := FailReason.TIME_UP
 
 var _particles: Array[GPUParticles2D] = []
 var _overlay_layer: CanvasLayer
@@ -70,10 +77,10 @@ func _spawn_banner() -> void:
 		return
 
 	var label := Label.new()
-	label.text = "GAME OVER"
+	label.text = _get_banner_text()
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 96)
+	label.add_theme_font_size_override("font_size", 80)
 	label.add_theme_color_override("font_color", Color(0.92, 0.22, 0.18))
 	label.set_anchors_preset(Control.PRESET_CENTER)
 	label.offset_left = -320.0
@@ -164,4 +171,14 @@ func _start_particles() -> void:
 func _stop_particles() -> void:
 	for particles in _particles:
 		particles.emitting = false
+	pass
+
+
+func _get_banner_text() -> String:
+	match fail_reason:
+		FailReason.EAGLE_DESTROYED:
+			return "基地被摧毁"
+		FailReason.TIME_UP:
+			return "时间到"
+	return "GAME OVER"
 	pass

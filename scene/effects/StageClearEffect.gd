@@ -3,7 +3,7 @@ class_name StageClearEffect
 
 const SCENE := "res://scene/effects/StageClearEffect.tscn"
 const BANNER_DURATION := 2.0
-const HOLD_AFTER_ANIM := 1.0
+const HOLD_AFTER_ANIM := 3.0
 const POPUP_DURATION := 0.55
 const POPUP_START_OFFSET := 160.0
 

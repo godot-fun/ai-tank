@@ -48,11 +48,11 @@ func _process(delta: float) -> void:
 	enemy_spawner.update(delta, battle_timer)
 
 	if enemy_spawner.all_enemies_killed():
-		end_level(true)
+		end_level()
 		return
 
 	if battle_timer <= 0.0:
-		end_level(false)
+		end_level(GameOverEffect.FailReason.TIME_UP)
 	pass
 
 
@@ -63,7 +63,7 @@ func on_enemy_tank_death(tank: Tank) -> void:
 
 
 func on_eagle_death() -> void:
-	gdf.callable_deferred(end_level.bind(false))
+	gdf.callable_deferred(end_level.bind(GameOverEffect.FailReason.EAGLE_DESTROYED))
 	pass
 
 
@@ -72,7 +72,7 @@ func refresh_enemy_hud() -> void:
 	pass
 
 
-func end_level(win: bool) -> void:
+func end_level(fail_reason = null) -> void:
 	if BattleProgress.level_ended:
 		return
 
@@ -80,7 +80,7 @@ func end_level(win: bool) -> void:
 	set_physics_process(false)
 	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
 
-	if win:
+	if fail_reason == null:
 		BattleProgress.end_level()
 		Audios.play_sfx(AudioConfig.STAGE_CLEAR)
 		Audio.pause_musics()
@@ -93,6 +93,7 @@ func end_level(win: bool) -> void:
 		Audios.play_sfx(AudioConfig.GAME_OVER)
 		Audio.stop_music()
 		var game_over_effect: GameOverEffect = load(GAME_OVER_EFFECT_SCENE).instantiate()
+		game_over_effect.fail_reason = fail_reason
 		add_child(game_over_effect)
 		await ThreadUtils.async_sleep(4000)
 		await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
