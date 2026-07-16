@@ -3,6 +3,20 @@ extends Area2D
 
 const FLASH_SHADER := "res://shader/buff_flash.gdshader"
 
+enum BuffType {
+	BULLET_SIZE,
+	BULLET_SPEED,
+	BULLET_FIRE_INTERVAL,
+	
+	TANK_SPEED,
+	TANK_HP,
+	TANK_RESPAWN,
+	TANK_SIZE,
+	
+	FREEZE,
+	AIR_STRIKE,
+}
+
 static var flash_material: ShaderMaterial
 
 var id: int
