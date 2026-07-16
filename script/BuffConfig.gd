@@ -93,7 +93,7 @@ static var tank_respawn_buff: BuffData = BuffData.new(
 static var tank_size_buff: BuffData = BuffData.new(
 	6,
 	Buff.TANK_SIZE,
-	DEFAULT_GRID_SIZE,
+	Vector2i.ONE,
 	"res://image/buff/tank_size.png",
 	"res://script/buff/TankSizeBuff.gd",
 )
