@@ -1,16 +1,13 @@
 class_name BuffHelper
 
-const BUFF_SCENE := "res://scene/Buff.tscn"
+const BUFF_SCENE := "res://scene/buff/Buff.tscn"
 
 
-static func create_buff(data: BuffConfig.BuffData, grid: Vector2i) -> Buff:
+static func create_buff(data: BuffConfig.BuffData, grid: Vector2i) -> void:
 	var scene: PackedScene = load(BUFF_SCENE)
-	var script: Script = load(data.script_resource)
-	var buff: Buff = scene.instantiate()
-	buff.set_script(script)
+	var buff = scene.instantiate()
 	buff.apply_data(data, grid)
 
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(buff)
-
-	return buff as Buff
+	pass

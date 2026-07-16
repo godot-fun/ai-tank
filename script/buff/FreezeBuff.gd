@@ -1,5 +1,5 @@
 ﻿class_name FreezeBuff
-extends Buff
+extends IBuff
 
 const EFFECT_DURATION := 7.0
 
@@ -16,5 +16,4 @@ func trigger(tank: Tank) -> void:
 			if is_instance_valid(enemy):
 				enemy.set_physics_process(true)
 	)
-	queue_free()
 	pass

@@ -38,7 +38,7 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right:
 	var tank: Tank = scene.instantiate()
 	tank.set_script(script)
 	tank.apply_data(data, spawn_grid)
-
+	BuffManager.wrap_buff_container(tank)
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tank)
 

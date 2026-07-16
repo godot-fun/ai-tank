@@ -5,14 +5,81 @@ const DEFAULT_RESPAWN_TIME: float = 15.0
 
 static var initialized: bool = false
 
+static var buff_map: Dictionary[int, BuffContainer] = {}
+
+
 static func init() -> void:
+	buff_map.clear()
 	if initialized:
 		return
 	initialized = true
 	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
+	EventBus.events.player_tank_death.connect(on_player_tank_death)
 	pass
 
+static func add_buff(tank: Tank, buff_type: int) -> bool:
+	var id := tank.id
+	if !buff_map.has(id):
+		buff_map[id] = BuffContainer.new()
+	var buff_container := buff_map[id]
+	var type_buffs := buff_container.get_buffs_by_type(buff_type)
+	var buff: IBuff = null
+	match buff_type:
+		IBuff.BuffType.BULLET_SIZE:
+			if type_buffs.size() >= 3:
+				return false
+			buff = BulletSizeBuff.new()
+		IBuff.BuffType.BULLET_SPEED:
+			if type_buffs.size() >= 3:
+				return false
+			buff = BulletSpeedBuff.new()
+		IBuff.BuffType.BULLET_FIRE_INTERVAL:
+			if type_buffs.size() >= 3:
+				return false
+			buff = BulletFireIntervalBuff.new()
+		IBuff.BuffType.TANK_SPEED:
+			if type_buffs.size() >= 3:
+				return false
+			buff = TankSpeedBuff.new()
+		IBuff.BuffType.TANK_HP:
+			if type_buffs.size() >= 3:
+				return false
+			buff = TankHpBuff.new()
+		IBuff.BuffType.TANK_RESPAWN:
+			if type_buffs.size() >= 3:
+				return false
+			buff = TankRespawnBuff.new()
+		IBuff.BuffType.TANK_SIZE:
+			if type_buffs.size() >= 1:
+				return false
+			buff = TankSizeBuff.new()
+		IBuff.BuffType.FREEZE:
+			FreezeBuff.new().trigger(tank)
+			return true
+		IBuff.BuffType.AIR_STRIKE:
+			AirStrikeBuff.new().trigger(tank)
+			return true
+	buff_container.add_buff(buff)
+	buff.trigger(tank)
+	return true
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+static func wrap_buff_container(tank: Tank) -> void:
+	var id := tank.id
+	if !buff_map.has(id):
+		return
+	var buff_container := buff_map[id]
+	trigger_buffs(tank, buff_container.buffs)
+	pass
+
+static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
+	for buff in buffs:
+		buff.trigger(tank)
+	pass
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 static func on_enemy_tank_death(tank: Tank) -> void:
 	var id := tank.id
@@ -22,4 +89,29 @@ static func on_enemy_tank_death(tank: Tank) -> void:
 	if id in range(TankConfig.ENEMY_RED_ID_RANGE.x, TankConfig.ENEMY_RED_ID_RANGE.y):
 		var grid_pos := tank.grid_pos
 		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos))
+	pass
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+static func on_player_tank_death(tank: Tank) -> void:
+	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
+	if tank_config.team != TankConfig.Team.PLAYER:
+		return
+	var buff_container := buff_map[tank.id]
+	var type_buffs := buff_container.get_buffs_by_type(IBuff.BuffType.TANK_RESPAWN)
+	var respawn_time := DEFAULT_RESPAWN_TIME - type_buffs.size() * TankRespawnBuff.EFFECT_VALUE
+	var parent := tank.get_parent()
+	RespawnCountdown.spawn(tank.global_position, respawn_time, parent)
+	parent.create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
+	pass
+
+
+static func on_respawn(tank_config: TankConfig.TankData) -> void:
+	if BattleProgress.level_ended:
+		return
+	if tank_config.id == 0:
+		TankHelper.create_tank(tank_config, Eagle.my_tank_start_grid_pos)
+	else:
+		TankHelper.create_tank(tank_config, Eagle.partner_start_grid_pos)
+	Audios.play_sfx(AudioConfig.TANK_RELOAD)
 	pass

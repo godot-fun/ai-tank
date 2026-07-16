@@ -1,5 +1,5 @@
 ﻿class_name AirStrikeBuff
-extends Buff
+extends IBuff
 
 const AIRCRAFT_TEXTURE := "res://image/buff/air_strike.png"
 const AIRCRAFT_SHADER := "res://shader/aircraft_flight.gdshader"
@@ -49,7 +49,6 @@ func trigger(tank: Tank) -> void:
 		tween.tween_callback(func() -> void: aircraft.queue_free())
 
 	SchedulerBus.schedule(kill_all, FLIGHT_DURATION * TimeUtils.MILLIS_PER_SECOND)
-	queue_free()
 	pass
 
 static func kill_all() -> void:

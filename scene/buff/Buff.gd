@@ -1,21 +1,6 @@
-﻿class_name Buff
 extends Area2D
 
 const FLASH_SHADER := "res://shader/buff_flash.gdshader"
-
-enum BuffType {
-	BULLET_SIZE,
-	BULLET_SPEED,
-	BULLET_FIRE_INTERVAL,
-	
-	TANK_SPEED,
-	TANK_HP,
-	TANK_RESPAWN,
-	TANK_SIZE,
-	
-	FREEZE,
-	AIR_STRIKE,
-}
 
 static var flash_material: ShaderMaterial
 
@@ -23,7 +8,6 @@ var id: int
 var buff: int
 var grid_size: Vector2i
 var buff_resource: String
-var script_resource: String
 
 var grid_pos := Vector2i.ZERO
 
@@ -34,7 +18,6 @@ func _ready() -> void:
 	sprite.texture = load(buff_resource)
 	setup_flash_material()
 	scale_buff()
-	start()
 	body_entered.connect(on_body_entered)
 	pass
 
@@ -43,7 +26,6 @@ func apply_data(data: BuffConfig.BuffData, grid: Vector2i) -> void:
 	buff = data.buff
 	grid_size = data.grid_size
 	buff_resource = data.buff_resource
-	script_resource = data.script_resource
 	grid_pos = TileConfig.clamp_grid_to_bounds(grid, data.grid_size)
 	global_position = TileConfig.grid_to_world(grid_pos, grid_size)
 	pass
@@ -70,14 +52,10 @@ func on_body_entered(body: Node2D) -> void:
 		return
 		
 	Audios.play_sfx(AudioConfig.BUFF_LEVEL_UP)
-	trigger(tank)
+	trigger_buff(tank)
 	pass
 
-# Interface-Start
-func start() -> void:
+func trigger_buff(tank: Tank) -> void:
+	if BuffManager.add_buff(tank, buff):
+		queue_free()
 	pass
-	
-
-func trigger(tank: Tank) -> void:
-	pass
-# Interface-End

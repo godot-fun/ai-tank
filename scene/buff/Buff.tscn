@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://cy5mpt6be5bug"]
 
-[ext_resource type="Script" uid="uid://c78170wwhmdyk" path="res://script/buff/BulletSpeedBuff.gd" id="1_dx85d"]
-[ext_resource type="Texture2D" uid="uid://bdaj0jififok2" path="res://image/buff/bullet_speed.png" id="2_dx85d"]
+[ext_resource type="Script" uid="uid://dj7eqphqpb5q0" path="res://scene/buff/Buff.gd" id="1_u4wps"]
+[ext_resource type="Texture2D" uid="uid://bdaj0jififok2" path="res://image/buff/bullet_speed.png" id="2_0bs7n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7itor"]
 size = Vector2(512, 512)
 
 [node name="Buff" type="Area2D" unique_id=1181343441]
-script = ExtResource("1_dx85d")
+script = ExtResource("1_u4wps")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2115809521]
-texture = ExtResource("2_dx85d")
+texture = ExtResource("2_0bs7n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=196892597]
 shape = SubResource("RectangleShape2D_7itor")

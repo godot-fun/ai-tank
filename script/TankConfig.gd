@@ -27,7 +27,6 @@ const ENEMY_RED_ID_RANGE := Vector2i(300, 400)
 const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
 
 static var tank_datas: Dictionary[int, TankData] = {}
-static var clone_tank_datas: Dictionary[int, TankData] = {}
 
 class TankData:
 	var id: int
@@ -78,25 +77,14 @@ class TankData:
 		death_effect_resource = _death_effect_resource
 		tank_resource = _tank_resource
 		script_resource = _script_resource
+		add_to_tank_datas()
 
-	func clone() -> TankData:
-		return TankData.new(
-			id,
-			team,
-			grid_size,
-			hp,
-			speed,
-			bullet_speed,
-			bullet_damage,
-			bullet_size,
-			bullet_fire_interval,
-			bullet_resource,
-			fire_sound_resource,
-			death_sound_resource,
-			death_effect_resource,
-			tank_resource,
-			script_resource
-		)
+	func add_to_tank_datas() -> void:
+		if TankConfig.tank_datas.has(id):
+			Log.error("tank config duplicate id:[{}]", id)
+			return
+		TankConfig.tank_datas[id] = self
+		pass
 
 static var my_tank: TankData = TankData.new(
 	0,
@@ -277,45 +265,3 @@ static var enemy_red_easy: TankData = TankData.new(
 	"res://image/characters/red_tank_4.png",
 	SCRIPT_ENEMY_EASY
 )
-
-static func add_to_tank_datas(tank: TankData) -> void:
-	var id := tank.id
-	if TankConfig.tank_datas.has(id):
-		Log.error("tank config duplicate id:[{}]", id)
-		return
-	tank_datas[id] = tank
-	pass
-
-static func init_datas() -> void:
-	if !clone_tank_datas.is_empty():
-		return
-	add_to_tank_datas(my_tank)
-	add_to_tank_datas(partner_tank_1)
-	add_to_tank_datas(partner_tank_2)
-	add_to_tank_datas(partner_tank_3)
-	add_to_tank_datas(partner_tank_4)
-	add_to_tank_datas(partner_tank_5)
-	add_to_tank_datas(partner_tank_6)
-	add_to_tank_datas(enemy_easy)
-	add_to_tank_datas(only_fire_enemy)
-	add_to_tank_datas(enemy_red_easy)
-	for data: TankData in tank_datas.values():
-		clone_tank_datas[data.id] = data.clone()
-	pass
-
-static func refresh_datas() -> void:
-	my_tank = clone_tank_datas[my_tank.id]
-	partner_tank_1 = clone_tank_datas[partner_tank_1.id]
-	partner_tank_2 = clone_tank_datas[partner_tank_2.id]
-	partner_tank_3 = clone_tank_datas[partner_tank_3.id]
-	partner_tank_4 = clone_tank_datas[partner_tank_4.id]
-	partner_tank_5 = clone_tank_datas[partner_tank_5.id]
-	partner_tank_6 = clone_tank_datas[partner_tank_6.id]
-	enemy_easy = clone_tank_datas[enemy_easy.id]
-	only_fire_enemy = clone_tank_datas[only_fire_enemy.id]
-	enemy_red_easy = clone_tank_datas[enemy_red_easy.id]
-	
-	tank_datas.clear()
-	clone_tank_datas.clear()
-	init_datas()
-	pass

@@ -1,24 +1,10 @@
 ﻿class_name TankRespawnBuff
-extends Buff
+extends IBuff
 
 const EFFECT_VALUE := 2.0
-static var limit: float = RespawnManager.DEFAULT_RESPAWN_TIME - EFFECT_VALUE * 3
-
 
 func trigger(tank: Tank) -> void:
-	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
-	if tank_config.team != TankConfig.Team.PLAYER:
-		return
-	
-	if tank_config.id == 0:
-		var value := maxf(RespawnManager.my_tank_respawn_time - EFFECT_VALUE, limit)
-		if RespawnManager.my_tank_respawn_time == limit:
-			return
-		RespawnManager.my_tank_respawn_time = value
-	else:
-		var value := maxf(RespawnManager.partner_tank_respawn_time - EFFECT_VALUE, limit)
-		if RespawnManager.partner_tank_respawn_time == limit:
-			return		
-		RespawnManager.partner_tank_respawn_time = value
-	queue_free()
 	pass
+
+func type() -> BuffType:
+	return BuffType.TANK_RESPAWN
