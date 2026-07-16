@@ -16,6 +16,7 @@ var grid_pos := Vector2i.ZERO
 @onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
+	z_index = 128
 	sprite.texture = load(buff_resource)
 	setup_flash_material()
 	scale_buff()

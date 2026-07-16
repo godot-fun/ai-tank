@@ -28,7 +28,7 @@ func trigger(tank: Tank) -> void:
 		var aircraft := Sprite2D.new()
 		aircraft.texture = texture
 		aircraft.scale = Vector2.ONE * aircraft_scale
-		aircraft.z_index = 100
+		aircraft.z_index = 512
 
 		var flight_material := ShaderMaterial.new()
 		flight_material.shader = shader
