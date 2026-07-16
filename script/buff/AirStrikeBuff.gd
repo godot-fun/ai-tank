@@ -61,13 +61,14 @@ func trigger(tank: Tank) -> void:
 			return a.global_position.y > b.global_position.y
 		)
 
-		var explosion_tween := parent.create_tween()
-		for enemy in enemies:
-			explosion_tween.tween_callback(func() -> void:
-				if is_instance_valid(enemy):
-					enemy.take_damage(enemy.hp)
-			)
-			explosion_tween.tween_interval(ENEMY_EXPLOSION_INTERVAL)
+		if not enemies.is_empty():
+			var explosion_tween := parent.create_tween()
+			for enemy in enemies:
+				explosion_tween.tween_callback(func() -> void:
+					if is_instance_valid(enemy):
+						enemy.take_damage(enemy.hp)
+				)
+				explosion_tween.tween_interval(ENEMY_EXPLOSION_INTERVAL)
 
 		for aircraft in aircrafts:
 			if is_instance_valid(aircraft):
