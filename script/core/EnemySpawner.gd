@@ -48,10 +48,11 @@ func spawn_wave() -> void:
 	if enemies_spawned >= total_enemies:
 		return
 
-	for grid in spawn_grids:
+	for i in range(spawn_grids.size()):
 		if enemies_spawned >= total_enemies:
 			break
-		if try_spawn_at(grid):
+		var search_right := i == 0
+		if try_spawn_at(spawn_grids[i], search_right):
 			enemies_spawned += 1
 
 
@@ -64,14 +65,9 @@ func _calculate_spawn_interval(time_limit: float) -> void:
 		spawn_interval = spawn_window / float(total_waves - 1)
 
 
-func try_spawn_at(grid: Vector2i) -> bool:
-	var grid_size := TankConfig.enemy_easy.grid_size
-	if TankHelper.is_move_blocked(grid, grid_size):
-		return false
-
+func try_spawn_at(grid: Vector2i, search_right: bool = false) -> bool:
 	var tank_data: TankConfig.TankData = TankConfig.enemy_red_easy if enemies_spawned > 0 && enemies_spawned % 8 == 0 else TankConfig.enemy_easy
-	TankHelper.create_tank(tank_data, grid)
-	return true
+	return TankHelper.create_tank(tank_data, grid, search_right) != null
 
 
 func on_enemy_tank_death() -> void:

@@ -13,12 +13,31 @@ static func get_alive_enemy_count() -> int:
 	return count
 
 
-static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
+static func find_spawn_grid(grid: Vector2i, grid_size: Vector2i, search_right: bool = false) -> Vector2i:
+	if not is_move_blocked(grid, grid_size):
+		return grid
+
+	var step := 1 if search_right else -1
+	var x := grid.x + step
+	var max_x := TileConfig.MAP_GRID_WIDTH - grid_size.x
+
+	while (search_right and x <= max_x) or (not search_right and x >= 0):
+		var candidate := Vector2i(x, grid.y)
+		if not is_move_blocked(candidate, grid_size):
+			return candidate
+		x += step
+
+	return grid
+
+
+static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false) -> Tank:
+	var spawn_grid := find_spawn_grid(grid, data.grid_size, search_right)
+
 	var scene: PackedScene = load(TANK_SCENE)
 	var script: Script = load(data.script_resource)
 	var tank: Tank = scene.instantiate()
 	tank.set_script(script)
-	tank.apply_data(data, grid)
+	tank.apply_data(data, spawn_grid)
 
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tank)

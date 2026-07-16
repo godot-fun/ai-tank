@@ -116,8 +116,8 @@ static var my_tank: TankData = TankData.new(
 	"res://script/tank/MyTank.gd",
 )
 
-static var partner_tank: TankData = TankData.new(
-	2,
+static var partner_tank_1: TankData = TankData.new(
+	11,
 	Team.PLAYER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
@@ -134,8 +134,98 @@ static var partner_tank: TankData = TankData.new(
 	"res://script/tank/PartnerTank.gd",
 )
 
+static var partner_tank_2: TankData = TankData.new(
+	12,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP,
+	DEFAULT_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/basic/green/05.png",
+	null,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	"res://image/characters/green_tank_2.png",
+	"res://script/tank/PartnerTank.gd",
+)
+
+static var partner_tank_3: TankData = TankData.new(
+	13,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP + 1,
+	DEFAULT_TANK_SPEED * 1.1,
+	DEFAULT_BULLET_SPEED * 1.1,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/armor/green/01.png",
+	null,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	"res://image/characters/green_tank_3.png",
+	"res://script/tank/PartnerTank.gd",
+)
+
+static var partner_tank_4: TankData = TankData.new(
+	14,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP + 2,
+	DEFAULT_TANK_SPEED * 1.2,
+	DEFAULT_BULLET_SPEED * 1.2,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/homing_missile/green/01.png",
+	null,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	"res://image/characters/green_tank_4.png",
+	"res://script/tank/PartnerTank.gd",
+)
+
+static var partner_tank_5: TankData = TankData.new(
+	15,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP + 2,
+	DEFAULT_TANK_SPEED * 1.3,
+	DEFAULT_BULLET_SPEED * 1.3,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/homing_missile/green/05.png",
+	null,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	"res://image/characters/green_tank_5.png",
+	"res://script/tank/PartnerTank.gd",
+)
+
+static var partner_tank_6: TankData = TankData.new(
+	16,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP + 3,
+	DEFAULT_TANK_SPEED * 1.4,
+	DEFAULT_BULLET_SPEED * 1.4,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/homing_missile/green/09.png",
+	null,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	"res://image/characters/green_tank_6.png",
+	"res://script/tank/PartnerTank.gd",
+)
+
 static var enemy_easy: TankData = TankData.new(
-	10,
+	100,
 	Team.ENEMY,
 	Vector2i(2, 2), 
 	DEFAULT_TANK_HP,
@@ -153,7 +243,7 @@ static var enemy_easy: TankData = TankData.new(
 )
 
 static var only_fire_enemy: TankData = TankData.new(
-	11,
+	101,
 	Team.ENEMY,
 	Vector2i(2, 2),
 	10,
@@ -200,7 +290,12 @@ static func init_datas() -> void:
 	if !clone_tank_datas.is_empty():
 		return
 	add_to_tank_datas(my_tank)
-	add_to_tank_datas(partner_tank)
+	add_to_tank_datas(partner_tank_1)
+	add_to_tank_datas(partner_tank_2)
+	add_to_tank_datas(partner_tank_3)
+	add_to_tank_datas(partner_tank_4)
+	add_to_tank_datas(partner_tank_5)
+	add_to_tank_datas(partner_tank_6)
 	add_to_tank_datas(enemy_easy)
 	add_to_tank_datas(only_fire_enemy)
 	add_to_tank_datas(enemy_red_easy)
@@ -210,7 +305,12 @@ static func init_datas() -> void:
 
 static func refresh_datas() -> void:
 	my_tank = clone_tank_datas[my_tank.id]
-	partner_tank = clone_tank_datas[partner_tank.id]
+	partner_tank_1 = clone_tank_datas[partner_tank_1.id]
+	partner_tank_2 = clone_tank_datas[partner_tank_2.id]
+	partner_tank_3 = clone_tank_datas[partner_tank_3.id]
+	partner_tank_4 = clone_tank_datas[partner_tank_4.id]
+	partner_tank_5 = clone_tank_datas[partner_tank_5.id]
+	partner_tank_6 = clone_tank_datas[partner_tank_6.id]
 	enemy_easy = clone_tank_datas[enemy_easy.id]
 	only_fire_enemy = clone_tank_datas[only_fire_enemy.id]
 	enemy_red_easy = clone_tank_datas[enemy_red_easy.id]
