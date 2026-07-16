@@ -22,35 +22,35 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 	if !buff_map.has(id):
 		buff_map[id] = BuffContainer.new()
 	var buff_container := buff_map[id]
-	var type_buffs := buff_container.get_buffs_by_type(buff_type)
+	var buff_type_of_size := buff_container.buff_type_of_size(buff_type)
 	var buff: IBuff = null
 	match buff_type:
 		IBuff.BuffType.BULLET_SIZE:
-			if type_buffs.size() >= 3:
+			if buff_type_of_size >= 3:
 				return false
 			buff = BulletSizeBuff.new()
 		IBuff.BuffType.BULLET_SPEED:
-			if type_buffs.size() >= 3:
+			if buff_type_of_size >= 3:
 				return false
 			buff = BulletSpeedBuff.new()
 		IBuff.BuffType.BULLET_FIRE_INTERVAL:
-			if type_buffs.size() >= 3:
+			if buff_type_of_size >= 3:
 				return false
 			buff = BulletFireIntervalBuff.new()
 		IBuff.BuffType.TANK_SPEED:
-			if type_buffs.size() >= 3:
+			if buff_type_of_size >= 3:
 				return false
 			buff = TankSpeedBuff.new()
 		IBuff.BuffType.TANK_HP:
-			if type_buffs.size() >= 3:
+			if buff_type_of_size >= 3:
 				return false
 			buff = TankHpBuff.new()
 		IBuff.BuffType.TANK_RESPAWN:
-			if type_buffs.size() >= 3:
+			if buff_type_of_size >= 3:
 				return false
 			buff = TankRespawnBuff.new()
 		IBuff.BuffType.TANK_SIZE:
-			if type_buffs.size() >= 1:
+			if buff_type_of_size >= 1:
 				return false
 			buff = TankSizeBuff.new()
 		IBuff.BuffType.FREEZE:
@@ -98,8 +98,8 @@ static func on_player_tank_death(tank: Tank) -> void:
 	if tank_config.team != TankConfig.Team.PLAYER:
 		return
 	var buff_container := buff_map[tank.id]
-	var type_buffs := buff_container.get_buffs_by_type(IBuff.BuffType.TANK_RESPAWN)
-	var respawn_time := DEFAULT_RESPAWN_TIME - type_buffs.size() * TankRespawnBuff.EFFECT_VALUE
+	var buff_type_of_size := buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
+	var respawn_time := DEFAULT_RESPAWN_TIME - buff_type_of_size * TankRespawnBuff.EFFECT_VALUE
 	var parent := tank.get_parent()
 	RespawnCountdown.spawn(tank.global_position, respawn_time, parent)
 	parent.create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)

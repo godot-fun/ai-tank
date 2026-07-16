@@ -13,3 +13,10 @@ func get_buffs_by_type(buff_type: int) -> Array[IBuff]:
 		if buff_type == buff.type():
 			result.append(buff)
 	return result
+
+func buff_type_of_size(buff_type: int) -> int:
+	var count := 0
+	for buff in buffs:
+		if buff_type == buff.type():
+			count = count + 1
+	return count
