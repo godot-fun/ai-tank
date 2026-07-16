@@ -10,11 +10,7 @@ var battle_timer := 0.0
 
 
 func _ready() -> void:
-	BattleProgress.level_ended = false
-	LevelConfig.load_level(BattleProgress.level)
-	Eagle.create_base()
-	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
-	TankHelper.create_tank(TankConfig.partner_tank, Eagle.partner_start_grid_pos)
+	BattleProgress.start_level()
 
 	var time_limit := BattleProgress.get_time_limit()
 	enemy_spawner.setup(BattleProgress.get_enemy_count(), BattleProgress.get_time_limit())
@@ -71,7 +67,7 @@ func end_level(cleared: bool) -> void:
 	if BattleProgress.level_ended:
 		return
 
-	BattleProgress.level_ended = true
+	BattleProgress.end_level()
 	set_process(false)
 	set_physics_process(false)
 	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
@@ -82,6 +78,5 @@ func end_level(cleared: bool) -> void:
 	add_child(effect)
 	await ThreadUtils.async_sleep(4000)
 
-	BattleProgress.next_level()
 	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
 	pass

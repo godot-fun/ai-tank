@@ -26,6 +26,15 @@ static func get_enemy_count() -> int:
 static func get_time_limit() -> float:
 	return min(TIME_LIMIT_SECONDS + level * TIME_PER_LEVEL, TIME_LIMIT_SECONDS_MAX)
 
-static func next_level() -> void:
+static func start_level() -> void:
+	level_ended = false
+	LevelConfig.load_level(BattleProgress.level)
+	Eagle.create_base()
+	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
+	TankHelper.create_tank(TankConfig.partner_tank, Eagle.partner_start_grid_pos)
+	pass
+	
+static func end_level() -> void:
+	level_ended = true
 	level += 1
 	pass
