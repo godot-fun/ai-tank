@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c56t7o44oi0nx"]
+
+[ext_resource type="Script" path="res://scene/effects/GameOverEffect.gd" id="1_game_over"]
+
+[node name="GameOverEffect" type="Node2D"]
+z_index = 200
+script = ExtResource("1_game_over")

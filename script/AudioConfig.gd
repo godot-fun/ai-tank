@@ -27,6 +27,7 @@ static var UI_SELECT := SoundEffect.new("res://audio/sfx/ui-select/01.wav")
 static var UI_CONFIRM := SoundEffect.new("res://audio/sfx/ui-confirm/01.wav")
 static var STAGE_START := SoundEffect.new(BGM_STAGE_START)
 static var STAGE_CLEAR := SoundEffect.new(BGM_STAGE_CLEAR)
+static var GAME_OVER := SoundEffect.new(BGM_GAME_OVER)
 
 static var TANK_FIRE := SoundEffect.new("res://audio/sfx/tank/tank-fire.wav", 0.5)
 static var TANK_DEATH := SoundEffect.new("res://audio/sfx/tank/tank_explosion.wav")

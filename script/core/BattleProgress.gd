@@ -38,3 +38,8 @@ static func end_level() -> void:
 	level_ended = true
 	level += 1
 	pass
+
+
+static func fail_level() -> void:
+	level_ended = true
+	pass

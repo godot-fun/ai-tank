@@ -69,4 +69,5 @@ func destroy() -> void:
 	egale_sprite.texture = load(TEXTURE_DESTROYED)
 	if shield_material != null:
 		shield_material.set_shader_parameter("shield_active", 0.0)
+	EventBus.events.eagle_death.emit()
 	pass

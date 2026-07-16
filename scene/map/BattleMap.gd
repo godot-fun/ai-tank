@@ -1,7 +1,9 @@
 extends Node2D
 
 const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
+const HOME_SCENE_PATH := "res://scene/Home.tscn"
 const STAGE_CLEAR_EFFECT_SCENE := "res://scene/effects/StageClearEffect.tscn"
+const GAME_OVER_EFFECT_SCENE := "res://scene/effects/GameOverEffect.tscn"
 
 @onready var battle_hud: BattleHud = $BattleHud
 
@@ -28,10 +30,12 @@ func _ready() -> void:
 
 	enemy_spawner.spawn_initial_wave()
 	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
+	EventBus.events.eagle_death.connect(on_eagle_death)
 	pass
 
 func _exit_tree() -> void:
 	EventBus.events.enemy_tank_death.disconnect(on_enemy_tank_death)
+	EventBus.events.eagle_death.disconnect(on_eagle_death)
 	pass
 
 func _process(delta: float) -> void:
@@ -58,25 +62,38 @@ func on_enemy_tank_death(tank: Tank) -> void:
 	pass
 
 
+func on_eagle_death() -> void:
+	gdf.callable_deferred(end_level.bind(false))
+	pass
+
+
 func refresh_enemy_hud() -> void:
 	battle_hud.update_enemies_remaining(enemy_spawner.get_remaining_count())
 	pass
 
 
-func end_level(cleared: bool) -> void:
+func end_level(win: bool) -> void:
 	if BattleProgress.level_ended:
 		return
 
-	BattleProgress.end_level()
 	set_process(false)
 	set_physics_process(false)
 	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
-	
-	Audios.play_sfx(AudioConfig.STAGE_CLEAR)
-	Audio.pause_musics()
-	var effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
-	add_child(effect)
-	await ThreadUtils.async_sleep(4000)
 
-	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
+	if win:
+		BattleProgress.end_level()
+		Audios.play_sfx(AudioConfig.STAGE_CLEAR)
+		Audio.pause_musics()
+		var clear_effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
+		add_child(clear_effect)
+		await ThreadUtils.async_sleep(4000)
+		await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
+	else:
+		BattleProgress.fail_level()
+		Audios.play_sfx(AudioConfig.GAME_OVER)
+		Audio.stop_music()
+		var game_over_effect: GameOverEffect = load(GAME_OVER_EFFECT_SCENE).instantiate()
+		add_child(game_over_effect)
+		await ThreadUtils.async_sleep(4000)
+		await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
 	pass
