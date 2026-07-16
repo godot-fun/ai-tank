@@ -28,8 +28,8 @@ External CLIs, language runtimes, and skill-only toolchains install into `.depen
 | Kind | Name examples | Install location |
 |------|---------------|------------------|
 | Language runtime | `python`, `python-3.11`, `node-20`, `rust-1.75`, `go-1.22` | `.dependency/<name>/` |
-| CLI tool (standalone binary) | `ffmpeg`, `git`, `jq`, `curl`, `imagemagick` | `.dependency/<name>/` |
-| Python third-party tool | `iopaint`, `rembg`, cloned GitHub projects | `.dependency/<name>/.venv/` |
+| CLI tool (standalone binary) | `ffmpeg`, `gemini-watermark`, `git`, `jq`, `curl`, `imagemagick` | `.dependency/<name>/` or `.dependency/<name>-tool/` |
+| Python third-party tool | `rembg`, cloned GitHub projects | `.dependency/<name>/.venv/` |
 
 **Root:** `.dependency/`  
 **Manifest:** `.dependency/manifest.json`
@@ -68,16 +68,49 @@ When a skill does **not** specify a Python version, assume **Python 3.14** as th
 - Skills that only reference `python` (no version suffix) rely on this default.
 - If a skill explicitly requires another version (e.g. `python-3.11`), use a separate manifest entry and install directory instead.
 
-The `python` runtime is for **stdlib-only** skill scripts (e.g. audio wrappers). Do **not** `pip install` into `.dependency/python/` itself.
+The `python` runtime is for **stdlib-only** skill scripts (e.g. audio wrappers, path/batch wrappers). Do **not** `pip install` into `.dependency/python/` itself.
+
+### Standalone CLI tools
+
+When a skill depends on a portable upstream binary (e.g. FFmpeg), follow this order:
+
+1. **Create the install directory** under `.dependency/` — use the manifest key name (e.g. `.dependency/ffmpeg/`).
+
+2. **Download the release asset** from the upstream project (GitHub Releases, vendor site). Extract so `bin` in `manifest.json` points at the executable.
+
+   ```bash
+   # FFmpeg (Windows)
+   # Download ffmpeg-release-essentials.zip → extract to .dependency/ffmpeg/
+   # Result: .dependency/ffmpeg/bin/ffmpeg.exe
+   ```
+
+   On Unix, use the platform binary without `.exe` (e.g. `.dependency/ffmpeg/bin/ffmpeg`).
+
+3. **Register** in `manifest.json` with `bin` pointing at the executable:
+
+   ```json
+   "ffmpeg": {
+     "populated": true,
+     "bin": ".dependency/ffmpeg/bin/ffmpeg.exe"
+   }
+   ```
+
+4. **Run** through the skill script when one exists — do not hand-write equivalent CLI unless the skill says the script is reference-only:
+
+   ```bash
+   .dependency/python/python.exe .cursor/skills/audio-to-wav/scripts/convert.py audio/input.flac
+   ```
+
+   Some skills wrap the binary with a stdlib Python script (`python` manifest entry); others invoke the CLI binary directly via its own manifest entry (`ffmpeg`).
 
 ### Python third-party tools (`.venv`)
 
-When a skill depends on a Python package or a GitHub project with pip dependencies (e.g. IOPaint, PyTorch, rembg), follow this order:
+When a skill depends on a Python package or a GitHub project with pip dependencies (e.g. rembg), follow this order:
 
 1. **Clone the upstream project** into `.dependency/<tool-name>/`:
 
    ```bash
-   git clone https://github.com/example/iopaint .dependency/iopaint
+   git clone https://github.com/example/rembg .dependency/rembg
    ```
 
    The clone root is `.dependency/<tool-name>/`; `.venv` is created as a sibling inside that directory.
@@ -90,32 +123,31 @@ When a skill depends on a Python package or a GitHub project with pip dependenci
 
    ```bash
    # default — Python 3.14
-   .dependency/python/python -m venv .dependency/iopaint/.venv
+   .dependency/python/python -m venv .dependency/rembg/.venv
 
    # project requires Python 3.11
-   .dependency/python-3.11/python -m venv .dependency/iopaint/.venv
+   .dependency/python-3.11/python -m venv .dependency/rembg/.venv
    ```
 
 5. **Install dependencies** only inside that venv — never into system Python or the bare runtime:
 
    ```bash
    # from cloned repo
-   .dependency/iopaint/.venv/Scripts/python.exe -m pip install .
-   .dependency/iopaint/.venv/Scripts/python.exe -m pip install -r requirements.txt
+   .dependency/rembg/.venv/Scripts/python.exe -m pip install .
+   .dependency/rembg/.venv/Scripts/python.exe -m pip install -r requirements.txt
 
    # extra packages named by the skill
-   .dependency/iopaint/.venv/Scripts/python.exe -m pip install torch torchvision
+   .dependency/rembg/.venv/Scripts/python.exe -m pip install "rembg[cpu]"
    ```
 
-   On Unix, use `.dependency/iopaint/.venv/bin/python` instead of `Scripts/python.exe`.
+   On Unix, use `.dependency/rembg/.venv/bin/python` instead of `Scripts/python.exe`.
 
 6. **Register** in `manifest.json` with `bin` pointing at the venv's Python interpreter. On Windows use `Scripts/python.exe`, on Unix use `bin/python`.
 
 7. **Run** skill scripts and tool CLIs through the venv interpreter:
 
    ```bash
-   .dependency/iopaint/.venv/Scripts/python.exe .cursor/skills/image-remove-watermark/scripts/remove_watermark.py ...
-   .dependency/iopaint/.venv/Scripts/python.exe -m iopaint run ...
+   .dependency/rembg/.venv/Scripts/python.exe .cursor/skills/image-remove-background/scripts/remove_background.py ...
    ```
 
    Prefer the venv's `python -m <module>` when a console script is missing.
@@ -141,9 +173,13 @@ Example:
     "populated": true,
     "bin": ".dependency/ffmpeg/bin/ffmpeg"
   },
-  "iopaint": {
+  "gemini-watermark": {
     "populated": true,
-    "bin": ".dependency/iopaint/.venv/Scripts/python.exe"
+    "bin": ".dependency/gemini-watermark-tool/GeminiWatermarkTool.exe"
+  },
+  "rembg": {
+    "populated": true,
+    "bin": ".dependency/rembg/.venv/Scripts/python.exe"
   }
 }
 ```
