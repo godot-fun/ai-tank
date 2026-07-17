@@ -63,11 +63,11 @@ static func kill_all() -> void:
 	for i in enemies.size():
 		var enemy := enemies[i]
 		var explosion_tween := enemy.create_tween()
+		explosion_tween.tween_interval(i * ENEMY_EXPLOSION_INTERVAL)
 		explosion_tween.tween_callback(func() -> void:
 			if is_instance_valid(enemy):
 				enemy.take_damage(enemy.hp)
 		)
-		explosion_tween.tween_interval(i * ENEMY_EXPLOSION_INTERVAL)
 	pass
 
 func build_lane_xs(min_x: float, max_x: float, aircraft_width: float) -> Array[float]:
