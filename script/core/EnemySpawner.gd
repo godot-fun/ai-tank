@@ -80,3 +80,13 @@ func get_remaining_count() -> int:
 
 func all_enemies_killed() -> bool:
 	return enemies_killed >= total_enemies
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+var enemy_buffs: Array[IBuff] = [BulletSizeBuff.new(), BulletSpeedBuff.new(), BulletFireIntervalBuff.new(), TankSpeedBuff.new(), TankHpBuff.new()]
+
+func enemy_random_buff(size: int) -> Array[IBuff]:
+	var buffs: Array[IBuff] = []
+	for i in range(size):
+		buffs.append(RandomUtils.random_ele(buffs))
+	return buffs

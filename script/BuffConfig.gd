@@ -90,7 +90,3 @@ static var air_strike_buff: BuffData = BuffData.new(
 
 static func random_buff() -> BuffData:
 	return RandomUtils.random_ele(buff_datas.values())
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-static var enemy_buff_datas: Array[BuffData] = [bullet_size_buff, bullet_speed_buff, bullet_fire_interval_buff, tank_speed_buff, tank_hp_buff]

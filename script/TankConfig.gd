@@ -212,6 +212,26 @@ static var partner_tank_6: TankData = TankData.new(
 	"res://script/tank/PartnerTank.gd",
 )
 
+
+static var only_fire_enemy: TankData = TankData.new(
+	99,
+	Team.ENEMY,
+	Vector2i(2, 2),
+	10,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/basic/gray/02.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/tank_2.png",
+	"res://script/tank/OnlyFireEnemy.gd",
+)
+
+# ----------------------------------------------------------------------------------------------------------------------
 static var enemy_easy: TankData = TankData.new(
 	100,
 	Team.ENEMY,
@@ -228,24 +248,6 @@ static var enemy_easy: TankData = TankData.new(
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/tank_1.png",
 	SCRIPT_ENEMY_EASY
-)
-
-static var only_fire_enemy: TankData = TankData.new(
-	101,
-	Team.ENEMY,
-	Vector2i(2, 2),
-	10,
-	DEFAULT_ENEMY_TANK_SPEED,
-	DEFAULT_BULLET_SPEED,
-	1,
-	DEFAULT_BULLET_SIZE,
-	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/basic/gray/02.png",
-	null,
-	AudioConfig.TANK_DEATH_ENEMY,
-	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/tank_2.png",
-	"res://script/tank/OnlyFireEnemy.gd",
 )
 
 static var enemy_red_easy: TankData = TankData.new(
