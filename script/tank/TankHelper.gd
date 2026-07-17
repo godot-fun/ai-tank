@@ -31,6 +31,10 @@ static func find_spawn_grid(grid: Vector2i, grid_size: Vector2i, search_right: b
 
 
 static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false) -> Tank:
+	var buff_container := BuffManager.get_buff_container(data.id)
+	return create_tank_with_buffs(data, grid, search_right, buff_container.buffs)
+
+static func create_tank_with_buffs(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false, buffs: Array[IBuff] = []) -> Tank:
 	var spawn_grid := find_spawn_grid(grid, data.grid_size, search_right)
 
 	var scene: PackedScene = load(TANK_SCENE)
@@ -38,14 +42,16 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right:
 	var tank: Tank = scene.instantiate()
 	tank.set_script(script)
 	tank.apply_data(data, spawn_grid)
-	BuffManager.wrap_buff_container(tank)
+	
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tank)
+	
+	BuffManager.trigger_buffs(tank, buffs)
 
 	tank.play_enter_animation()
 	return tank
 
-
+# ----------------------------------------------------------------------------------------------------------------------
 static func register_tank(tank: Tank) -> void:
 	tanks.append(tank)
 	pass
