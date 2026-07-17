@@ -53,11 +53,15 @@ func spawn_wave() -> void:
 			break
 		var search_right := i == 0
 
-		var tank_data: TankConfig.TankData = TankConfig.enemy_red_easy if enemies_spawned > 0 && enemies_spawned % 8 == 0 else TankConfig.enemy_easy
+		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
+		var red_tank := false
+		if enemies_spawned > 0 && enemies_spawned % 8 == 0:
+			tank_data = TankConfig.enemy_red_easy
+			red_tank = true
 		var buff_size := enemies_spawned / 10
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], search_right, buffs)
-		enemy_tank_evolution(tank, buffs)
+		enemy_tank_evolution(tank, buffs, red_tank)
 		enemies_spawned += 1
 	pass
 
@@ -88,11 +92,11 @@ var enemy_buffs: Array[IBuff] = [BulletSizeBuff.new(), BulletSpeedBuff.new(), Bu
 func enemy_random_buff(size: int) -> Array[IBuff]:
 	var buffs: Array[IBuff] = []
 	for i in range(size):
-		buffs.append(RandomUtils.random_ele(buffs))
+		buffs.append(RandomUtils.random_ele(enemy_buffs))
 	return buffs
 
 
-func enemy_tank_evolution(tank: Tank, buffs: Array[IBuff]) -> void:
+func enemy_tank_evolution(tank: Tank, buffs: Array[IBuff], red_tank: bool) -> void:
 	var buff_container := BuffContainer.new()
 	buff_container.buffs = buffs
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
@@ -102,8 +106,8 @@ func enemy_tank_evolution(tank: Tank, buffs: Array[IBuff]) -> void:
 	var tank_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.TANK_SPEED)
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_HP)
 	
-	var bullet_resource_template := "res://image/bullets/tank/red/{}.png"
-	var tank_resource_template := "res://image/characters/red_tank_{}.png"
+	var bullet_resource_template := "res://image/bullets/tank/red/{}.png" if red_tank else "res://image/bullets/tank/gray/{}.png"
+	var tank_resource_template := "res://image/characters/red_tank_{}.png" if red_tank else "res://image/characters/tank_{}.png"
 	var bullet_id := clampi(bullet_buff_count / 2, 1, 4)
 	var tank_id := clampi(tank_buff_count, 1, 6)
 	
