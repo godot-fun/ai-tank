@@ -52,9 +52,14 @@ func spawn_wave() -> void:
 		if enemies_spawned >= total_enemies:
 			break
 		var search_right := i == 0
-		if try_spawn_at(spawn_grids[i], search_right):
-			enemies_spawned += 1
 
+		var tank_data: TankConfig.TankData = TankConfig.enemy_red_easy if enemies_spawned > 0 && enemies_spawned % 8 == 0 else TankConfig.enemy_easy
+		var buff_size := enemies_spawned / 10
+		var buffs := enemy_random_buff(buff_size)
+		TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], search_right, buffs)
+		
+		enemies_spawned += 1
+	pass
 
 func calculate_spawn_interval(time_limit: float) -> void:
 	var spawn_window := maxf(time_limit - BattleProgress.SPAWN_FINISH_EARLY_SECONDS, 0.0)
@@ -63,11 +68,6 @@ func calculate_spawn_interval(time_limit: float) -> void:
 		spawn_interval = spawn_window
 	else:
 		spawn_interval = spawn_window / float(total_waves - 1)
-
-
-func try_spawn_at(grid: Vector2i, search_right: bool = false) -> bool:
-	var tank_data: TankConfig.TankData = TankConfig.enemy_red_easy if enemies_spawned > 0 && enemies_spawned % 8 == 0 else TankConfig.enemy_easy
-	return TankHelper.create_tank(tank_data, grid, search_right) != null
 
 
 func on_enemy_tank_death() -> void:

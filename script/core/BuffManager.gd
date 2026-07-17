@@ -94,12 +94,12 @@ static func my_tank_evolution(tank: Tank) -> void:
 		return
 	var buff_container := get_buff_container(tank.id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
-	bullet_buff_count = bullet_buff_count + buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
-	bullet_buff_count = bullet_buff_count + buff_container.buff_type_of_size(IBuff.BuffType.BULLET_FIRE_INTERVAL)
+	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
+	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_FIRE_INTERVAL)
 	
 	var tank_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.TANK_SPEED)
 #	tank_buff_count = tank_buff_count + buff_container.buff_type_of_size(IBuff.BuffType.TANK_SIZE)
-	tank_buff_count = tank_buff_count + buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
+	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	
 	var bullet_resource_template := "res://image/bullets/tank/blue/{}.png"
 	var tank_resource_template := "res://image/characters/blue_tank_{}.png"

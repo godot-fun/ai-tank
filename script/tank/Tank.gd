@@ -26,6 +26,7 @@ var fire_cooldown := 0.0
 var grid_pos := Vector2i.ZERO
 var facing := Vector2i.UP
 var moving := false
+var max_hp := 1
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -67,6 +68,7 @@ func apply_data(data: TankConfig.TankData, grid: Vector2i) -> void:
 	script_resource = data.script_resource
 	grid_pos = TileConfig.clamp_grid_to_bounds(grid, data.grid_size)
 	global_position = TileConfig.grid_to_world(grid_pos, grid_size)
+	max_hp = data.hp
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -81,9 +83,7 @@ func scale_tank() -> void:
 
 
 func update_hp_color() -> void:
-	var tank_config: TankConfig.TankData = TankConfig.tank_datas[id]
-	var max_hp := tank_config.hp
-	if max_hp <= TankConfig.DEFAULT_TANK_HP:
+	if max_hp <= hp:
 		sprite.self_modulate = Color.WHITE
 		return
 
