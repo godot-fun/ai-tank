@@ -51,11 +51,11 @@ func on_body_entered(body: Node2D) -> void:
 	if tank.team != TankConfig.Team.PLAYER:
 		return
 		
-	Audios.play_sfx(AudioConfig.BUFF_LEVEL_UP)
 	trigger_buff(tank)
 	pass
 
 func trigger_buff(tank: Tank) -> void:
 	if BuffManager.add_buff(tank, buff):
+		Audios.play_sfx(AudioConfig.BUFF_LEVEL_UP)
 		queue_free()
 	pass

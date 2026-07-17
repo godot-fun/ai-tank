@@ -186,11 +186,11 @@ static var partner_tank_5: TankData = TankData.new(
 	1,
 	DEFAULT_BULLET_SIZE * 1.4,
 	DEFAULT_BULLET_FIRE_INTERVAL * 0.6,
-	"res://image/bullets/tank/green/5.png",
+	"res://image/bullets/tank/green/4.png",
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_4.png",
+	"res://image/characters/green_tank_5.png",
 	"res://script/tank/PartnerTank.gd",
 )
 
@@ -204,11 +204,11 @@ static var partner_tank_6: TankData = TankData.new(
 	1,
 	DEFAULT_BULLET_SIZE * 1.5,
 	DEFAULT_BULLET_FIRE_INTERVAL * 0.5,
-	"res://image/bullets/tank/green/6.png",
+	"res://image/bullets/tank/green/4.png",
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_4.png",
+	"res://image/characters/green_tank_6.png",
 	"res://script/tank/PartnerTank.gd",
 )
 
