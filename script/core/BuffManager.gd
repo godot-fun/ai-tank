@@ -59,6 +59,9 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 		IBuff.BuffType.AIR_STRIKE:
 			AirStrikeBuff.new().trigger(tank)
 			return true
+		_:
+			Log.error("unknwon buff type:[{}]", buff_type)
+			return false
 	buff_container.add_buff(buff)
 	buff.trigger(tank)
 	return true
