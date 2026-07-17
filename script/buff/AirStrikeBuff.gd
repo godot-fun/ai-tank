@@ -56,16 +56,18 @@ static func kill_all() -> void:
 	for target in TankHelper.tanks:
 		if is_instance_valid(target) and target.team == TankConfig.Team.ENEMY and target.is_alive():
 			enemies.append(target)
-	enemies.sort_custom(func(a: Tank, b: Tank) -> bool: return a.global_position.y > b.global_position.y)
+	if enemies.is_empty():
+		return
 
-	if not enemies.is_empty():
-		for enemy in enemies:
-			var explosion_tween := enemy.create_tween()
-			explosion_tween.tween_callback(func() -> void:
-				if is_instance_valid(enemy):
-					enemy.take_damage(enemy.hp)
-			)
-			explosion_tween.tween_interval(ENEMY_EXPLOSION_INTERVAL)
+	enemies.sort_custom(func(a: Tank, b: Tank) -> bool: return a.global_position.y > b.global_position.y)
+	for i in enemies.size():
+		var enemy := enemies[i]
+		var explosion_tween := enemy.create_tween()
+		explosion_tween.tween_callback(func() -> void:
+			if is_instance_valid(enemy):
+				enemy.take_damage(enemy.hp)
+		)
+		explosion_tween.tween_interval(i * ENEMY_EXPLOSION_INTERVAL)
 	pass
 
 func build_lane_xs(min_x: float, max_x: float, aircraft_width: float) -> Array[float]:
