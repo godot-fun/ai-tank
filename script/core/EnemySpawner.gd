@@ -10,8 +10,6 @@ static var spawn_grids: Array[Vector2i] = [
 const INITIAL_ENEMY_COUNT := 18
 const ENEMY_COUNT_PER_LEVEL := 5
 
-const SPAWN_FINISH_EARLY_SECONDS := 30.0
-
 
 static func get_enemy_count() -> int:
 	return INITIAL_ENEMY_COUNT + BattleProgress.level * ENEMY_COUNT_PER_LEVEL
@@ -22,6 +20,7 @@ var enemies_killed := 0
 var spawn_timer := 0.0
 var spawn_interval := 0.0
 var remaining_time := 0.0
+var spawn_finish_early_seconds := 0.0
 
 
 func setup(total: int, time_limit: float) -> void:
@@ -30,6 +29,7 @@ func setup(total: int, time_limit: float) -> void:
 	enemies_killed = 0
 	spawn_timer = 0.0
 	remaining_time = time_limit
+	spawn_finish_early_seconds = time_limit * 0.5
 	calculate_spawn_interval(time_limit)
 
 
@@ -43,7 +43,7 @@ func update(delta: float, time_remaining: float) -> void:
 	if enemies_spawned >= total_enemies:
 		return
 
-	if time_remaining <= SPAWN_FINISH_EARLY_SECONDS:
+	if time_remaining <= spawn_finish_early_seconds:
 		spawn_wave()
 		return
 
@@ -75,7 +75,7 @@ func spawn_wave() -> void:
 	pass
 
 func calculate_spawn_interval(time_limit: float) -> void:
-	var spawn_window := maxf(time_limit - SPAWN_FINISH_EARLY_SECONDS, 0.0)
+	var spawn_window := maxf(time_limit - spawn_finish_early_seconds, 0.0)
 	var total_waves := ceili(float(total_enemies) / float(spawn_grids.size()))
 	if total_waves <= 1:
 		spawn_interval = spawn_window

@@ -1,7 +1,7 @@
 class_name BattleProgress
 
 const TIME_LIMIT_SECONDS_MAX := 90.0
-const TIME_LIMIT_SECONDS := 60.0
+const TIME_LIMIT_SECONDS := 30.0
 const TIME_PER_LEVEL := 5
 
 static var level := 0
