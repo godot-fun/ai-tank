@@ -97,6 +97,4 @@ func end_level(fail_reason = null) -> void:
 		var game_over_effect: GameOverEffect = load(GAME_OVER_EFFECT_SCENE).instantiate()
 		game_over_effect.fail_reason = fail_reason
 		add_child(game_over_effect)
-		await ThreadUtils.async_sleep(4000)
-		await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
 	pass
