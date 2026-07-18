@@ -24,6 +24,8 @@ var spawn_timer := 0.0
 var spawn_interval := 0.0
 var remaining_time := 0.0
 var spawn_finish_early_seconds := 0.0
+var spawn_elite_enemy_seconds := 0.0
+var spawn_boss_enemy_seconds := 0.0
 
 
 func setup(total: int, time_limit: float) -> void:
@@ -33,6 +35,8 @@ func setup(total: int, time_limit: float) -> void:
 	spawn_timer = 0.0
 	remaining_time = time_limit
 	spawn_finish_early_seconds = time_limit * 0.5
+	spawn_elite_enemy_seconds = time_limit * 0.6
+	spawn_boss_enemy_seconds = time_limit * 0.6
 	calculate_spawn_interval(time_limit)
 
 
@@ -50,12 +54,18 @@ func update(delta: float, time_remaining: float) -> void:
 		spawn_wave()
 		return
 
+	if time_remaining <= spawn_elite_enemy_seconds:
+		spawn_wave()
+		spawn_elite_enemy_seconds = 0
+		return
+
 	spawn_timer += delta
 	if spawn_timer >= spawn_interval:
 		spawn_timer = 0.0
 		spawn_wave()
 
 
+# ----------------------------------------------------------------------------------------------------------------------
 func spawn_wave() -> void:
 	if enemies_spawned >= total_enemies:
 		return
@@ -79,6 +89,16 @@ func spawn_wave() -> void:
 		BuffManager.update_tank_appearance(tank, buffs, tank_color)
 	pass
 
+func spawn_elite_enemy() -> void:
+	var tank_data: TankConfig.TankData = TankConfig.elite_enemy_easy
+	var buff_size := enemies_spawned / 8
+	var buffs := enemy_random_buff(buff_size)
+	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
+	if tank == null:
+		return
+	enemies_spawned += 1
+	pass
+# ----------------------------------------------------------------------------------------------------------------------
 func calculate_spawn_interval(time_limit: float) -> void:
 	var spawn_window := maxf(time_limit - spawn_finish_early_seconds, 0.0)
 	var total_waves := ceili(float(total_enemies) / float(spawn_grids.size()))

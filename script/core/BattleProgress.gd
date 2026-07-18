@@ -1,16 +1,12 @@
 class_name BattleProgress
 
-const TIME_LIMIT_SECONDS_MAX := 90.0
-const TIME_LIMIT_SECONDS := 30.0
-const TIME_PER_LEVEL := 5
-
-const LEVEL_TIME: Array[float] = [30, 35, 40, 60, 75
-								, 45, 50, 55, 75, 90
-								, 60, 60, 60, 75, 90
-								, 60, 60, 60, 75, 90
-								, 60, 60, 60, 75, 90
-								, 60, 60, 60, 75, 90
-								, 60, 60, 60, 75, 90]
+const LEVEL_TIME: Array[float] = [30, 35, 40, 60, 70
+								, 45, 50, 55, 70, 80
+								, 60, 60, 60, 80, 90
+								, 60, 60, 60, 80, 90
+								, 60, 60, 60, 90, 100
+								, 60, 60, 60, 90, 110
+								, 60, 60, 60, 90, 120]
 
 static var level := 0
 
@@ -26,7 +22,7 @@ static func init() -> void:
 
 
 static func get_time_limit() -> float:
-	return min(TIME_LIMIT_SECONDS + level * TIME_PER_LEVEL, TIME_LIMIT_SECONDS_MAX)
+	return LEVEL_TIME[min(level, LEVEL_TIME.size() - 1)]
 
 static func start_level() -> void:
 	level_ended = false
