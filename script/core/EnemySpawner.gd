@@ -7,9 +7,9 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const INITIAL_ENEMY_COUNT := 10
+const INITIAL_ENEMY_COUNT := 12
 const ENEMY_COUNT_PER_LEVEL := 5
-const RED_ENEMY_SPAWN_INTERVAL := 7
+const RED_ENEMY_SPAWN_INTERVAL := 8
 
 const ELITE_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 13, 18, 23, 28, 33]
 const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
