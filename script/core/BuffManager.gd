@@ -67,7 +67,8 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 			return false
 	buff_container.add_buff(buff)
 	buff.trigger(tank)
-	my_tank_evolution(tank)
+	if tank.id != 0:
+		update_tank_appearance(tank, buff_container.buffs, TankConfig.Appearance.blue)
 	return true
 
 
@@ -84,14 +85,13 @@ static func wrap_buff_container(tank: Tank) -> void:
 static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 	for buff in buffs:
 		buff.trigger(tank)
-	my_tank_evolution(tank)
+	if tank.id != 0:
+		update_tank_appearance(tank, buffs, TankConfig.Appearance.blue)
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-static func my_tank_evolution(tank: Tank) -> void:
-	if tank.id != 0:
-		return
+static func update_tank_appearance(tank: Tank, buffs: Array[IBuff], appearance: TankConfig.Appearance) -> void:
 	var buff_container := get_buff_container(tank.id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
@@ -102,10 +102,12 @@ static func my_tank_evolution(tank: Tank) -> void:
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_HP)
 	
+	var tank_color: String = TankConfig.Appearance.keys()[appearance].to_lower()
+	
 	var bullet_resource_template := "res://image/bullets/tank/blue/{}.png"
 	var tank_resource_template := "res://image/characters/blue_tank_{}.png"
-	var bullet_id := clampi(bullet_buff_count / 2, 1, 4)
-	var tank_id := clampi(tank_buff_count / 2 + 1, 1, 6)
+	var bullet_id := clampi(bullet_buff_count, 1, 6)
+	var tank_id := clampi(tank_buff_count, 1, 6)
 	
 	var bullet_resource := StringUtils.format(bullet_resource_template, bullet_id)
 	var tank_resource := StringUtils.format(tank_resource_template, tank_id)

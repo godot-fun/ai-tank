@@ -5,6 +5,13 @@ enum Team {
 	ENEMY
 }
 
+enum Appearance {
+	blue,
+	green,
+	gray,
+	red
+}
+
 
 const DEFAULT_TANK_SPEED := 400.0
 const DEFAULT_ENEMY_TANK_SPEED := 320.0
