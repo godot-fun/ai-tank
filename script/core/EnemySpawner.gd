@@ -72,6 +72,9 @@ func spawn_wave() -> void:
 			tank_color = TankConfig.Appearance.red
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], search_right, buffs)
+		if tank == null:
+			enemies_spawned -= 1
+			return
 		BuffManager.update_tank_appearance(tank, buffs, tank_color)
 	pass
 

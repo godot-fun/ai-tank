@@ -27,7 +27,7 @@ static func find_spawn_grid(grid: Vector2i, grid_size: Vector2i, search_right: b
 			return candidate
 		x += step
 
-	return grid
+	return Vector2i.MIN
 
 
 static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false) -> Tank:
@@ -36,7 +36,8 @@ static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right:
 
 static func create_tank_with_buffs(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false, buffs: Array[IBuff] = []) -> Tank:
 	var spawn_grid := find_spawn_grid(grid, data.grid_size, search_right)
-
+	if spawn_grid == Vector2i.MIN:
+		return null
 	var scene: PackedScene = load(TANK_SCENE)
 	var script: Script = load(data.script_resource)
 	var tank: Tank = scene.instantiate()
