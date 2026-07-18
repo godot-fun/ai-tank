@@ -54,15 +54,15 @@ func spawn_wave() -> void:
 		var search_right := i == 0
 
 		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
-		var buff_size := enemies_spawned / 25
-		var red_tank := false
+		var buff_size := enemies_spawned / 30
+		var tank_color := TankConfig.Appearance.gray
 		if enemies_spawned > 0 && enemies_spawned % 8 == 0:
-			tank_data = TankConfig.enemy_red_easy
-			red_tank = true
 			buff_size = enemies_spawned / 10
+			tank_data = TankConfig.enemy_red_easy
+			tank_color = TankConfig.Appearance.red
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], search_right, buffs)
-		enemy_tank_evolution(tank, buffs, red_tank)
+		BuffManager.update_tank_appearance(tank, buffs, tank_color)
 		enemies_spawned += 1
 	pass
 
@@ -95,28 +95,3 @@ func enemy_random_buff(size: int) -> Array[IBuff]:
 	for i in range(size):
 		buffs.append(RandomUtils.random_ele(enemy_buffs))
 	return buffs
-
-
-func enemy_tank_evolution(tank: Tank, buffs: Array[IBuff], red_tank: bool) -> void:
-	var buff_container := BuffContainer.new()
-	buff_container.buffs = buffs
-	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
-	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
-	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_FIRE_INTERVAL)
-	
-	var tank_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.TANK_SPEED)
-	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_HP)
-	
-	var bullet_resource_template := "res://image/bullets/tank/red/{}.png" if red_tank else "res://image/bullets/tank/gray/{}.png"
-	var tank_resource_template := "res://image/characters/red_tank_{}.png" if red_tank else "res://image/characters/tank_{}.png"
-	var bullet_id := clampi(bullet_buff_count / 2, 1, 4)
-	var tank_id := clampi(tank_buff_count, 1, 6)
-	
-	var bullet_resource := StringUtils.format(bullet_resource_template, bullet_id)
-	var tank_resource := StringUtils.format(tank_resource_template, tank_id)
-	if tank.bullet_resource == bullet_resource && tank.tank_resource == tank_resource:
-		return
-	tank.bullet_resource = bullet_resource
-	tank.tank_resource = tank_resource
-	tank.scale_tank()
-	pass

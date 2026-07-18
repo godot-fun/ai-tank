@@ -234,7 +234,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/tank_2.png",
+	"res://image/characters/gray_tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",
 )
 
@@ -253,7 +253,7 @@ static var enemy_easy: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/tank_1.png",
+	"res://image/characters/gray_tank_1.png",
 	SCRIPT_ENEMY_EASY
 )
 
