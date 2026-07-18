@@ -6,11 +6,6 @@ enum FailReason {
 	TIME_UP,
 }
 
-enum Action {
-	RETRY,
-	HOME,
-}
-
 const SCENE := "res://scene/effects/GameOverEffect.tscn"
 const HOME_SCENE_PATH := "res://scene/Home.tscn"
 const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
@@ -18,13 +13,11 @@ const BANNER_DURATION := 2.0
 const DROP_DURATION := 0.7
 const DROP_START_OFFSET := 200.0
 
-signal action_selected(action: Action)
-
 var fail_reason := FailReason.TIME_UP
 
 var _particles: Array[GPUParticles2D] = []
 var _overlay_layer: CanvasLayer
-var _action_taken := false
+var _buttons: VBoxContainer
 
 
 func _ready() -> void:
@@ -32,8 +25,6 @@ func _ready() -> void:
 	z_index = 200
 	await get_tree().process_frame
 	await play_defeat()
-	var action: Action = await action_selected
-	await _handle_action(action)
 	pass
 
 
@@ -83,9 +74,6 @@ func _add_dim_overlay() -> void:
 
 
 func _spawn_banner() -> void:
-	if _overlay_layer == null:
-		return
-
 	var label := Label.new()
 	label.text = _get_banner_text()
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -110,74 +98,44 @@ func _spawn_banner() -> void:
 
 
 func _spawn_action_buttons() -> void:
-	if _overlay_layer == null:
-		return
+	_buttons = VBoxContainer.new()
+	_buttons.set_anchors_preset(Control.PRESET_CENTER)
+	_buttons.offset_left = -140.0
+	_buttons.offset_top = 80.0
+	_buttons.offset_right = 140.0
+	_buttons.offset_bottom = 240.0
+	_buttons.add_theme_constant_override("separation", 16)
+	_buttons.modulate.a = 0.0
+	_overlay_layer.add_child(_buttons)
 
-	var container := VBoxContainer.new()
-	container.set_anchors_preset(Control.PRESET_CENTER)
-	container.offset_left = -140.0
-	container.offset_top = 80.0
-	container.offset_right = 140.0
-	container.offset_bottom = 240.0
-	container.add_theme_constant_override("separation", 16)
-	container.alignment = BoxContainer.ALIGNMENT_CENTER
-	container.modulate.a = 0.0
-	_overlay_layer.add_child(container)
-
-	var retry_button := _create_action_button("重试")
-	var home_button := _create_action_button("回到主界面")
-	container.add_child(retry_button)
-	container.add_child(home_button)
-
-	retry_button.pressed.connect(_on_retry_pressed)
-	home_button.pressed.connect(_on_home_pressed)
-	retry_button.mouse_entered.connect(_on_button_hover)
-	home_button.mouse_entered.connect(_on_button_hover)
-
-	var tween := create_tween()
-	tween.tween_property(container, "modulate:a", 1.0, 0.4)
+	_add_button("重试", _on_retry_pressed)
+	_add_button("回到主界面", _on_home_pressed)
+	create_tween().tween_property(_buttons, "modulate:a", 1.0, 0.4)
 	pass
 
 
-func _create_action_button(text: String) -> Button:
+func _add_button(text: String, on_pressed: Callable) -> void:
 	var button := Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(280.0, 64.0)
 	button.add_theme_font_size_override("font_size", 32)
-	return button
-
-
-func _on_button_hover() -> void:
-	Audios.play_sfx(AudioConfig.UI_SELECT)
+	button.pressed.connect(on_pressed)
+	button.mouse_entered.connect(func() -> void: Audios.play_sfx(AudioConfig.UI_SELECT))
+	_buttons.add_child(button)
 	pass
 
 
 func _on_retry_pressed() -> void:
-	_emit_action(Action.RETRY)
+	_buttons.visible = false
+	Audios.play_sfx(AudioConfig.UI_CONFIRM)
+	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
 	pass
 
 
 func _on_home_pressed() -> void:
-	_emit_action(Action.HOME)
-	pass
-
-
-func _emit_action(action: Action) -> void:
-	if _action_taken:
-		return
-	_action_taken = true
+	_buttons.visible = false
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
-	action_selected.emit(action)
-	pass
-
-
-func _handle_action(action: Action) -> void:
-	match action:
-		Action.RETRY:
-			await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
-		Action.HOME:
-			GameManager.init()
-			await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
+	await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
 	pass
 
 
