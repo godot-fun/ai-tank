@@ -14,9 +14,7 @@ const RED_ENEMY_SPAWN_INTERVAL := 7
 const ELITE_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 13, 18, 23, 28, 33]
 const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
 
-static func get_enemy_count() -> int:
-	return INITIAL_ENEMY_COUNT + BattleProgress.level * ENEMY_COUNT_PER_LEVEL
-
+var level: int = 0
 var total_enemies := 0
 var enemies_spawned := 0
 var enemies_killed := 0
@@ -28,15 +26,22 @@ var spawn_elite_enemy_seconds := 0.0
 var spawn_boss_enemy_seconds := 0.0
 
 
-func setup(total: int, time_limit: float) -> void:
-	total_enemies = total
+func setup(time_limit: float, _level: int) -> void:
+	level = _level
 	enemies_spawned = 0
 	enemies_killed = 0
 	spawn_timer = 0.0
 	remaining_time = time_limit
 	spawn_finish_early_seconds = time_limit * 0.5
-	spawn_elite_enemy_seconds = time_limit * 0.6
-	spawn_boss_enemy_seconds = time_limit * 0.6
+	
+	total_enemies = INITIAL_ENEMY_COUNT + level * ENEMY_COUNT_PER_LEVEL
+	
+	if ELITE_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+		spawn_elite_enemy_seconds = time_limit * 0.6
+		
+	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+		spawn_boss_enemy_seconds = time_limit * 0.6
+	
 	calculate_spawn_interval(time_limit)
 
 
@@ -55,8 +60,11 @@ func update(delta: float, time_remaining: float) -> void:
 		return
 
 	if time_remaining <= spawn_elite_enemy_seconds:
-		spawn_wave()
-		spawn_elite_enemy_seconds = 0
+		spawn_elite_enemy()
+		return
+	
+	if time_remaining <= spawn_boss_enemy_seconds:
+		spawn_boss_enemy()
 		return
 
 	spawn_timer += delta
@@ -91,12 +99,34 @@ func spawn_wave() -> void:
 
 func spawn_elite_enemy() -> void:
 	var tank_data: TankConfig.TankData = TankConfig.elite_enemy_easy
-	var buff_size := enemies_spawned / 8
+	var buff_size: int= BattleProgress.level / 4
 	var buffs := enemy_random_buff(buff_size)
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
 	if tank == null:
 		return
+	var tank_resources := ["res://image/characters/gray_tank_7.png", "res://image/characters/gray_tank_8.png", "res://image/characters/gray_tank_9.png"]
+	var tank_resource: String = RandomUtils.random_ele(tank_resources)
+	tank.tank_resource = tank_resource
+	tank.scale_tank()
+	tank.hp = tank.hp + BattleProgress.level
 	enemies_spawned += 1
+	spawn_elite_enemy_seconds = 0
+	pass
+	
+func spawn_boss_enemy() -> void:
+	var tank_data: TankConfig.TankData = TankConfig.boss_enemy_easy
+	var buff_size: int= BattleProgress.level / 3
+	var buffs := enemy_random_buff(buff_size)
+	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
+	if tank == null:
+		return
+	var tank_resources := ["res://image/characters/red_tank_7.png", "res://image/characters/red_tank_8.png"]
+	var tank_resource: String = RandomUtils.random_ele(tank_resources)
+	tank.tank_resource = tank_resource
+	tank.scale_tank()
+	tank.hp = tank.hp + BattleProgress.level
+	enemies_spawned += 1
+	spawn_boss_enemy_seconds = 0
 	pass
 # ----------------------------------------------------------------------------------------------------------------------
 func calculate_spawn_interval(time_limit: float) -> void:
