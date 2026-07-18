@@ -52,18 +52,17 @@ func spawn_wave() -> void:
 		if enemies_spawned >= total_enemies:
 			break
 		var search_right := i == 0
-
+		enemies_spawned += 1
 		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
 		var buff_size := enemies_spawned / 30
 		var tank_color := TankConfig.Appearance.gray
-		if enemies_spawned > 0 && enemies_spawned % 8 == 0:
+		if enemies_spawned % 8 == 0:
 			buff_size = enemies_spawned / 10
 			tank_data = TankConfig.enemy_red_easy
 			tank_color = TankConfig.Appearance.red
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], search_right, buffs)
 		BuffManager.update_tank_appearance(tank, buffs, tank_color)
-		enemies_spawned += 1
 	pass
 
 func calculate_spawn_interval(time_limit: float) -> void:
@@ -91,6 +90,7 @@ func all_enemies_killed() -> bool:
 var enemy_buffs: Array[IBuff] = [BulletSizeBuff.new(), BulletSpeedBuff.new(), BulletFireIntervalBuff.new(), TankSpeedBuff.new(), TankHpBuff.new()]
 
 func enemy_random_buff(size: int) -> Array[IBuff]:
+	size = min(size, 9)
 	var buffs: Array[IBuff] = []
 	for i in range(size):
 		buffs.append(RandomUtils.random_ele(enemy_buffs))

@@ -257,6 +257,24 @@ static var enemy_easy: TankData = TankData.new(
 	SCRIPT_ENEMY_EASY
 )
 
+static var elite_enemy_easy: TankData = TankData.new(
+	110,
+	Team.ENEMY,
+	Vector2i(3, 3), 
+	DEFAULT_TANK_HP + 10,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE * 2,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.7,
+	"res://image/bullets/tank/gray/5.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/gray_tank_7.png",
+	SCRIPT_ENEMY_EASY
+)
+
 static var enemy_red_easy: TankData = TankData.new(
 	300,
 	Team.ENEMY,
