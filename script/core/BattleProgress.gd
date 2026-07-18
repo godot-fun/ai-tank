@@ -4,6 +4,14 @@ const TIME_LIMIT_SECONDS_MAX := 90.0
 const TIME_LIMIT_SECONDS := 30.0
 const TIME_PER_LEVEL := 5
 
+const LEVEL_TIME: Array[float] = [30, 35, 40, 60, 75
+								, 45, 50, 55, 75, 90
+								, 60, 60, 60, 75, 90
+								, 60, 60, 60, 75, 90
+								, 60, 60, 60, 75, 90
+								, 60, 60, 60, 75, 90
+								, 60, 60, 60, 75, 90]
+
 static var level := 0
 
 static var score := 0

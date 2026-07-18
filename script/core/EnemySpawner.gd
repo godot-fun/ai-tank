@@ -11,6 +11,8 @@ const INITIAL_ENEMY_COUNT := 10
 const ENEMY_COUNT_PER_LEVEL := 5
 const RED_ENEMY_SPAWN_INTERVAL := 7
 
+const ELITE_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 13, 18, 23, 28, 33]
+const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
 
 static func get_enemy_count() -> int:
 	return INITIAL_ENEMY_COUNT + BattleProgress.level * ENEMY_COUNT_PER_LEVEL
