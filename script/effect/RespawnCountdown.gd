@@ -24,7 +24,7 @@ static func spawn(world_position: Vector2, duration: float, parent: Node) -> voi
 
 func _ready() -> void:
 	top_level = true
-	z_index = 10
+	z_index = 2048
 	setup_label()
 	update_display(int(ceil(duration)))
 	set_process(true)
