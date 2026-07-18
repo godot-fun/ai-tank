@@ -63,6 +63,8 @@ func on_enemy_tank_death(tank: Tank) -> void:
 
 
 func on_eagle_death() -> void:
+	if BattleProgress.level_ended:
+		return
 	gdf.callable_deferred(end_level.bind(GameOverEffect.FailReason.EAGLE_DESTROYED))
 	pass
 
@@ -75,10 +77,10 @@ func refresh_enemy_hud() -> void:
 func end_level(fail_reason = null) -> void:
 	if BattleProgress.level_ended:
 		return
-
-	set_process(false)
-	set_physics_process(false)
-	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
+	# 让战场上的所有物体都停止
+#	set_process(false)
+#	set_physics_process(false)
+#	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
 
 	if fail_reason == null:
 		BattleProgress.end_level()

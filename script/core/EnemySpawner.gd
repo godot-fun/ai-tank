@@ -7,8 +7,9 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const INITIAL_ENEMY_COUNT := 18
+const INITIAL_ENEMY_COUNT := 10
 const ENEMY_COUNT_PER_LEVEL := 5
+const RED_ENEMY_SPAWN_INTERVAL := 7
 
 
 static func get_enemy_count() -> int:
@@ -65,7 +66,7 @@ func spawn_wave() -> void:
 		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
 		var buff_size := enemies_spawned / 30
 		var tank_color := TankConfig.Appearance.gray
-		if enemies_spawned % 8 == 0:
+		if enemies_spawned % RED_ENEMY_SPAWN_INTERVAL == 0:
 			buff_size = enemies_spawned / 10
 			tank_data = TankConfig.enemy_red_easy
 			tank_color = TankConfig.Appearance.red
