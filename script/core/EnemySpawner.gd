@@ -111,6 +111,7 @@ func spawn_elite_enemy() -> void:
 	tank.hp = tank.hp + BattleProgress.level
 	enemies_spawned += 1
 	spawn_elite_enemy_seconds = 0
+	Audio.play_music_fade(AudioConfig.BGM_FC_BOSS_BATTLE)
 	pass
 	
 func spawn_boss_enemy() -> void:
@@ -127,6 +128,7 @@ func spawn_boss_enemy() -> void:
 	tank.hp = tank.hp + BattleProgress.level
 	enemies_spawned += 1
 	spawn_boss_enemy_seconds = 0
+	Audio.play_music_fade(AudioConfig.BGM_BOSS_BATTLE)
 	pass
 # ----------------------------------------------------------------------------------------------------------------------
 func calculate_spawn_interval(time_limit: float) -> void:

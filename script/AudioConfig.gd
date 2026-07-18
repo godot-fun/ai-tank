@@ -22,6 +22,7 @@ const BGM_FC_STAGE_2 := "res://audio/bgm/ninja/05-Stage-2.ogg"
 const BGM_FC_STAGE_3 := "res://audio/bgm/ninja/06-Stage-3.ogg"
 const BGM_FC_STAGE_4 := "res://audio/bgm/ninja/07-Stage-4.ogg"
 const BGM_FC_STAGE_5 := "res://audio/bgm/ninja/08-Stage-5.ogg"
+const BGM_FC_BOSS_BATTLE := "res://audio/bgm/ninja/09-Boss-Battle.ogg"
 
 static var UI_SELECT := SoundEffect.new("res://audio/sfx/ui-select/01.wav")
 static var UI_CONFIRM := SoundEffect.new("res://audio/sfx/ui-confirm/01.wav")

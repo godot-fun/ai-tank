@@ -20,14 +20,8 @@ func _ready() -> void:
 	refresh_enemy_hud()
 	battle_hud.update_timer(battle_timer)
 
-	if Audio.musics.is_empty():
-		Audio.set_audio_bus_volume_linear(Audio.AudioBusType.Music, 0.6)
-		Audio.play_musics([AudioConfig.BGM_STAGE_1, AudioConfig.BGM_STAGE_2, AudioConfig.BGM_STAGE_3, AudioConfig.BGM_STAGE_4,
-			AudioConfig.BGM_STAGE_5, AudioConfig.BGM_STAGE_6])
-#		Audio.play_musics([AudioConfig.BGM_FC_STAGE_1, AudioConfig.BGM_FC_STAGE_2, AudioConfig.BGM_FC_STAGE_3, AudioConfig.BGM_FC_STAGE_4, AudioConfig.BGM_FC_STAGE_5])
-	else:
-		Audio.resume_musics()
-
+	Audio.play_music_fade(BattleProgress.get_current_level_music())
+	
 	enemy_spawner.spawn_initial_wave()
 	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
 	EventBus.events.eagle_death.connect(on_eagle_death)
@@ -81,11 +75,12 @@ func end_level(fail_reason = null) -> void:
 #	set_process(false)
 #	set_physics_process(false)
 #	process_mode = Node.ProcessMode.PROCESS_MODE_DISABLED
-
+	
+	Audio.stop_music()
+	
 	if fail_reason == null:
 		BattleProgress.end_level()
 		Audios.play_sfx(AudioConfig.STAGE_CLEAR)
-		Audio.pause_musics()
 		var clear_effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
 		add_child(clear_effect)
 		await ThreadUtils.async_sleep(4000)
@@ -93,7 +88,6 @@ func end_level(fail_reason = null) -> void:
 	else:
 		BattleProgress.fail_level()
 		Audios.play_sfx(AudioConfig.GAME_OVER)
-		Audio.stop_music()
 		var game_over_effect: GameOverEffect = load(GAME_OVER_EFFECT_SCENE).instantiate()
 		game_over_effect.fail_reason = fail_reason
 		add_child(game_over_effect)
