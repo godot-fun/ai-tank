@@ -1,9 +1,5 @@
 class_name BattleProgress
 
-const INITIAL_ENEMY_COUNT := 18
-const ENEMY_COUNT_PER_LEVEL := 5
-
-const SPAWN_FINISH_EARLY_SECONDS := 30.0
 const TIME_LIMIT_SECONDS_MAX := 90.0
 const TIME_LIMIT_SECONDS := 60.0
 const TIME_PER_LEVEL := 5
@@ -19,9 +15,6 @@ static func init() -> void:
 	score = 0
 	level_ended = false
 	pass
-
-static func get_enemy_count() -> int:
-	return INITIAL_ENEMY_COUNT + level * ENEMY_COUNT_PER_LEVEL
 
 
 static func get_time_limit() -> float:

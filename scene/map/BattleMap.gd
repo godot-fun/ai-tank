@@ -15,7 +15,7 @@ func _ready() -> void:
 	BattleProgress.start_level()
 
 	var time_limit := BattleProgress.get_time_limit()
-	enemy_spawner.setup(BattleProgress.get_enemy_count(), BattleProgress.get_time_limit())
+	enemy_spawner.setup(EnemySpawner.get_enemy_count(), BattleProgress.get_time_limit())
 	battle_timer = time_limit
 	refresh_enemy_hud()
 	battle_hud.update_timer(battle_timer)

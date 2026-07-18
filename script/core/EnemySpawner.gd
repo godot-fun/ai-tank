@@ -7,6 +7,15 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
+const INITIAL_ENEMY_COUNT := 18
+const ENEMY_COUNT_PER_LEVEL := 5
+
+const SPAWN_FINISH_EARLY_SECONDS := 30.0
+
+
+static func get_enemy_count() -> int:
+	return INITIAL_ENEMY_COUNT + BattleProgress.level * ENEMY_COUNT_PER_LEVEL
+
 var total_enemies := 0
 var enemies_spawned := 0
 var enemies_killed := 0
@@ -34,7 +43,7 @@ func update(delta: float, time_remaining: float) -> void:
 	if enemies_spawned >= total_enemies:
 		return
 
-	if time_remaining <= BattleProgress.SPAWN_FINISH_EARLY_SECONDS:
+	if time_remaining <= SPAWN_FINISH_EARLY_SECONDS:
 		spawn_wave()
 		return
 
@@ -66,7 +75,7 @@ func spawn_wave() -> void:
 	pass
 
 func calculate_spawn_interval(time_limit: float) -> void:
-	var spawn_window := maxf(time_limit - BattleProgress.SPAWN_FINISH_EARLY_SECONDS, 0.0)
+	var spawn_window := maxf(time_limit - SPAWN_FINISH_EARLY_SECONDS, 0.0)
 	var total_waves := ceili(float(total_enemies) / float(spawn_grids.size()))
 	if total_waves <= 1:
 		spawn_interval = spawn_window
