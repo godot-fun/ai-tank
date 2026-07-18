@@ -61,7 +61,6 @@ func spawn_wave() -> void:
 	for i in range(spawn_grids.size()):
 		if enemies_spawned >= total_enemies:
 			break
-		var search_right := i == 0
 		enemies_spawned += 1
 		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
 		var buff_size := enemies_spawned / 30
@@ -71,7 +70,7 @@ func spawn_wave() -> void:
 			tank_data = TankConfig.enemy_red_easy
 			tank_color = TankConfig.Appearance.red
 		var buffs := enemy_random_buff(buff_size)
-		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], search_right, buffs)
+		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], buffs)
 		if tank == null:
 			enemies_spawned -= 1
 			return

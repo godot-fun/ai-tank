@@ -13,29 +13,37 @@ static func get_alive_enemy_count() -> int:
 	return count
 
 
-static func find_spawn_grid(grid: Vector2i, grid_size: Vector2i, search_right: bool = false) -> Vector2i:
+# 从 grid 出发，向左右交替扩展，寻找最近可放置 grid_size 的格子；找不到返回 Vector2i.MIN
+static func find_spawn_grid(grid: Vector2i, grid_size: Vector2i) -> Vector2i:
 	if not is_move_blocked(grid, grid_size):
 		return grid
 
-	var step := 1 if search_right else -1
-	var x := grid.x + step
 	var max_x := TileConfig.MAP_GRID_WIDTH - grid_size.x
+	var max_offset := maxi(grid.x, max_x - grid.x)  # 左右各自最多能偏移的格数
 
-	while (search_right and x <= max_x) or (not search_right and x >= 0):
-		var candidate := Vector2i(x, grid.y)
-		if not is_move_blocked(candidate, grid_size):
-			return candidate
-		x += step
+	for offset in range(1, max_offset + 1):
+		# 同一距离下先查左侧，再查右侧
+		var left_x := grid.x - offset
+		if left_x >= 0:
+			var left := Vector2i(left_x, grid.y)
+			if not is_move_blocked(left, grid_size):
+				return left
+
+		var right_x := grid.x + offset
+		if right_x <= max_x:
+			var right := Vector2i(right_x, grid.y)
+			if not is_move_blocked(right, grid_size):
+				return right
 
 	return Vector2i.MIN
 
 
-static func create_tank(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false) -> Tank:
+static func create_tank(data: TankConfig.TankData, grid: Vector2i) -> Tank:
 	var buff_container := BuffManager.get_buff_container(data.id)
-	return create_tank_with_buffs(data, grid, search_right, buff_container.buffs)
+	return create_tank_with_buffs(data, grid, buff_container.buffs)
 
-static func create_tank_with_buffs(data: TankConfig.TankData, grid: Vector2i, search_right: bool = false, buffs: Array[IBuff] = []) -> Tank:
-	var spawn_grid := find_spawn_grid(grid, data.grid_size, search_right)
+static func create_tank_with_buffs(data: TankConfig.TankData, grid: Vector2i, buffs: Array[IBuff] = []) -> Tank:
+	var spawn_grid := find_spawn_grid(grid, data.grid_size)
 	if spawn_grid == Vector2i.MIN:
 		return null
 	var scene: PackedScene = load(TANK_SCENE)
