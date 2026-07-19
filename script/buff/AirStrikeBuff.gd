@@ -70,9 +70,14 @@ static func kill_all() -> void:
 			var damage: int = enemy.hp
 			match enemy.team:
 				TankConfig.Team.ELITE_ENEMY:
-					damage = damage * 0.5
+					damage = maxi(damage * 0.5 as int, 5)
 				TankConfig.Team.BOSS_ENEMY:
-					damage = damage * 0.8
+					damage = maxi(damage * 0.8 as int, 5)
+			EffectAnimation2D.spawn(
+				enemy.global_position,
+				enemy.get_tree().current_scene,
+				TankConfig.EFFECT_BULLET_HIT_STEEL,
+				Vector2i(6, 3), 0.8)
 			enemy.take_damage(damage)
 		)
 	pass
