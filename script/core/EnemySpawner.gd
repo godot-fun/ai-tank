@@ -184,8 +184,18 @@ func get_remaining_count() -> int:
 	return get_total_enemies() - enemies_killed
 
 
+func all_spawns_complete() -> bool:
+	if get_waves_spawned() < get_total_enemy_wave_count():
+		return false
+	if spawn_mini_boss_enemy_seconds > 0.0:
+		return false
+	if spawn_boss_enemy_seconds > 0.0:
+		return false
+	return true
+
+
 func all_enemies_killed() -> bool:
-	return enemies_killed >= get_total_enemies()
+	return all_spawns_complete() and TankHelper.get_alive_enemy_count() == 0
 
 
 # ----------------------------------------------------------------------------------------------------------------------
