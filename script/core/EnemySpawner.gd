@@ -11,7 +11,17 @@ const INITIAL_ENEMY_COUNT := 12
 const ENEMY_COUNT_PER_LEVEL := 5
 const RED_ENEMY_SPAWN_INTERVAL := 8
 
-const ELITE_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 13, 18, 23, 28, 33]
+const ENEMY_WAVE: Array[int] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
+								13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
+								23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+								33, 33, 33, 35, 35]
+
+const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 2, 1, 1, 1, 2, 2
+									, 1, 1, 1, 3, 3, 1, 1, 1, 3, 3
+									, 2, 2, 2, 4, 4, 2, 2, 2, 4, 4
+									, 3, 3, 3, 5, 5]
+
+const MINI_BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 9, 13, 18, 19, 23, 28, 29, 33, 34]
 const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
 
 var level: int = 0
@@ -36,7 +46,7 @@ func setup(time_limit: float, _level: int) -> void:
 	
 	total_enemies = INITIAL_ENEMY_COUNT + level * ENEMY_COUNT_PER_LEVEL
 	
-	if ELITE_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
 		spawn_mini_boss_enemy_seconds = time_limit * 0.6
 		
 	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
@@ -46,7 +56,7 @@ func setup(time_limit: float, _level: int) -> void:
 
 
 func spawn_initial_wave() -> void:
-	spawn_wave()
+	spawn_enemy_wave()
 
 
 func update(delta: float, time_remaining: float) -> void:
@@ -56,7 +66,7 @@ func update(delta: float, time_remaining: float) -> void:
 		return
 
 	if time_remaining <= spawn_finish_early_seconds:
-		spawn_wave()
+		spawn_enemy_wave()
 		return
 
 	if time_remaining <= spawn_mini_boss_enemy_seconds:
@@ -70,11 +80,11 @@ func update(delta: float, time_remaining: float) -> void:
 	spawn_timer += delta
 	if spawn_timer >= spawn_interval:
 		spawn_timer = 0.0
-		spawn_wave()
+		spawn_enemy_wave()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-func spawn_wave() -> void:
+func spawn_enemy_wave() -> void:
 	if enemies_spawned >= total_enemies:
 		return
 
@@ -84,17 +94,12 @@ func spawn_wave() -> void:
 		enemies_spawned += 1
 		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
 		var buff_size := enemies_spawned / 30
-		var tank_color := TankConfig.Appearance.gray
-		if enemies_spawned % RED_ENEMY_SPAWN_INTERVAL == 0:
-			buff_size = enemies_spawned / 10
-			tank_data = TankConfig.elite_enemy_easy
-			tank_color = TankConfig.Appearance.red
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], buffs)
 		if tank == null:
 			enemies_spawned -= 1
 			return
-		BuffManager.update_tank_appearance(tank, buffs, tank_color)
+		BuffManager.update_tank_appearance(tank, buffs, TankConfig.Appearance.gray)
 	pass
 
 func spawn_mini_boss_enemy() -> void:
