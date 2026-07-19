@@ -45,3 +45,24 @@ static func buff_container_remove_test() -> void:
 	assert(container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE) == 0)
 
 	assert(!container.remove_buff(buff2))
+
+
+static func remove_current_level_buffs_test() -> void:
+	BuffManager.buff_map.clear()
+	BuffManager.current_level_buff_map.clear()
+
+	var container := BuffContainer.new()
+	var previous_level_buff := BulletSizeBuff.new()
+	var current_level_buff := BulletSizeBuff.new()
+	container.add_buff(previous_level_buff)
+	container.add_buff(current_level_buff)
+	BuffManager.buff_map[0] = container
+	var current_level_container := BuffContainer.new()
+	current_level_container.add_buff(current_level_buff)
+	BuffManager.current_level_buff_map[0] = current_level_container
+
+	BuffManager.remove_current_level_buffs()
+
+	assert(container.buffs == [previous_level_buff])
+	assert(BuffManager.current_level_buff_map.is_empty())
+	BuffManager.buff_map.clear()

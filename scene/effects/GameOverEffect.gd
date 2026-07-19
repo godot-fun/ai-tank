@@ -128,6 +128,7 @@ func _add_button(text: String, on_pressed: Callable) -> void:
 func _on_retry_pressed() -> void:
 	_buttons.visible = false
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
+	BuffManager.remove_current_level_buffs()
 	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
 	pass
 

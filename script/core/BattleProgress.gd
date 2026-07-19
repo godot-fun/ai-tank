@@ -64,6 +64,7 @@ static func get_current_level_music() -> String:
 
 static func start_level() -> void:
 	level_ended = false
+	BuffManager.start_level()
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)

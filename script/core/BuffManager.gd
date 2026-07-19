@@ -7,9 +7,12 @@ static var initialized: bool = false
 
 static var buff_map: Dictionary[int, BuffContainer] = {}
 
+static var current_level_buff_map: Dictionary[int, BuffContainer] = {}
+
 
 static func init() -> void:
 	buff_map.clear()
+	current_level_buff_map.clear()
 	if initialized:
 		return
 	initialized = true
@@ -18,11 +21,32 @@ static func init() -> void:
 	EventBus.events.partnet_tank_death.connect(on_partner_tank_death)
 	pass
 
+static func start_level() -> void:
+	current_level_buff_map.clear()
+	pass
+
+static func remove_current_level_buffs() -> void:
+	for id: int in current_level_buff_map:
+		if !buff_map.has(id):
+			continue
+		var buff_container := buff_map[id]
+		var level_buff_container := current_level_buff_map[id]
+		for buff: IBuff in level_buff_container.buffs:
+			buff_container.remove_buff(buff)
+	current_level_buff_map.clear()
+	pass
+
 static func get_buff_container(id: int) -> BuffContainer:
 	if !buff_map.has(id):
 		buff_map[id] = BuffContainer.new()
 	var buff_container := buff_map[id]
 	return buff_container
+
+static func add_current_level_buff(id: int, buff: IBuff) -> void:
+	if !current_level_buff_map.has(id):
+		current_level_buff_map[id] = BuffContainer.new()
+	current_level_buff_map[id].add_buff(buff)
+	pass
 
 static func add_buff(tank: Tank, buff_type: int) -> bool:
 	var buff_container := get_buff_container(tank.id)
@@ -67,6 +91,7 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 			Log.error("unknwon buff type:[{}]", buff_type)
 			return false
 	buff_container.add_buff(buff)
+	add_current_level_buff(tank.id, buff)
 	buff.trigger(tank)
 	update_tank_appearance(tank, buff_container.buffs, TankConfig.Appearance.blue)
 	return true
