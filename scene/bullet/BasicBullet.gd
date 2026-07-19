@@ -120,6 +120,9 @@ func on_body_entered(body: Node2D) -> void:
 				TankConfig.EFFECT_BULLET_HIT_BRICK, 
 				Vector2i(4, 4), 0.3, 27)
 		else:
+			# Boss bullets can pierce and destroy steel walls.
+			if team == TankConfig.Team.BOSS_ENEMY:
+				tile.destroy()
 			Audios.play_sfx(AudioConfig.BULLET_HIT_STEEL)
 			EffectAnimation2D.spawn(global_position, 
 				get_tree().current_scene,
