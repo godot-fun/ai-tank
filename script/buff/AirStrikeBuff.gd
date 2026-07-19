@@ -77,7 +77,7 @@ static func kill_all() -> void:
 				enemy.global_position,
 				enemy.get_tree().current_scene,
 				TankConfig.EFFECT_BULLET_HIT_STEEL,
-				Vector2i(6, 3), 0.8)
+				Vector2i(6, 3))
 			enemy.take_damage(damage)
 		)
 	pass
