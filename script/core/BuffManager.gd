@@ -15,6 +15,7 @@ static func init() -> void:
 	initialized = true
 	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
 	EventBus.events.player_tank_death.connect(on_player_tank_death)
+	EventBus.events.partnet_tank_death.connect(on_partner_tank_death)
 	pass
 
 static func get_buff_container(id: int) -> BuffContainer:
@@ -142,6 +143,9 @@ static func on_player_tank_death(tank: Tank) -> void:
 	parent.create_tween().tween_callback(on_respawn.bind(tank_config)).set_delay(respawn_time)
 	pass
 
+static func on_partner_tank_death(tank: Tank) -> void:
+	on_player_tank_death(tank)
+	pass
 
 static func on_respawn(tank_config: TankConfig.TankData) -> void:
 	if BattleProgress.level_ended:

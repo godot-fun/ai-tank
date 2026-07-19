@@ -158,8 +158,10 @@ func take_damage(amount: int) -> bool:
 	)
 	if is_enemy():
 		EventBus.events.enemy_tank_death.emit(self)	
-	else:
+	elif team == TankConfig.Team.PLAYER:
 		EventBus.events.player_tank_death.emit(self)
+	elif team == TankConfig.Team.PARTNER:
+		EventBus.events.partnet_tank_death.emit(self)
 	queue_free()
 	return true
 
