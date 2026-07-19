@@ -4,47 +4,47 @@ extends IBuff
 const EFFECT_DURATION := 10
 const POLL_INTERVAL := 0.2
 
-static var _poll_timer: Timer
-static var _remaining_time := 0.0
+static var poll_timer: Timer
+static var remaining_time := 0.0
 
 
 func trigger(tank: Tank) -> void:
-	_remaining_time += EFFECT_DURATION
-	if _poll_timer == null or not is_instance_valid(_poll_timer):
-		_start_poll(tank)
-	_freeze_all_enemies()
+	remaining_time += EFFECT_DURATION
+	if poll_timer == null or not is_instance_valid(poll_timer):
+		start_poll(tank)
+	freeze_all_enemies()
 
 
-static func _start_poll(tank: Tank) -> void:
-	_poll_timer = Timer.new()
-	_poll_timer.wait_time = POLL_INTERVAL
-	_poll_timer.autostart = true
-	tank.get_parent().add_child(_poll_timer)
-	_poll_timer.timeout.connect(_on_poll)
+static func start_poll(tank: Tank) -> void:
+	poll_timer = Timer.new()
+	poll_timer.wait_time = POLL_INTERVAL
+	poll_timer.autostart = true
+	tank.get_parent().add_child(poll_timer)
+	poll_timer.timeout.connect(on_poll)
 
 
-static func _on_poll() -> void:
-	_freeze_all_enemies()
-	_remaining_time -= POLL_INTERVAL
-	if _remaining_time <= 0.0:
-		_stop_poll()
-		_unfreeze_all_enemies()
+static func on_poll() -> void:
+	freeze_all_enemies()
+	remaining_time -= POLL_INTERVAL
+	if remaining_time <= 0.0:
+		stop_poll()
+		unfreeze_all_enemies()
 
 
-static func _stop_poll() -> void:
-	if _poll_timer != null and is_instance_valid(_poll_timer):
-		_poll_timer.queue_free()
-	_poll_timer = null
-	_remaining_time = 0.0
+static func stop_poll() -> void:
+	if poll_timer != null and is_instance_valid(poll_timer):
+		poll_timer.queue_free()
+	poll_timer = null
+	remaining_time = 0.0
 
 
-static func _freeze_all_enemies() -> void:
+static func freeze_all_enemies() -> void:
 	for target in TankHelper.tanks:
 		if is_instance_valid(target) and target.is_alive_enemy():
 			target.set_physics_process(false)
 
 
-static func _unfreeze_all_enemies() -> void:
+static func unfreeze_all_enemies() -> void:
 	for target in TankHelper.tanks:
 		if is_instance_valid(target) and target.is_alive_enemy():
 			target.set_physics_process(true)
