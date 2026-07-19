@@ -92,7 +92,7 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 	buff_container.add_buff(buff)
 	add_current_level_buff(tank.id, buff)
 	buff.trigger(tank)
-	update_tank_appearance(tank, buff_container.buffs, TankConfig.Appearance.blue)
+	update_tank_appearance(tank, buff_container.buffs)
 	return true
 
 
@@ -109,14 +109,22 @@ static func wrap_buff_container(tank: Tank) -> void:
 static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 	for buff in buffs:
 		buff.trigger(tank)
-	update_tank_appearance(tank, buffs, TankConfig.Appearance.blue)
+	update_tank_appearance(tank, buffs)
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-static func update_tank_appearance(tank: Tank, buffs: Array[IBuff], appearance: TankConfig.Appearance) -> void:
+static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 	if tank.team != TankConfig.Team.PLAYER && tank.team != TankConfig.Team.ENEMY:
 		return
+	var appearance: TankConfig.Appearance = TankConfig.Appearance.blue
+	match tank.team:
+		TankConfig.Team.PLAYER:
+			appearance = TankConfig.Appearance.blue
+		TankConfig.Team.ENEMY:
+			appearance = TankConfig.Appearance.gray
+		TankConfig.Team.ELITE_ENEMY:
+			appearance = TankConfig.Appearance.red
 	var buff_container := get_buff_container(tank.id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)

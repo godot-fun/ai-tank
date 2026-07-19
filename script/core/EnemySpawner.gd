@@ -82,11 +82,9 @@ func spawn_enemy_wave() -> void:
 
 	var is_elite_wave := should_spawn_elite_wave()
 	var tank_data: TankConfig.TankData = TankConfig.enemy_easy
-	var tank_color := TankConfig.Appearance.gray
 	var buff_size := enemies_spawned_wave / 30
 	if is_elite_wave:
 		tank_data = TankConfig.elite_enemy_easy
-		tank_color = TankConfig.Appearance.red
 		buff_size = elite_enemies_spawned_wave / 10
 		elite_enemies_spawned_wave += 1
 	else:
@@ -97,7 +95,7 @@ func spawn_enemy_wave() -> void:
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], buffs)
 		if tank == null:
 			continue
-		BuffManager.update_tank_appearance(tank, buffs, tank_color)
+		BuffManager.update_tank_appearance(tank, buffs)
 	pass
 
 func spawn_mini_boss_enemy() -> void:
