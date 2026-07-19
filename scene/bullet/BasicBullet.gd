@@ -14,7 +14,7 @@ static func is_same_faction(a: TankConfig.Team, b: TankConfig.Team) -> bool:
 var direction := Vector2i.ZERO
 var speed := 0.0
 var damage := 0
-var bullet_size := 0.6
+var bullet_size := 0.0
 var team := TankConfig.Team.PLAYER
 var sprite_bullet_resource := ""
 
@@ -90,8 +90,10 @@ func on_area_entered(area: Area2D) -> void:
 		get_tree().current_scene,
 		TankConfig.EFFECT_BULLET_HIT_BULLET, 
 		Vector2i(4, 4), 0.3, 27)
-	queue_free()
-	other.queue_free()
+	if team != TankConfig.Team.BOSS_ENEMY:
+		queue_free()
+	if other.team != TankConfig.Team.BOSS_ENEMY:
+		other.queue_free()
 	pass
 
 
