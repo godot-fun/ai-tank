@@ -134,8 +134,6 @@ static func on_enemy_tank_death(tank: Tank) -> void:
 
 static func on_player_tank_death(tank: Tank) -> void:
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
-	if tank_config.team != TankConfig.Team.PLAYER:
-		return
 	var buff_container := get_buff_container(tank.id)
 	var buff_type_of_size := buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	var respawn_time := DEFAULT_RESPAWN_TIME - buff_type_of_size * TankRespawnBuff.EFFECT_VALUE
@@ -149,8 +147,8 @@ static func on_respawn(tank_config: TankConfig.TankData) -> void:
 	if BattleProgress.level_ended:
 		return
 	if tank_config.id == 0:
-		TankHelper.create_tank(tank_config, Eagle.my_tank_start_grid_pos)
+		TankHelper.create_tank(tank_config, Eagle.player_tank_start_grid_pos)
 	else:
-		TankHelper.create_tank(tank_config, Eagle.partner_start_grid_pos)
+		TankHelper.create_tank(tank_config, Eagle.partner_tank_start_grid_pos)
 	Audios.play_sfx(AudioConfig.TANK_RELOAD)
 	pass

@@ -66,18 +66,18 @@ static func start_level() -> void:
 	level_ended = false
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
-	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
-	TankHelper.create_tank(TankConfig.partner_tank_1, Eagle.partner_start_grid_pos)
+	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)
+	TankHelper.create_tank(TankConfig.partner_tank_1, Eagle.partner_tank_start_grid_pos)
 	if level >= 4:
-		TankHelper.create_tank(TankConfig.partner_tank_2, Eagle.partner_start_grid_pos)
+		TankHelper.create_tank(TankConfig.partner_tank_2, Eagle.partner_tank_start_grid_pos)
 	if level >= 9:
-		TankHelper.create_tank(TankConfig.partner_tank_3, Eagle.partner_start_grid_pos)
+		TankHelper.create_tank(TankConfig.partner_tank_3, Eagle.partner_tank_start_grid_pos)
 	if level >= 14:
-		TankHelper.create_tank(TankConfig.partner_tank_4, Eagle.partner_start_grid_pos)
+		TankHelper.create_tank(TankConfig.partner_tank_4, Eagle.partner_tank_start_grid_pos)
 	if level >= 19:
-		TankHelper.create_tank(TankConfig.partner_tank_5, Eagle.partner_start_grid_pos)
+		TankHelper.create_tank(TankConfig.partner_tank_5, Eagle.partner_tank_start_grid_pos)
 	if level >= 24:
-		TankHelper.create_tank(TankConfig.partner_tank_6, Eagle.partner_start_grid_pos)
+		TankHelper.create_tank(TankConfig.partner_tank_6, Eagle.partner_tank_start_grid_pos)
 	pass
 	
 static func end_level() -> void:

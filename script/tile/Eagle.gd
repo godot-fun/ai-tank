@@ -11,8 +11,8 @@ const SHIELD_SHADER := "res://shader/eagle_shield.gdshader"
 
 @warning_ignore("integer_division")
 static var egale_first_grid_pos := Vector2i((TileConfig.MAP_GRID_WIDTH - 2) / 2, TileConfig.MAP_GRID_HEIGHT - 2)
-static var my_tank_start_grid_pos := egale_first_grid_pos + Vector2i.LEFT * 3
-static var partner_start_grid_pos := egale_first_grid_pos + Vector2i.RIGHT * 3
+static var player_tank_start_grid_pos := egale_first_grid_pos + Vector2i.LEFT * 3
+static var partner_tank_start_grid_pos := egale_first_grid_pos + Vector2i.RIGHT * 3
 
 static var egale_sprite: Sprite2D
 static var shield_material: ShaderMaterial

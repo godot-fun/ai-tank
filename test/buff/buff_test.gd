@@ -3,7 +3,7 @@ extends Node2D
 
 func _ready() -> void:
 	GameManager.init()
-	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
+	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)
 	
 	BuffHelper.create_buff(BuffConfig.bullet_size_buff, Vector2i(4, 4))
 	BuffHelper.create_buff(BuffConfig.bullet_size_buff, Vector2i(4, 6))
