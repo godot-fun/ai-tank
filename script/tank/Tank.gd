@@ -128,6 +128,12 @@ func physics_update(_delta: float) -> void:
 func is_alive() -> bool:
 	return hp > 0
 
+func is_enemy() -> bool:
+	return team == TankConfig.Team.ENEMY || team == TankConfig.Team.ELITE_ENEMY || team == TankConfig.Team.BOSS_ENEMY
+
+func is_alive_enemy() -> bool:
+	return is_enemy() && is_alive()
+
 
 # true is die
 func take_damage(amount: int) -> bool:
@@ -150,7 +156,7 @@ func take_damage(amount: int) -> bool:
 		death_effect_resource,
 		Vector2i(4, 4), 0.5
 	)
-	if team == TankConfig.Team.ENEMY:
+	if is_enemy():
 		EventBus.events.enemy_tank_death.emit(self)	
 	else:
 		EventBus.events.player_tank_death.emit(self)

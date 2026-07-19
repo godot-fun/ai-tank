@@ -67,8 +67,7 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 			return false
 	buff_container.add_buff(buff)
 	buff.trigger(tank)
-	if tank.id == 0:
-		update_tank_appearance(tank, buff_container.buffs, TankConfig.Appearance.blue)
+	update_tank_appearance(tank, buff_container.buffs, TankConfig.Appearance.blue)
 	return true
 
 
@@ -85,13 +84,14 @@ static func wrap_buff_container(tank: Tank) -> void:
 static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 	for buff in buffs:
 		buff.trigger(tank)
-	if tank.id == 0:
-		update_tank_appearance(tank, buffs, TankConfig.Appearance.blue)
+	update_tank_appearance(tank, buffs, TankConfig.Appearance.blue)
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 static func update_tank_appearance(tank: Tank, buffs: Array[IBuff], appearance: TankConfig.Appearance) -> void:
+	if tank.team != TankConfig.Team.PLAYER && tank.team != TankConfig.Team.ENEMY:
+		return
 	var buff_container := get_buff_container(tank.id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)

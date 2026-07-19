@@ -2,7 +2,10 @@ class_name TankConfig
 
 enum Team {
 	PLAYER,
-	ENEMY
+	PARTNER,
+	ENEMY,
+	ELITE_ENEMY,
+	BOSS_ENEMY,
 }
 
 enum Appearance {
@@ -113,7 +116,7 @@ static var my_tank: TankData = TankData.new(
 
 static var partner_tank_1: TankData = TankData.new(
 	11,
-	Team.PLAYER,
+	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
 	DEFAULT_TANK_SPEED,
@@ -131,7 +134,7 @@ static var partner_tank_1: TankData = TankData.new(
 
 static var partner_tank_2: TankData = TankData.new(
 	12,
-	Team.PLAYER,
+	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + 1,
 	DEFAULT_TANK_SPEED * 1.1,
@@ -149,7 +152,7 @@ static var partner_tank_2: TankData = TankData.new(
 
 static var partner_tank_3: TankData = TankData.new(
 	13,
-	Team.PLAYER,
+	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + 1,
 	DEFAULT_TANK_SPEED * 1.2,
@@ -167,7 +170,7 @@ static var partner_tank_3: TankData = TankData.new(
 
 static var partner_tank_4: TankData = TankData.new(
 	14,
-	Team.PLAYER,
+	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + 2,
 	DEFAULT_TANK_SPEED * 1.3,
@@ -185,7 +188,7 @@ static var partner_tank_4: TankData = TankData.new(
 
 static var partner_tank_5: TankData = TankData.new(
 	15,
-	Team.PLAYER,
+	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + 2,
 	DEFAULT_TANK_SPEED * 1.4,
@@ -203,7 +206,7 @@ static var partner_tank_5: TankData = TankData.new(
 
 static var partner_tank_6: TankData = TankData.new(
 	16,
-	Team.PLAYER,
+	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + 3,
 	DEFAULT_TANK_SPEED * 1.5,
@@ -259,7 +262,7 @@ static var enemy_easy: TankData = TankData.new(
 
 static var elite_enemy_easy: TankData = TankData.new(
 	110,
-	Team.ENEMY,
+	Team.ELITE_ENEMY,
 	Vector2i(3, 3), 
 	DEFAULT_TANK_HP + 5,
 	DEFAULT_ENEMY_TANK_SPEED,
@@ -277,7 +280,7 @@ static var elite_enemy_easy: TankData = TankData.new(
 
 static var boss_enemy_easy: TankData = TankData.new(
 	120,
-	Team.ENEMY,
+	Team.BOSS_ENEMY,
 	Vector2i(4, 4), 
 	DEFAULT_TANK_HP + 10,
 	DEFAULT_ENEMY_TANK_SPEED,

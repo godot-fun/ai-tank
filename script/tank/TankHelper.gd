@@ -8,7 +8,7 @@ static var tanks: Array[Tank] = []
 static func get_alive_enemy_count() -> int:
 	var count := 0
 	for tank in tanks:
-		if tank.team == TankConfig.Team.ENEMY and tank.is_alive():
+		if tank.is_alive_enemy():
 			count += 1
 	return count
 
@@ -83,7 +83,7 @@ static func find_nearest_enemy(from_tank: Tank) -> Tank:
 	var nearest_dist := INF
 
 	for tank in tanks:
-		if tank.team != TankConfig.Team.ENEMY or not tank.is_alive():
+		if !tank.is_alive_enemy():
 			continue
 		var dist := absi(from_tank.grid_pos.x - tank.grid_pos.x) + absi(from_tank.grid_pos.y - tank.grid_pos.y)
 		if dist < nearest_dist:

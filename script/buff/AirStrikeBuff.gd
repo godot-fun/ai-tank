@@ -54,7 +54,7 @@ func trigger(tank: Tank) -> void:
 static func kill_all() -> void:
 	var enemies: Array[Tank] = []
 	for target in TankHelper.tanks:
-		if is_instance_valid(target) and target.team == TankConfig.Team.ENEMY and target.is_alive():
+		if is_instance_valid(target) and target.is_alive_enemy():
 			enemies.append(target)
 	if enemies.is_empty():
 		return

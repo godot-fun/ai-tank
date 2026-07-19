@@ -7,7 +7,7 @@ const EFFECT_DURATION := 7.0
 func trigger(tank: Tank) -> void:
 	var enemies: Array[Tank] = []
 	for target in TankHelper.tanks:
-		if target.team == TankConfig.Team.ENEMY and target.is_alive():
+		if target.is_alive_enemy():
 			target.set_physics_process(false)
 			enemies.append(target)
 
