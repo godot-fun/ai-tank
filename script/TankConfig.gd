@@ -16,8 +16,8 @@ enum Appearance {
 }
 
 
-const DEFAULT_TANK_SPEED := 400.0
-const DEFAULT_ENEMY_TANK_SPEED := 320.0
+const DEFAULT_TANK_SPEED := 280.0
+const DEFAULT_ENEMY_TANK_SPEED := 300.0
 const DEFAULT_TANK_HP: int = 1
 
 

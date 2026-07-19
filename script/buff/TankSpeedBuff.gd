@@ -1,7 +1,7 @@
 ﻿class_name TankSpeedBuff
 extends IBuff
 
-const EFFECT_VALUE := 100.0
+const EFFECT_VALUE := 50.0
 
 func trigger(tank: Tank) -> void:
 	tank.speed = tank.speed + EFFECT_VALUE
