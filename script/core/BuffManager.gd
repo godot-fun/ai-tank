@@ -78,9 +78,8 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 				return false
 			buff = TankRespawnBuff.new()
 		IBuff.BuffType.TANK_SIZE:
-			if buff_type_of_size >= 1:
-				return false
-			buff = TankSizeBuff.new()
+			TankSizeBuff.new().trigger(tank)
+			return true
 		IBuff.BuffType.FREEZE:
 			FreezeBuff.new().trigger(tank)
 			return true
