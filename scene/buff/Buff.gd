@@ -48,7 +48,7 @@ func on_body_entered(body: Node2D) -> void:
 	if not body is Tank:
 		return
 	var tank := body as Tank
-	if tank.team != TankConfig.Team.PLAYER:
+	if tank.is_enemy():
 		return
 		
 	trigger_buff(tank)
