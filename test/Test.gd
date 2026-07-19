@@ -11,7 +11,7 @@ func _ready() -> void:
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(6, 0))
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(9, 0))
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(12, 0))
-	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(18 , 0))
+	TankHelper.create_tank(TankConfig.mini_boss_enemy_easy, Vector2i(18 , 0))
 	for i in 32:
 		TileHelper.create_tile(TileConfig.brick_wall, Vector2i(i, 8))
 	for i in 32:

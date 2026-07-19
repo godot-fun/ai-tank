@@ -22,7 +22,7 @@ var spawn_timer := 0.0
 var spawn_interval := 0.0
 var remaining_time := 0.0
 var spawn_finish_early_seconds := 0.0
-var spawn_elite_enemy_seconds := 0.0
+var spawn_mini_boss_enemy_seconds := 0.0
 var spawn_boss_enemy_seconds := 0.0
 
 
@@ -37,7 +37,7 @@ func setup(time_limit: float, _level: int) -> void:
 	total_enemies = INITIAL_ENEMY_COUNT + level * ENEMY_COUNT_PER_LEVEL
 	
 	if ELITE_ENEMY_SPAWN_LEVEL.find(level) >= 0:
-		spawn_elite_enemy_seconds = time_limit * 0.6
+		spawn_mini_boss_enemy_seconds = time_limit * 0.6
 		
 	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
 		spawn_boss_enemy_seconds = time_limit * 0.6
@@ -59,8 +59,8 @@ func update(delta: float, time_remaining: float) -> void:
 		spawn_wave()
 		return
 
-	if time_remaining <= spawn_elite_enemy_seconds:
-		spawn_elite_enemy()
+	if time_remaining <= spawn_mini_boss_enemy_seconds:
+		spawn_mini_boss_enemy()
 		return
 	
 	if time_remaining <= spawn_boss_enemy_seconds:
@@ -87,7 +87,7 @@ func spawn_wave() -> void:
 		var tank_color := TankConfig.Appearance.gray
 		if enemies_spawned % RED_ENEMY_SPAWN_INTERVAL == 0:
 			buff_size = enemies_spawned / 10
-			tank_data = TankConfig.enemy_red_easy
+			tank_data = TankConfig.elite_enemy_easy
 			tank_color = TankConfig.Appearance.red
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], buffs)
@@ -97,8 +97,8 @@ func spawn_wave() -> void:
 		BuffManager.update_tank_appearance(tank, buffs, tank_color)
 	pass
 
-func spawn_elite_enemy() -> void:
-	var tank_data: TankConfig.TankData = TankConfig.elite_enemy_easy
+func spawn_mini_boss_enemy() -> void:
+	var tank_data: TankConfig.TankData = TankConfig.mini_boss_enemy_easy
 	var buff_size: int= BattleProgress.level / 4
 	var buffs := enemy_random_buff(buff_size)
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
@@ -110,7 +110,7 @@ func spawn_elite_enemy() -> void:
 	tank.scale_tank()
 	tank.hp = tank.hp + BattleProgress.level
 	enemies_spawned += 1
-	spawn_elite_enemy_seconds = 0
+	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_FC_BOSS_BATTLE)
 	pass
 	

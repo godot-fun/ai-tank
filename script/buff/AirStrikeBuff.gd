@@ -65,8 +65,15 @@ static func kill_all() -> void:
 		var explosion_tween := enemy.create_tween()
 		explosion_tween.tween_interval(i * ENEMY_EXPLOSION_INTERVAL)
 		explosion_tween.tween_callback(func() -> void:
-			if is_instance_valid(enemy):
-				enemy.take_damage(enemy.hp)
+			if !is_instance_valid(enemy):
+				return
+			var damage: int = enemy.hp
+			match enemy.team:
+				TankConfig.Team.ELITE_ENEMY:
+					damage = damage * 0.5
+				TankConfig.Team.BOSS_ENEMY:
+					damage = damage * 0.8
+			enemy.take_damage(damage)
 		)
 	pass
 

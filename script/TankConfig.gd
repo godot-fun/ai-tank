@@ -33,7 +33,6 @@ const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
 const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
-const ENEMY_RED_ID_RANGE := Vector2i(300, 400)
 const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
 
 static var tank_datas: Dictionary[int, TankData] = {}
@@ -261,8 +260,26 @@ static var enemy_easy: TankData = TankData.new(
 )
 
 static var elite_enemy_easy: TankData = TankData.new(
-	110,
+	150,
 	Team.ELITE_ENEMY,
+	Vector2i(2, 2),
+	2,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/tank/red/1.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/red_tank_4.png",
+	SCRIPT_ENEMY_EASY
+)
+
+static var mini_boss_enemy_easy: TankData = TankData.new(
+	110,
+	Team.BOSS_ENEMY,
 	Vector2i(3, 3), 
 	DEFAULT_TANK_HP + 5,
 	DEFAULT_ENEMY_TANK_SPEED,
@@ -293,23 +310,5 @@ static var boss_enemy_easy: TankData = TankData.new(
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/red_tank_7.png",
-	SCRIPT_ENEMY_EASY
-)
-
-static var enemy_red_easy: TankData = TankData.new(
-	300,
-	Team.ENEMY,
-	Vector2i(2, 2),
-	2,
-	DEFAULT_ENEMY_TANK_SPEED,
-	DEFAULT_BULLET_SPEED,
-	1,
-	DEFAULT_BULLET_SIZE,
-	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/tank/red/1.png",
-	null,
-	AudioConfig.TANK_DEATH_ENEMY,
-	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/red_tank_4.png",
 	SCRIPT_ENEMY_EASY
 )

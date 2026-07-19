@@ -3,12 +3,12 @@ extends Node2D
 
 func _ready() -> void:
 	GameManager.init()
-	TankHelper.create_tank(TankConfig.my_tank, Vector2i(10, TileConfig.MAP_GRID_HEIGHT))
-	TankHelper.create_tank(TankConfig.enemy_red_easy, Vector2i(10, 0))
-	TankHelper.create_tank(TankConfig.enemy_red_easy, Vector2i(15, 0))
-	TankHelper.create_tank(TankConfig.enemy_red_easy, Vector2i(20, 0))
-	TankHelper.create_tank(TankConfig.enemy_red_easy, Vector2i(25, 0))
-	TankHelper.create_tank(TankConfig.enemy_red_easy, Vector2i(30, 0))
+	TankHelper.create_tank(TankConfig.my_tank, Eagle.my_tank_start_grid_pos)
+	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(10, 0))
+	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(15, 0))
+	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(20, 0))
+	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(25, 0))
+	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(30, 0))
 	
 	BuffHelper.create_buff(BuffConfig.bullet_size_buff, Vector2i(4, 4))
 	BuffHelper.create_buff(BuffConfig.bullet_size_buff, Vector2i(4, 6))
