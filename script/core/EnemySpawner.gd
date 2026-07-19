@@ -7,10 +7,6 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const INITIAL_ENEMY_COUNT := 12
-const ENEMY_COUNT_PER_LEVEL := 5
-const RED_ENEMY_SPAWN_INTERVAL := 8
-
 const ENEMY_WAVE: Array[int] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
 								13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
 								23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
@@ -25,8 +21,8 @@ const MINI_BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 9, 13, 18, 19, 23, 28, 29
 const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
 
 var level: int = 0
-var total_enemies := 0
-var enemies_spawned := 0
+var regular_enemies_spawned := 0
+var elite_enemies_spawned := 0
 var enemies_killed := 0
 var spawn_timer := 0.0
 var spawn_interval := 0.0
@@ -38,13 +34,12 @@ var spawn_boss_enemy_seconds := 0.0
 
 func setup(time_limit: float, _level: int) -> void:
 	level = _level
-	enemies_spawned = 0
+	regular_enemies_spawned = 0
+	elite_enemies_spawned = 0
 	enemies_killed = 0
 	spawn_timer = 0.0
 	remaining_time = time_limit
 	spawn_finish_early_seconds = time_limit * 0.5
-	
-	total_enemies = INITIAL_ENEMY_COUNT + level * ENEMY_COUNT_PER_LEVEL
 	
 	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
 		spawn_mini_boss_enemy_seconds = time_limit * 0.6
@@ -61,9 +56,6 @@ func spawn_initial_wave() -> void:
 
 func update(delta: float, time_remaining: float) -> void:
 	remaining_time = time_remaining
-
-	if enemies_spawned >= total_enemies:
-		return
 
 	if time_remaining <= spawn_finish_early_seconds:
 		spawn_enemy_wave()
@@ -85,21 +77,32 @@ func update(delta: float, time_remaining: float) -> void:
 
 # ----------------------------------------------------------------------------------------------------------------------
 func spawn_enemy_wave() -> void:
-	if enemies_spawned >= total_enemies:
+	if get_wave_enemies_spawned() >= get_total_enemy_wave_count():
 		return
 
 	for i in range(spawn_grids.size()):
-		if enemies_spawned >= total_enemies:
+		if get_wave_enemies_spawned() >= get_total_enemy_wave_count():
 			break
-		enemies_spawned += 1
 		var tank_data: TankConfig.TankData = TankConfig.enemy_easy
-		var buff_size := enemies_spawned / 30
+		var tank_color := TankConfig.Appearance.gray
+		var buff_size := 0
+		if should_spawn_elite():
+			elite_enemies_spawned += 1
+			buff_size = get_wave_enemies_spawned() / 10
+			tank_data = TankConfig.elite_enemy_easy
+			tank_color = TankConfig.Appearance.red
+		else:
+			regular_enemies_spawned += 1
+			buff_size = get_wave_enemies_spawned() / 30
 		var buffs := enemy_random_buff(buff_size)
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], buffs)
 		if tank == null:
-			enemies_spawned -= 1
+			if tank_color == TankConfig.Appearance.red:
+				elite_enemies_spawned -= 1
+			else:
+				regular_enemies_spawned -= 1
 			return
-		BuffManager.update_tank_appearance(tank, buffs, TankConfig.Appearance.gray)
+		BuffManager.update_tank_appearance(tank, buffs, tank_color)
 	pass
 
 func spawn_mini_boss_enemy() -> void:
@@ -114,7 +117,6 @@ func spawn_mini_boss_enemy() -> void:
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
 	tank.hp = tank.hp + BattleProgress.level
-	enemies_spawned += 1
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_FC_BOSS_BATTLE)
 	pass
@@ -131,14 +133,39 @@ func spawn_boss_enemy() -> void:
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
 	tank.hp = tank.hp + BattleProgress.level
-	enemies_spawned += 1
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_BOSS_BATTLE)
 	pass
 # ----------------------------------------------------------------------------------------------------------------------
+func get_wave_enemies_spawned() -> int:
+	return regular_enemies_spawned + elite_enemies_spawned
+
+
+func get_enemy_wave_count() -> int:
+	return ENEMY_WAVE[min(level, ENEMY_WAVE.size() - 1)]
+
+
+func get_elite_enemy_wave_count() -> int:
+	return ELITE_ENEMY_WAVE[min(level, ELITE_ENEMY_WAVE.size() - 1)]
+
+
+func get_total_enemy_wave_count() -> int:
+	return get_enemy_wave_count() + get_elite_enemy_wave_count()
+
+
+func should_spawn_elite() -> bool:
+	var elite_count := get_elite_enemy_wave_count()
+	if elite_enemies_spawned >= elite_count:
+		return false
+	if regular_enemies_spawned >= get_enemy_wave_count():
+		return true
+	var elite_spawn_interval := maxi(1, get_enemy_wave_count() / maxi(1, elite_count))
+	return regular_enemies_spawned > 0 and regular_enemies_spawned % elite_spawn_interval == 0
+
+
 func calculate_spawn_interval(time_limit: float) -> void:
 	var spawn_window := maxf(time_limit - spawn_finish_early_seconds, 0.0)
-	var total_waves := ceili(float(total_enemies) / float(spawn_grids.size()))
+	var total_waves := ceili(float(get_total_enemy_wave_count()) / float(spawn_grids.size()))
 	if total_waves <= 1:
 		spawn_interval = spawn_window
 	else:
@@ -150,11 +177,11 @@ func on_enemy_tank_death() -> void:
 
 
 func get_remaining_count() -> int:
-	return total_enemies - enemies_killed
+	return get_total_enemy_wave_count() - enemies_killed
 
 
 func all_enemies_killed() -> bool:
-	return enemies_killed >= total_enemies
+	return enemies_killed >= get_total_enemy_wave_count()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
