@@ -90,9 +90,13 @@ func on_area_entered(area: Area2D) -> void:
 		get_tree().current_scene,
 		TankConfig.EFFECT_BULLET_HIT_BULLET, 
 		Vector2i(4, 4), 0.3, 27)
-	if team != TankConfig.Team.BOSS_ENEMY:
+
+	var min_damage := mini(damage, other.damage)
+	damage = damage - min_damage
+	other.damage = other.damage - min_damage
+	if damage <= 0:
 		queue_free()
-	if other.team != TankConfig.Team.BOSS_ENEMY:
+	if other.damage <= 0:
 		other.queue_free()
 	pass
 

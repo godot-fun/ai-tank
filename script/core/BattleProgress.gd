@@ -1,7 +1,7 @@
 class_name BattleProgress
 
-const LEVEL_TIME: Array[float] = [40, 45, 50, 60, 70
-								, 50, 55, 60, 70, 80
+const LEVEL_TIME: Array[float] = [40, 50, 60, 70, 80
+								, 60, 60, 60, 70, 80
 								, 60, 60, 60, 80, 90
 								, 60, 60, 60, 80, 90
 								, 60, 60, 60, 90, 100
@@ -69,15 +69,15 @@ static func start_level() -> void:
 	Eagle.create_base()
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)
 	TankHelper.create_tank(TankConfig.partner_tank_1, Eagle.partner_tank_start_grid_pos)
-	if level >= 4:
+	if level >= 3:
 		TankHelper.create_tank(TankConfig.partner_tank_2, Eagle.partner_tank_start_grid_pos)
-	if level >= 9:
+	if level >= 8:
 		TankHelper.create_tank(TankConfig.partner_tank_3, Eagle.partner_tank_start_grid_pos)
-	if level >= 14:
+	if level >= 13:
 		TankHelper.create_tank(TankConfig.partner_tank_4, Eagle.partner_tank_start_grid_pos)
-	if level >= 19:
+	if level >= 18:
 		TankHelper.create_tank(TankConfig.partner_tank_5, Eagle.partner_tank_start_grid_pos)
-	if level >= 24:
+	if level >= 23:
 		TankHelper.create_tank(TankConfig.partner_tank_6, Eagle.partner_tank_start_grid_pos)
 	pass
 	

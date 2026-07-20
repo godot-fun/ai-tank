@@ -1,6 +1,6 @@
 class_name BuffManager
 
-const DEFAULT_RESPAWN_TIME: float = 12.0
+const DEFAULT_RESPAWN_TIME: float = 10.0
 
 
 static var initialized: bool = false

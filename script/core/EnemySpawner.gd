@@ -7,12 +7,12 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const ENEMY_WAVE: Array[int] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
+const ENEMY_WAVE: Array[int] = [2, 3, 3, 5, 6, 8, 9, 10, 11, 12, 
 								13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
 								23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
 								33, 33, 33, 35, 35]
 
-const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 2, 1, 1, 1, 2, 2
+const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 2, 1, 1, 1, 1, 1, 2, 2
 									, 1, 1, 1, 3, 3, 1, 1, 1, 3, 3
 									, 2, 2, 2, 4, 4, 2, 2, 2, 4, 4
 									, 3, 3, 3, 5, 5]
@@ -39,13 +39,13 @@ func setup(time_limit: float, _level: int) -> void:
 	enemies_killed = 0
 	spawn_timer = 0.0
 	remaining_time = time_limit
-	spawn_finish_early_seconds = time_limit * 0.5
+	spawn_finish_early_seconds = time_limit * 0.6
 	
 	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
-		spawn_mini_boss_enemy_seconds = time_limit * 0.6
+		spawn_mini_boss_enemy_seconds = time_limit * 0.7
 		
 	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
-		spawn_boss_enemy_seconds = time_limit * 0.6
+		spawn_boss_enemy_seconds = time_limit * 0.7
 	
 	calculate_spawn_interval(time_limit)
 

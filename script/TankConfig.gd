@@ -22,8 +22,8 @@ const DEFAULT_TANK_HP: int = 1
 
 
 const DEFAULT_BULLET_SPEED := 700.0
-const DEFAULT_BULLET_SIZE := 1.2
-const DEFAULT_BULLET_FIRE_INTERVAL := 1.6
+const DEFAULT_BULLET_SIZE := 1.3
+const DEFAULT_BULLET_FIRE_INTERVAL := 1.2
 const DEFAULT_ENEMY_BULLET_FIRE_INTERVAL := 3
 
 const EFFECT_TANK_PARTNER_EXPLOSION := "res://image/effects/tank_partnet_explosion.png"
@@ -285,7 +285,7 @@ static var mini_boss_enemy_easy: TankData = TankData.new(
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
-	DEFAULT_BULLET_SIZE * 3,
+	DEFAULT_BULLET_SIZE * 2,
 	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.7,
 	"res://image/bullets/tank/gray/5.png",
 	null,
@@ -303,7 +303,7 @@ static var boss_enemy_easy: TankData = TankData.new(
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
 	1,
-	DEFAULT_BULLET_SIZE * 4,
+	DEFAULT_BULLET_SIZE * 3,
 	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.6,
 	"res://image/bullets/tank/gray/5.png",
 	null,
