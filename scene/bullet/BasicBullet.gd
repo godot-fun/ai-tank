@@ -3,14 +3,6 @@ extends Area2D
 
 const SCENE := "res://scene/bullet/BasicBullet.tscn"
 
-static var player_faction: Array[TankConfig.Team] = [TankConfig.Team.PLAYER, TankConfig.Team.PARTNER]
-static var enemy_faction: Array[TankConfig.Team] = [TankConfig.Team.ENEMY, TankConfig.Team.ELITE_ENEMY, TankConfig.Team.BOSS_ENEMY]
-
-
-static func is_same_faction(a: TankConfig.Team, b: TankConfig.Team) -> bool:
-	return (a in player_faction and b in player_faction) or (a in enemy_faction and b in enemy_faction)
-
-
 var direction := Vector2i.ZERO
 var speed := 0.0
 var damage := 0
@@ -78,7 +70,7 @@ func on_area_entered(area: Area2D) -> void:
 		return
 
 	var other := area as BasicBullet
-	if is_same_faction(other.team, team):
+	if TankConfig.is_same_faction(other.team, team):
 		return
 
 	# Only one bullet handles the collision to avoid double-free.

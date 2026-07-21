@@ -25,6 +25,7 @@ const DEFAULT_BULLET_SPEED := 700.0
 const DEFAULT_BULLET_SIZE := 1.0
 const DEFAULT_BULLET_FIRE_INTERVAL := 1.2
 const DEFAULT_ENEMY_BULLET_FIRE_INTERVAL := 3
+const DEFAULT_BULLET_DAMAGE := 1
 
 const EFFECT_TANK_PARTNER_EXPLOSION := "res://image/effects/tank_partnet_explosion.png"
 const EFFECT_TANK_ENEMY_EXPLOSION := "res://image/effects/tank_enemy_explosion.png"
@@ -120,7 +121,7 @@ static var partner_tank_1: TankData = TankData.new(
 	DEFAULT_TANK_HP,
 	DEFAULT_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/green/1.png",
@@ -138,7 +139,7 @@ static var partner_tank_2: TankData = TankData.new(
 	DEFAULT_TANK_HP + 1,
 	DEFAULT_TANK_SPEED * 1.1,
 	DEFAULT_BULLET_SPEED * 1.1,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE * 1.1,
 	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/green/2.png",
@@ -156,7 +157,7 @@ static var partner_tank_3: TankData = TankData.new(
 	DEFAULT_TANK_HP + 1,
 	DEFAULT_TANK_SPEED * 1.2,
 	DEFAULT_BULLET_SPEED * 1.2,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE * 1.2,
 	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/green/3.png",
@@ -174,7 +175,7 @@ static var partner_tank_4: TankData = TankData.new(
 	DEFAULT_TANK_HP + 2,
 	DEFAULT_TANK_SPEED * 1.3,
 	DEFAULT_BULLET_SPEED * 1.3,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE * 1.3,
 	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/green/4.png",
@@ -192,7 +193,7 @@ static var partner_tank_5: TankData = TankData.new(
 	DEFAULT_TANK_HP + 2,
 	DEFAULT_TANK_SPEED * 1.4,
 	DEFAULT_BULLET_SPEED * 1.4,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE * 1.4,
 	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/green/5.png",
@@ -210,7 +211,7 @@ static var partner_tank_6: TankData = TankData.new(
 	DEFAULT_TANK_HP + 3,
 	DEFAULT_TANK_SPEED * 1.5,
 	DEFAULT_BULLET_SPEED * 1.5,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE * 1.5,
 	DEFAULT_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/green/6.png",
@@ -229,7 +230,7 @@ static var only_fire_enemy: TankData = TankData.new(
 	10,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/basic/gray/02.png",
@@ -248,7 +249,7 @@ static var enemy_easy: TankData = TankData.new(
 	DEFAULT_TANK_HP,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/gray/1.png",
@@ -263,10 +264,10 @@ static var elite_enemy_easy: TankData = TankData.new(
 	150,
 	Team.ELITE_ENEMY,
 	Vector2i(2, 2),
-	2,
+	DEFAULT_TANK_HP + 1,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
 	"res://image/bullets/tank/red/1.png",
@@ -284,7 +285,7 @@ static var mini_boss_enemy_easy: TankData = TankData.new(
 	DEFAULT_TANK_HP + 10,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
-	1,
+	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE * 2,
 	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.7,
 	"res://image/bullets/tank/gray/7.png",
@@ -312,3 +313,19 @@ static var boss_enemy_easy: TankData = TankData.new(
 	"res://image/characters/red_tank_7.png",
 	SCRIPT_ENEMY_EASY
 )
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+static var player_faction: Array[TankConfig.Team] = [TankConfig.Team.PLAYER, TankConfig.Team.PARTNER]
+static var enemy_faction: Array[TankConfig.Team] = [TankConfig.Team.ENEMY, TankConfig.Team.ELITE_ENEMY, TankConfig.Team.BOSS_ENEMY]
+
+
+static func is_same_faction(a: Team, b: Team) -> bool:
+	return (a in player_faction and b in player_faction) or (a in enemy_faction and b in enemy_faction)
+
+static func is_player_faction(team: Team) -> bool:
+	return team in player_faction
+
+static func is_enemy_faction(team: Team) -> bool:
+	return team in enemy_faction
+
