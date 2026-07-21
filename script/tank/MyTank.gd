@@ -7,7 +7,8 @@ const HOLD_MOVE_DELAY := 0.12
 
 var shake_material: ShaderMaterial
 var reload_indicator: ReloadIndicator
-var direction_hold_time := 0.0
+## < 0: already facing, move immediately. >= 0: hold time after a turn.
+var direction_hold_time := -1.0
 
 
 func start() -> void:
@@ -46,17 +47,23 @@ func physics_update(delta: float) -> void:
 		return
 
 	var direction := read_direction()
-	if direction == Vector2i.ZERO or direction != facing:
-		if direction != Vector2i.ZERO:
-			update_facing(direction)
+	if direction == Vector2i.ZERO:
+		direction_hold_time = -1.0
+		stop_move_sound()
+		return
+
+	if direction != facing:
+		update_facing(direction)
 		direction_hold_time = 0.0
 		stop_move_sound()
 		return
 
-	direction_hold_time += delta
-	if direction_hold_time < HOLD_MOVE_DELAY:
-		stop_move_sound()
-		return
+	if direction_hold_time >= 0.0:
+		direction_hold_time += delta
+		if direction_hold_time < HOLD_MOVE_DELAY:
+			stop_move_sound()
+			return
+		direction_hold_time = -1.0
 
 	move(direction)
 	play_move_sound()
