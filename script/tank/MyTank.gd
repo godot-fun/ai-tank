@@ -3,9 +3,11 @@ class_name MyTank
 
 const SHAKE_SHADER := "res://shader/tank_move_shake.gdshader"
 const RELOAD_INDICATOR_MARGIN := 8.0
+const HOLD_MOVE_DELAY := 0.12
 
 var shake_material: ShaderMaterial
 var reload_indicator: ReloadIndicator
+var direction_hold_time := 0.0
 
 
 func start() -> void:
@@ -36,7 +38,7 @@ func update_shake_shader() -> void:
 	pass
 
 
-func physics_update(_delta: float) -> void:
+func physics_update(delta: float) -> void:
 	if Input.is_action_pressed("ui_accept"):
 		fire()
 
@@ -44,11 +46,20 @@ func physics_update(_delta: float) -> void:
 		return
 
 	var direction := read_direction()
-	if direction != Vector2i.ZERO:
-		move(direction)
-		play_move_sound()
-	else:
+	if direction == Vector2i.ZERO or direction != facing:
+		if direction != Vector2i.ZERO:
+			update_facing(direction)
+		direction_hold_time = 0.0
 		stop_move_sound()
+		return
+
+	direction_hold_time += delta
+	if direction_hold_time < HOLD_MOVE_DELAY:
+		stop_move_sound()
+		return
+
+	move(direction)
+	play_move_sound()
 	pass
 
 
