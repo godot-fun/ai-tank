@@ -72,7 +72,7 @@ static func kill_all() -> void:
 				TankConfig.Team.ELITE_ENEMY:
 					damage = maxi(damage * 0.5 as int, 5)
 				TankConfig.Team.BOSS_ENEMY:
-					damage = maxi(damage * 0.8 as int, 5)
+					damage = maxi(damage * 0.9 as int, 5)
 			EffectAnimation2D.spawn(
 				enemy.global_position,
 				enemy.get_tree().current_scene,
