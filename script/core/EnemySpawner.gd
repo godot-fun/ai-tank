@@ -82,10 +82,9 @@ func spawn_enemy_wave() -> void:
 
 	var is_elite_wave := should_spawn_elite_wave()
 	var tank_data: TankConfig.TankData = TankConfig.enemy_easy
-	var buff_size := enemies_spawned_wave / 30
+	var buff_size := enemies_spawned_wave / 3
 	if is_elite_wave:
 		tank_data = TankConfig.elite_enemy_easy
-		buff_size = elite_enemies_spawned_wave / 10
 		elite_enemies_spawned_wave += 1
 	else:
 		enemies_spawned_wave += 1
@@ -200,7 +199,7 @@ func all_enemies_killed() -> bool:
 var enemy_buffs: Array[IBuff] = [BulletSizeBuff.new(), BulletSpeedBuff.new(), BulletFireIntervalBuff.new(), TankSpeedBuff.new(), TankHpBuff.new()]
 
 func enemy_random_buff(size: int) -> Array[IBuff]:
-	size = min(size, 9)
+	size = min(size, 12)
 	var buffs: Array[IBuff] = []
 	for i in range(size):
 		buffs.append(RandomUtils.random_ele(enemy_buffs))
