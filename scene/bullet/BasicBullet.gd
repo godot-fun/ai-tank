@@ -96,7 +96,7 @@ func on_area_entered(area: Area2D) -> void:
 func on_body_entered(body: Node2D) -> void:
 	if body is Tank:
 		var tank := body as Tank
-		if is_same_faction(tank.team, team):
+		if TankConfig.is_same_faction(tank.team, team):
 			return
 		if !tank.take_damage(damage):
 			Audios.play_sfx(AudioConfig.BULLET_HIT_TANK)
