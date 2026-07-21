@@ -78,7 +78,9 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 				return false
 			buff = TankRespawnBuff.new()
 		IBuff.BuffType.TANK_SIZE:
-			TankSizeBuff.new().trigger(tank)
+			if buff_type_of_size >= 1:
+				return false
+			buff = TankSizeBuff.new()
 			return true
 		IBuff.BuffType.FREEZE:
 			FreezeBuff.new().trigger(tank)
@@ -168,6 +170,8 @@ static func on_enemy_tank_death(tank: Tank) -> void:
 static func on_player_tank_death(tank: Tank) -> void:
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[tank.id]
 	var buff_container := get_buff_container(tank.id)
+	buff_container.remove_buff_by_type(IBuff.BuffType.TANK_SIZE)
+	
 	var buff_type_of_size := buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	var respawn_time := DEFAULT_RESPAWN_TIME - buff_type_of_size * TankRespawnBuff.EFFECT_VALUE
 	var parent := tank.get_parent()
