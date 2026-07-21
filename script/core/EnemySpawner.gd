@@ -108,7 +108,7 @@ func spawn_mini_boss_enemy() -> void:
 	var tank_resource: String = RandomUtils.random_ele(tank_resources)
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
-	tank.hp = tank.hp + BattleProgress.level * 2
+	tank.hp = tank.hp + BattleProgress.level * 4
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_FC_BOSS_BATTLE)
 	pass
@@ -124,7 +124,7 @@ func spawn_boss_enemy() -> void:
 	var tank_resource: String = RandomUtils.random_ele(tank_resources)
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
-	tank.hp = tank.hp + BattleProgress.level * 3
+	tank.hp = tank.hp + BattleProgress.level * 5
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_BOSS_BATTLE)
 	pass

@@ -10,7 +10,7 @@ const ENEMY_EXPLOSION_INTERVAL := 0.25
 
 
 func trigger(tank: Tank) -> void:
-	if tank.team != TankConfig.Team.PLAYER:
+	if tank.is_enemy():
 		return
 
 	var texture: Texture2D = load(AIRCRAFT_TEXTURE)
