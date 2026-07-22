@@ -42,7 +42,7 @@ func setup(time_limit: float, _level: int) -> void:
 	spawn_finish_early_seconds = time_limit * 0.6
 	
 	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
-		spawn_mini_boss_enemy_seconds = time_limit * 0.7
+		spawn_mini_boss_enemy_seconds = time_limit * 0.75
 		
 	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
 		spawn_boss_enemy_seconds = time_limit * 0.7
@@ -111,6 +111,7 @@ func spawn_mini_boss_enemy() -> void:
 	tank.hp = tank.hp + BattleProgress.level * 5
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_FC_BOSS_BATTLE)
+	SchedulerBus.schedule(spawn_enemy_wave, 1000)
 	pass
 	
 func spawn_boss_enemy() -> void:
@@ -127,6 +128,7 @@ func spawn_boss_enemy() -> void:
 	tank.hp = tank.hp + BattleProgress.level * 6
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_BOSS_BATTLE)
+	SchedulerBus.schedule(spawn_enemy_wave, 1000)
 	pass
 # ----------------------------------------------------------------------------------------------------------------------
 func get_waves_spawned() -> int:
