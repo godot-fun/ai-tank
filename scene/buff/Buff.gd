@@ -1,3 +1,4 @@
+class_name Buff
 extends Area2D
 
 const FLASH_SHADER := "res://shader/buff_flash.gdshader"

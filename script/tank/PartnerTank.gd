@@ -3,6 +3,7 @@ class_name PartnerTank
 
 const AI_THINK_INTERVAL := 0.5
 const RANDOM_MOVE_EXTRA_STEPS_MAX := 2
+const BUFF_SEEK_RANGE := 5
 
 
 var ai_think_timer := 0.0
@@ -34,13 +35,17 @@ func physics_update(delta: float) -> void:
 func pick_move_direction() -> Vector2i:
 	var target_grid := Vector2i.ZERO
 
-	var enemy := TankHelper.find_nearest_enemy(self)
-	if enemy != null:
-		target_grid = enemy.grid_pos
+	var nearby_buff := BuffHelper.find_nearest_obtainable_buff(self, BUFF_SEEK_RANGE)
+	if nearby_buff != null:
+		target_grid = nearby_buff.grid_pos
 	else:
-		var leader := TankHelper.find_player()
-		if leader != null and leader != self:
-			target_grid = leader.grid_pos
+		var enemy := TankHelper.find_nearest_enemy(self)
+		if enemy != null:
+			target_grid = enemy.grid_pos
+		else:
+			var leader := TankHelper.find_player()
+			if leader != null and leader != self:
+				target_grid = leader.grid_pos
 
 	if target_grid == Vector2i.ZERO:
 		return Vector2i.ZERO

@@ -7,13 +7,13 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const ENEMY_WAVE: Array[int] = [2, 3, 3, 5, 6, 8, 9, 10, 11, 12, 
-								13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
-								23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
-								33, 33, 33, 35, 35]
+const ENEMY_WAVE: Array[int] = [2, 3, 3, 4, 5, 6, 7, 7, 8, 9, 
+								12, 13, 13, 14, 15, 16, 17, 17, 18, 19, 
+								22, 23, 23, 24, 25, 26, 27, 27, 28, 29, 
+								33, 33, 33, 34, 35]
 
-const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 2, 1, 1, 1, 1, 1, 2, 2
-									, 1, 1, 1, 3, 3, 1, 1, 1, 3, 3
+const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 1, 1, 1, 1, 2, 1
+									, 1, 1, 1, 3, 2, 1, 1, 1, 3, 2
 									, 2, 2, 2, 4, 4, 2, 2, 2, 4, 4
 									, 3, 3, 3, 5, 5]
 
@@ -108,7 +108,7 @@ func spawn_mini_boss_enemy() -> void:
 	var tank_resource: String = RandomUtils.random_ele(tank_resources)
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
-	tank.hp = tank.hp + BattleProgress.level * 5
+	tank.hp = tank.hp + BattleProgress.level * 4
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_FC_BOSS_BATTLE)
 	pass
@@ -124,7 +124,7 @@ func spawn_boss_enemy() -> void:
 	var tank_resource: String = RandomUtils.random_ele(tank_resources)
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
-	tank.hp = tank.hp + BattleProgress.level * 6
+	tank.hp = tank.hp + BattleProgress.level * 5
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music_fade(AudioConfig.BGM_BOSS_BATTLE)
 	pass
