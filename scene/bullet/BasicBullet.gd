@@ -81,7 +81,7 @@ func on_area_entered(area: Area2D) -> void:
 	EffectAnimation2D.spawn(global_position, 
 		get_tree().current_scene,
 		TankConfig.EFFECT_BULLET_HIT_BULLET, 
-		Vector2i(4, 4), 0.3, 27)
+		Vector2i(4, 4), 0.3 * bullet_size, 27)
 
 	var min_damage := mini(damage, other.damage)
 	damage = damage - min_damage
@@ -103,7 +103,7 @@ func on_body_entered(body: Node2D) -> void:
 			EffectAnimation2D.spawn(global_position, 
 				get_tree().current_scene,
 				TankConfig.EFFECT_BULLET_HIT_ENEMY, 
-				Vector2i(6, 3), 0.3, 27)
+				Vector2i(6, 3), 0.3 * bullet_size, 27)
 		queue_free()
 	elif body is Tile:
 		var tile := body as Tile
@@ -113,17 +113,19 @@ func on_body_entered(body: Node2D) -> void:
 		queue_free()
 		if tile is BrickWall:
 			Audios.play_sfx(AudioConfig.BULLET_HIT_BRICK)
-			EffectAnimation2D.spawn(global_position, 
+			EffectAnimation2D.spawn(tile.global_position, 
 				get_tree().current_scene,
 				TankConfig.EFFECT_BULLET_HIT_BRICK, 
 				Vector2i(4, 4), 0.3, 27)
 		else:
+			var effect_position := global_position
 			# Boss bullets can pierce and destroy steel walls.
 			if team == TankConfig.Team.BOSS_ENEMY:
 				tile.destroy()
+				effect_position = tile.global_position
 			Audios.play_sfx(AudioConfig.BULLET_HIT_STEEL)
-			EffectAnimation2D.spawn(global_position, 
+			EffectAnimation2D.spawn(effect_position, 
 				get_tree().current_scene,
 				TankConfig.EFFECT_BULLET_HIT_STEEL, 
-				Vector2i(6, 3), 0.3, 27)
+				Vector2i(6, 3), 0.3 * bullet_size, 27)
 	pass
