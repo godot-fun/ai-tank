@@ -5,8 +5,8 @@ class_name BattleHud
 @onready var timer_label: Label = $MarginContainer/VBox/TimerLabel
 
 
-func update_enemies_remaining(count: int) -> void:
-	enemy_label.text = "剩余敌人: %d" % count
+func update_waves_remaining(count: int) -> void:
+	enemy_label.text = "剩余波次: %d" % count
 	pass
 
 

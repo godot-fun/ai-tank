@@ -1,6 +1,6 @@
 class_name BattleProgress
 
-const LEVEL_TIME: Array[float] = [40, 50, 60, 70, 90
+const LEVEL_TIME: Array[float] = [40, 50, 50, 70, 80
 								, 60, 60, 60, 70, 120
 								, 60, 60, 60, 80, 90
 								, 60, 60, 60, 80, 120

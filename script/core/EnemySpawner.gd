@@ -181,6 +181,10 @@ func get_remaining_count() -> int:
 	return get_total_enemies() - enemies_killed
 
 
+func get_remaining_wave_count() -> int:
+	return get_total_enemy_wave_count() - get_waves_spawned()
+
+
 func all_spawns_complete() -> bool:
 	if get_waves_spawned() < get_total_enemy_wave_count():
 		return false

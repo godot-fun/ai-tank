@@ -17,12 +17,12 @@ func _ready() -> void:
 	var time_limit := BattleProgress.get_time_limit()
 	enemy_spawner.setup(BattleProgress.get_time_limit(), BattleProgress.level)
 	battle_timer = time_limit
-	refresh_enemy_hud()
 	battle_hud.update_timer(battle_timer)
 
 	Audio.play_music_fade(BattleProgress.get_current_level_music())
 	
 	enemy_spawner.spawn_initial_wave()
+	refresh_wave_hud()
 	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
 	EventBus.events.eagle_death.connect(on_eagle_death)
 	pass
@@ -40,6 +40,7 @@ func _process(delta: float) -> void:
 	battle_hud.update_timer(battle_timer)
 
 	enemy_spawner.update(delta, battle_timer)
+	refresh_wave_hud()
 
 	if enemy_spawner.all_enemies_killed():
 		end_level()
@@ -52,7 +53,6 @@ func _process(delta: float) -> void:
 
 func on_enemy_tank_death(tank: Tank) -> void:
 	enemy_spawner.on_enemy_tank_death()
-	refresh_enemy_hud()
 	pass
 
 
@@ -63,8 +63,8 @@ func on_eagle_death() -> void:
 	pass
 
 
-func refresh_enemy_hud() -> void:
-	battle_hud.update_enemies_remaining(enemy_spawner.get_remaining_count())
+func refresh_wave_hud() -> void:
+	battle_hud.update_waves_remaining(enemy_spawner.get_remaining_wave_count())
 	pass
 
 
