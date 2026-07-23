@@ -9,10 +9,14 @@ static var buff_map: Dictionary[int, BuffContainer] = {}
 
 static var current_level_buff_map: Dictionary[int, BuffContainer] = {}
 
+## tank_id -> 击杀敌人数
+static var enemy_kill_counts: Dictionary[int, int] = {}
+
 
 static func init() -> void:
 	buff_map.clear()
 	current_level_buff_map.clear()
+	enemy_kill_counts.clear()
 	if initialized:
 		return
 	initialized = true
@@ -23,6 +27,7 @@ static func init() -> void:
 
 static func start_level() -> void:
 	current_level_buff_map.clear()
+	enemy_kill_counts.clear()
 	pass
 
 static func remove_current_level_buffs() -> void:
@@ -162,6 +167,9 @@ static func on_enemy_tank_death(tank: Tank) -> void:
 	var tank_config: TankConfig.TankData = TankConfig.tank_datas[id]
 	if tank_config.team == TankConfig.Team.PLAYER:
 		return
+	var killer_id := tank.killed_by_tank_id
+	if killer_id >= 0 and TankConfig.tank_datas.has(killer_id):
+		enemy_kill_counts[killer_id] = enemy_kill_counts.get(killer_id, 0) + 1
 	if tank.team == TankConfig.Team.ELITE_ENEMY:
 		var grid_pos := tank.grid_pos
 		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos))
