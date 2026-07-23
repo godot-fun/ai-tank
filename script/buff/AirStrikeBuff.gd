@@ -48,7 +48,9 @@ func trigger(tank: Tank) -> void:
 		tween.tween_property(aircraft, "global_position", end_pos, FLIGHT_DURATION).set_delay(delay)
 		tween.tween_callback(func() -> void: aircraft.queue_free())
 
-	SchedulerBus.schedule(kill_all, FLIGHT_DURATION * TimeUtils.MILLIS_PER_SECOND)
+	var kill_tween := tank.get_parent().create_tween()
+	kill_tween.tween_interval(FLIGHT_DURATION)
+	kill_tween.tween_callback(kill_all)
 	pass
 
 static func kill_all() -> void:
