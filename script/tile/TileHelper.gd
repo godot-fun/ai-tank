@@ -38,6 +38,26 @@ static func create_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
 	return tile as Tile
 
 
+static func get_tile(grid: Vector2i) -> Tile:
+	if not is_cell_in_bounds(grid):
+		return null
+	return grids[grid.x][grid.y]
+
+
+static func remove_tile_at(grid: Vector2i) -> void:
+	var tile := get_tile(grid)
+	if tile == null:
+		return
+	grids[grid.x][grid.y] = null
+	tile.queue_free()
+	pass
+
+
+static func replace_tile(data: TileConfig.TileCell, grid: Vector2i) -> Tile:
+	remove_tile_at(grid)
+	return create_tile(data, grid)
+
+
 static func register_tile(tile: Tile) -> void:
 	var cell := tile.grid_pos
 	if is_cell_in_bounds(cell):

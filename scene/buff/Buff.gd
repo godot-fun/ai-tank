@@ -2,6 +2,10 @@ class_name Buff
 extends Area2D
 
 const FLASH_SHADER := "res://shader/buff_flash.gdshader"
+const LIFETIME_SEC := 15.0
+const WARN_SEC := 5.0
+const WARN_GRAY := Color(0.55, 0.55, 0.55, 1.0)
+const WARN_FADE := Color(0.55, 0.55, 0.55, 0.0)
 
 static var flash_material: ShaderMaterial
 
@@ -20,6 +24,22 @@ func _ready() -> void:
 	setup_flash_material()
 	scale_buff()
 	body_entered.connect(on_body_entered)
+	start_lifetime()
+	pass
+
+func start_lifetime() -> void:
+	var tween := create_tween()
+	tween.tween_interval(LIFETIME_SEC - WARN_SEC)
+	tween.tween_callback(start_despawn_warning)
+	tween.tween_interval(WARN_SEC)
+	tween.tween_callback(queue_free)
+	pass
+
+func start_despawn_warning() -> void:
+	sprite.material = null
+	var tween := create_tween()
+	tween.tween_property(sprite, "modulate", WARN_GRAY, WARN_SEC * 0.5)
+	tween.tween_property(sprite, "modulate", WARN_FADE, WARN_SEC * 0.5)
 	pass
 
 func apply_data(data: BuffConfig.BuffData, grid: Vector2i) -> void:

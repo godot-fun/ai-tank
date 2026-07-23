@@ -12,6 +12,7 @@ enum BuffType {
 	
 	FREEZE,
 	AIR_STRIKE,
+	BASE_STEEL,
 	
 	UNKNOWN,
 }

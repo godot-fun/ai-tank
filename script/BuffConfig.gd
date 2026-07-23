@@ -87,6 +87,13 @@ static var air_strike_buff: BuffData = BuffData.new(
 	"res://image/buff/buff_air_strike.png"
 )
 
+static var base_steel_buff: BuffData = BuffData.new(
+	9,
+	IBuff.BuffType.BASE_STEEL,
+	Vector2i.ONE,
+	"res://image/tiles/steel_wall_1.png"
+)
+
 
 static func random_buff() -> BuffData:
 	return RandomUtils.random_ele(buff_datas.values())

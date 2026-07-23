@@ -55,13 +55,20 @@ static func setup_shield_material() -> void:
 	pass
 
 
-static func create_base_bricks() -> void:
+static func base_wall_grids() -> Array[Vector2i]:
 	var pos := egale_first_grid_pos
+	var grids: Array[Vector2i] = []
 	for x in range(-1, 3):
-		TileHelper.create_tile(TileConfig.brick_wall_eagle, pos + Vector2i(x, -1))
+		grids.append(pos + Vector2i(x, -1))
 	for y in range(2):
-		TileHelper.create_tile(TileConfig.brick_wall_eagle, pos + Vector2i(-1, y))
-		TileHelper.create_tile(TileConfig.brick_wall_eagle, pos + Vector2i(2, y))
+		grids.append(pos + Vector2i(-1, y))
+		grids.append(pos + Vector2i(2, y))
+	return grids
+
+
+static func create_base_bricks() -> void:
+	for grid in base_wall_grids():
+		TileHelper.create_tile(TileConfig.brick_wall_eagle, grid)
 	pass
 
 
