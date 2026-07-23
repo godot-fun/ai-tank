@@ -3,6 +3,7 @@ extends Area2D
 
 const SCENE := "res://scene/bullet/BasicBullet.tscn"
 
+var id: int = 0
 var direction := Vector2i.ZERO
 var speed := 0.0
 var damage := 0
@@ -31,18 +32,20 @@ func scale_sprite() -> void:
 	pass
 
 func apply_data(
+	tank_id: int,
+	tank_team: int,
 	from: Vector2,
 	dir: Vector2i,
-	bullet_team: int,
 	bullet_speed: float,
 	bullet_damage: int,
 	_bullet_size: float,
 	bullet_resource: String,
 ) -> void:
+	id = tank_id
+	team = tank_team
 	sprite_bullet_resource = bullet_resource
 	global_position = from
 	direction = dir
-	team = bullet_team
 	speed = bullet_speed
 	damage = bullet_damage
 	bullet_size = _bullet_size
@@ -98,7 +101,7 @@ func on_body_entered(body: Node2D) -> void:
 		var tank := body as Tank
 		if TankConfig.is_same_faction(tank.team, team):
 			return
-		if !tank.take_damage(damage):
+		if !tank.take_damage(damage, id):
 			Audios.play_sfx(AudioConfig.BULLET_HIT_TANK)
 			EffectAnimation2D.spawn(global_position, 
 				get_tree().current_scene,

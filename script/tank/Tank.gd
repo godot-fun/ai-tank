@@ -27,6 +27,7 @@ var grid_pos := Vector2i.ZERO
 var facing := Vector2i.UP
 var moving := false
 var max_hp := 1
+var killed_by_tank_id := -1
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -136,7 +137,7 @@ func is_alive_enemy() -> bool:
 
 
 # true is die
-func take_damage(amount: int) -> bool:
+func take_damage(amount: int, damage_from_tank_id: int = -1) -> bool:
 	if !is_alive() || amount <= 0 || is_queued_for_deletion():
 		return false
 
@@ -149,6 +150,7 @@ func take_damage(amount: int) -> bool:
 	Audios.play_sfx(death_sound_resource)
 
 	sprite.visible = false
+	killed_by_tank_id = damage_from_tank_id
 	TankBreakEffect.spawn(global_position, scale, grid_size, sprite.rotation, sprite.texture,  get_parent())
 	EffectAnimation2D.spawn(
 		global_position,
@@ -177,7 +179,7 @@ func fire() -> void:
 	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
 	var bullet: BasicBullet = bullet_scene.instantiate()
 	var spawn_offset := Vector2(facing) * TileConfig.TILE_SIZE
-	bullet.apply_data(global_position + spawn_offset, facing, team, bullet_speed, bullet_damage, bullet_size, bullet_resource)
+	bullet.apply_data(id, team, global_position + spawn_offset, facing, bullet_speed, bullet_damage, bullet_size, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 
 	fire_cooldown = bullet_fire_interval
