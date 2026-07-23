@@ -116,7 +116,7 @@ func on_body_entered(body: Node2D) -> void:
 			EffectAnimation2D.spawn(tile.global_position, 
 				get_tree().current_scene,
 				TankConfig.EFFECT_BULLET_HIT_BRICK, 
-				Vector2i(4, 4), 0.3, 27)
+				Vector2i(4, 4), 0.3 * bullet_size, 27)
 		else:
 			var effect_position := global_position
 			# Boss bullets can pierce and destroy steel walls.
