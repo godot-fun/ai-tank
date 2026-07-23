@@ -89,7 +89,11 @@ func make_tank_row(tank_data: TankConfig.TankData) -> Control:
 	buff_row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	buff_row.add_theme_constant_override("separation", 12)
 	var buff_counts := get_buff_type_counts(tank_data.id)
+	var buff_types: Array[int] = []
 	for buff_type: int in buff_counts:
+		buff_types.append(buff_type)
+	buff_types.sort()
+	for buff_type: int in buff_types:
 		buff_row.add_child(make_buff_entry(buff_type, buff_counts[buff_type]))
 	row.add_child(buff_row)
 
@@ -113,6 +117,8 @@ func make_buff_entry(buff_type: int, count: int) -> Control:
 	var entry := HBoxContainer.new()
 	entry.alignment = BoxContainer.ALIGNMENT_CENTER
 	entry.add_theme_constant_override("separation", 4)
+	entry.mouse_filter = Control.MOUSE_FILTER_STOP
+	entry.tooltip_text = get_buff_description(buff_type)
 
 	var resource := get_buff_resource(buff_type)
 	if !resource.is_empty():
@@ -121,6 +127,7 @@ func make_buff_entry(buff_type: int, count: int) -> Control:
 		icon.custom_minimum_size = Vector2(BUFF_ICON_SIZE, BUFF_ICON_SIZE)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		entry.add_child(icon)
 
 	var label := Label.new()
@@ -128,6 +135,7 @@ func make_buff_entry(buff_type: int, count: int) -> Control:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 28)
 	label.add_theme_color_override("font_color", Color(0.85, 0.9, 0.95, 1))
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	entry.add_child(label)
 
 	return entry
@@ -139,6 +147,32 @@ func get_buff_resource(buff_type: int) -> String:
 		if data.buff == buff_type:
 			return data.buff_resource
 	return ""
+
+
+func get_buff_description(buff_type: int) -> String:
+	match buff_type:
+		IBuff.BuffType.BULLET_SIZE:
+			return "增大子弹体积，并提升子弹伤害"
+		IBuff.BuffType.BULLET_SPEED:
+			return "提升子弹飞行速度"
+		IBuff.BuffType.BULLET_FIRE_INTERVAL:
+			return "缩短开火间隔，提升射速"
+		IBuff.BuffType.TANK_SPEED:
+			return "提升坦克移动速度"
+		IBuff.BuffType.TANK_HP:
+			return "提升坦克生命值"
+		IBuff.BuffType.TANK_RESPAWN:
+			return "缩短坦克复活等待时间"
+		IBuff.BuffType.TANK_SIZE:
+			return "缩小坦克体积，更易躲避攻击"
+		IBuff.BuffType.FREEZE:
+			return "冻结全场敌人一段时间"
+		IBuff.BuffType.AIR_STRIKE:
+			return "呼叫空袭，对场上敌人造成伤害"
+		IBuff.BuffType.BASE_STEEL:
+			return "将基地周围砖墙临时变为钢墙"
+		_:
+			return ""
 
 
 func show_tap_prompt() -> void:
