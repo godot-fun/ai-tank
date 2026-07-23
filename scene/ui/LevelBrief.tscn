@@ -40,17 +40,17 @@ theme_override_font_sizes/font_size = 72
 text = "第 1 关"
 horizontal_alignment = 1
 
-[node name="KillTitle" type="Label" parent="CenterContainer/VBox"]
+[node name="StatsTitle" type="Label" parent="CenterContainer/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.8, 0.88, 1)
 theme_override_font_sizes/font_size = 32
-text = "击杀"
+text = "战绩"
 horizontal_alignment = 1
 
-[node name="KillStats" type="HBoxContainer" parent="CenterContainer/VBox"]
+[node name="TankStats" type="VBoxContainer" parent="CenterContainer/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
+theme_override_constants/separation = 12
+alignment = 0
 
 [node name="TapPrompt" type="Label" parent="."]
 visible = false

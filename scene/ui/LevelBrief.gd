@@ -1,34 +1,46 @@
 extends Control
 
 const BATTLE_SCENE_PATH := "res://scene/map/BattleMap.tscn"
-const TANK_ICON_SIZE := 96.0
+const TANK_ICON_SIZE := 72.0
+const BUFF_ICON_SIZE := 48.0
 
 @onready var level_label: Label = $CenterContainer/VBox/LevelLabel
-@onready var kill_stats: HBoxContainer = $CenterContainer/VBox/KillStats
+@onready var tank_stats: VBoxContainer = $CenterContainer/VBox/TankStats
 @onready var tap_prompt: Label = $TapPrompt
 
 
 func _ready() -> void:
 	set_process_input(false)
 	level_label.text = "第 %d 关" % (BattleProgress.level + 1)
-	populate_kill_stats()
+	populate_tank_stats()
 	show_tap_prompt()
 	Audios.play_sfx(AudioConfig.STAGE_START)
 	pass
 
 
-func populate_kill_stats() -> void:
-	var kill_title: Label = $CenterContainer/VBox/KillTitle
-	var has_kills := not BuffManager.enemy_kill_counts.is_empty()
-	kill_title.visible = has_kills
-	kill_stats.visible = has_kills
-	for child in kill_stats.get_children():
+func populate_tank_stats() -> void:
+	var stats_title: Label = $CenterContainer/VBox/StatsTitle
+	var show_stats := should_show_stats()
+	stats_title.visible = show_stats
+	tank_stats.visible = show_stats
+	for child in tank_stats.get_children():
 		child.queue_free()
-	if !has_kills:
+	if !show_stats:
 		return
 	for tank_data: TankConfig.TankData in get_brief_tanks():
-		kill_stats.add_child(make_kill_entry(tank_data))
+		tank_stats.add_child(make_tank_row(tank_data))
 	pass
+
+
+func should_show_stats() -> bool:
+	if not BuffManager.enemy_kill_counts.is_empty():
+		return true
+	for tank_data: TankConfig.TankData in get_brief_tanks():
+		if !BuffManager.buff_map.has(tank_data.id):
+			continue
+		if BuffManager.buff_map[tank_data.id].buffs.size() > 0:
+			return true
+	return false
 
 
 func get_brief_tanks() -> Array[TankConfig.TankData]:
@@ -50,29 +62,83 @@ func get_brief_tanks() -> Array[TankConfig.TankData]:
 	return tanks
 
 
-func make_kill_entry(tank_data: TankConfig.TankData) -> Control:
-	var entry := VBoxContainer.new()
-	entry.alignment = BoxContainer.ALIGNMENT_CENTER
-	entry.add_theme_constant_override("separation", 8)
+func make_tank_row(tank_data: TankConfig.TankData) -> Control:
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 16)
 
-	var icon := TextureRect.new()
-	icon.texture = load(tank_data.tank_resource)
-	icon.custom_minimum_size = Vector2(TANK_ICON_SIZE, TANK_ICON_SIZE)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	entry.add_child(icon)
+	var tank_icon := TextureRect.new()
+	tank_icon.texture = load(tank_data.tank_resource)
+	tank_icon.custom_minimum_size = Vector2(TANK_ICON_SIZE, TANK_ICON_SIZE)
+	tank_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tank_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(tank_icon)
 
 	var kills: int = 0
 	if BuffManager.enemy_kill_counts.has(tank_data.id):
 		kills = BuffManager.enemy_kill_counts[tank_data.id]
+	var kill_label := Label.new()
+	kill_label.text = "击杀 x%d" % kills
+	kill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	kill_label.add_theme_font_size_override("font_size", 32)
+	kill_label.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98, 1))
+	row.add_child(kill_label)
+
+	var buff_row := HBoxContainer.new()
+	buff_row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	buff_row.add_theme_constant_override("separation", 12)
+	var buff_counts := get_buff_type_counts(tank_data.id)
+	for buff_type: int in buff_counts:
+		buff_row.add_child(make_buff_entry(buff_type, buff_counts[buff_type]))
+	row.add_child(buff_row)
+
+	return row
+
+
+func get_buff_type_counts(tank_id: int) -> Dictionary[int, int]:
+	var counts: Dictionary[int, int] = {}
+	if !BuffManager.buff_map.has(tank_id):
+		return counts
+	for buff: IBuff in BuffManager.buff_map[tank_id].buffs:
+		var buff_type: int = buff.type()
+		if counts.has(buff_type):
+			counts[buff_type] = counts[buff_type] + 1
+		else:
+			counts[buff_type] = 1
+	return counts
+
+
+func make_buff_entry(buff_type: int, count: int) -> Control:
+	var entry := HBoxContainer.new()
+	entry.alignment = BoxContainer.ALIGNMENT_CENTER
+	entry.add_theme_constant_override("separation", 4)
+
+	var resource := get_buff_resource(buff_type)
+	if !resource.is_empty():
+		var icon := TextureRect.new()
+		icon.texture = load(resource)
+		icon.custom_minimum_size = Vector2(BUFF_ICON_SIZE, BUFF_ICON_SIZE)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		entry.add_child(icon)
+
 	var label := Label.new()
-	label.text = "x%d" % kills
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 36)
-	label.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98, 1))
+	label.text = "x%d" % count
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 28)
+	label.add_theme_color_override("font_color", Color(0.85, 0.9, 0.95, 1))
 	entry.add_child(label)
 
 	return entry
+
+
+func get_buff_resource(buff_type: int) -> String:
+	for id: int in BuffConfig.buff_datas:
+		var data := BuffConfig.buff_datas[id]
+		if data.buff == buff_type:
+			return data.buff_resource
+	return ""
 
 
 func show_tap_prompt() -> void:
