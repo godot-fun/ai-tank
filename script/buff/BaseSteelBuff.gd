@@ -1,13 +1,14 @@
 class_name BaseSteelBuff
 extends IBuff
 
-const EFFECT_DURATION_MS := 15 * TimeUtils.MILLIS_PER_SECOND
+const EFFECT_DURATION := 15.0
 
 
-func trigger(_tank: Tank) -> void:
-	# body_entered 处于物理查询刷新中，不能立刻增删 StaticBody2D
-	gdf.callable_deferred(fortify_base)
-	SchedulerBus.schedule(restore_base, EFFECT_DURATION_MS)
+func trigger(tank: Tank) -> void:
+	var tween := tank.get_parent().create_tween()
+	tween.tween_callback(fortify_base)
+	tween.tween_interval(EFFECT_DURATION)
+	tween.tween_callback(restore_base)
 	pass
 
 

@@ -12,10 +12,10 @@ const ENEMY_WAVE: Array[int] = [2, 3, 3, 4, 5, 6, 7, 7, 8, 9,
 								22, 23, 23, 24, 25, 26, 27, 27, 28, 29, 
 								33, 33, 33, 34, 35]
 
-const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 1, 1, 1, 1, 2, 1
-									, 1, 1, 1, 3, 2, 1, 1, 1, 3, 2
-									, 2, 2, 2, 4, 4, 2, 2, 2, 4, 4
-									, 3, 3, 3, 5, 5]
+const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 1, 1, 1, 2, 2, 1
+									, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1
+									, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1
+									, 1, 1, 2, 3, 4]
 
 const MINI_BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 9, 13, 18, 19, 23, 28, 29, 33, 34]
 const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
