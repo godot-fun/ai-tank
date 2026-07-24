@@ -35,6 +35,7 @@ const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
 const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
+const SCRIPT_ENEMY_EAGLE := "res://script/tank/EnemyEagle.gd"
 
 static var tank_datas: Dictionary[int, TankData] = {}
 
@@ -258,6 +259,24 @@ static var enemy_easy: TankData = TankData.new(
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/gray_tank_1.png",
 	SCRIPT_ENEMY_EASY
+)
+
+static var enemy_eagle: TankData = TankData.new(
+	101,
+	Team.ENEMY,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	DEFAULT_BULLET_DAMAGE,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/tank/gray/1.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/gray_tank_2.png",
+	SCRIPT_ENEMY_EAGLE
 )
 
 static var elite_enemy_easy: TankData = TankData.new(
