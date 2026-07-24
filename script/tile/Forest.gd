@@ -7,7 +7,7 @@ static var sway_material: ShaderMaterial
 
 
 func start() -> void:
-	z_index = 1
+	z_index = 8
 	setup_sway_material()
 	pass
 

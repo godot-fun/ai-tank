@@ -15,6 +15,7 @@ var sprite_bullet_resource := ""
 
 
 func _ready() -> void:
+	z_index = -4
 	body_entered.connect(on_body_entered)
 	area_entered.connect(on_area_entered)
 	scale_sprite()

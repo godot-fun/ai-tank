@@ -7,7 +7,7 @@ static var shimmer_material: ShaderMaterial
 
 
 func start() -> void:
-	z_index = -5
+	z_index = -8
 	setup_shimmer_material()
 	pass
 

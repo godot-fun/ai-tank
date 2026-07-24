@@ -9,7 +9,7 @@ var progress := 0.0
 
 func _ready() -> void:
 	top_level = true
-	z_index = 10
+	z_index = 64
 	visible = false
 	pass
 

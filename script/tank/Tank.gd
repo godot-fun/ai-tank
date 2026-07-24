@@ -178,7 +178,7 @@ func fire() -> void:
 
 	var bullet_scene: PackedScene = load(BasicBullet.SCENE)
 	var bullet: BasicBullet = bullet_scene.instantiate()
-	var spawn_offset := Vector2(facing) * TileConfig.TILE_SIZE
+	var spawn_offset := Vector2(facing) * TileConfig.TILE_SIZE / 2
 	bullet.apply_data(id, team, global_position + spawn_offset, facing, bullet_speed, bullet_damage, bullet_size, bullet_resource)
 	get_tree().current_scene.add_child(bullet)
 

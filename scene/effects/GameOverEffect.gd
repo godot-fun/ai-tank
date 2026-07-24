@@ -22,7 +22,7 @@ var _buttons: VBoxContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	z_index = 200
+	z_index = 4096
 	await get_tree().process_frame
 	await play_defeat()
 	pass
