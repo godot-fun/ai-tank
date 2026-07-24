@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk47n4p01qsr5"
-path="res://.godot/imported/red_tank_7.png-dd9e54e6299d6132a7e5a6d5653b8605.ctex"
+uid="uid://bqw3qo5nvgv3w"
+path="res://.godot/imported/mini_boss_gray_tank_2.png-6c0c253672b06a2902ce07463f4df625.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/characters/red_tank_7.png"
-dest_files=["res://.godot/imported/red_tank_7.png-dd9e54e6299d6132a7e5a6d5653b8605.ctex"]
+source_file="res://image/characters/mini_boss_gray_tank_2.png"
+dest_files=["res://.godot/imported/mini_boss_gray_tank_2.png-6c0c253672b06a2902ce07463f4df625.ctex"]
 
 [params]
 
