@@ -4,6 +4,7 @@ enum Team {
 	PLAYER,
 	PARTNER,
 	ENEMY,
+	ENEMY_JEEP,
 	ELITE_ENEMY,
 	BOSS_ENEMY,
 }
@@ -246,7 +247,7 @@ static var only_fire_enemy: TankData = TankData.new(
 static var enemy_easy: TankData = TankData.new(
 	100,
 	Team.ENEMY,
-	Vector2i(2, 2), 
+	Vector2i.ONE * 2, 
 	DEFAULT_TANK_HP,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
@@ -261,12 +262,12 @@ static var enemy_easy: TankData = TankData.new(
 	SCRIPT_ENEMY_EASY
 )
 
-static var enemy_eagle: TankData = TankData.new(
+static var enemy_jeep: TankData = TankData.new(
 	101,
-	Team.ENEMY,
-	Vector2i(2, 2),
+	Team.ENEMY_JEEP,
+	Vector2i.ONE * 2, 
 	DEFAULT_TANK_HP,
-	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_ENEMY_TANK_SPEED * 2,
 	DEFAULT_BULLET_SPEED,
 	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
@@ -275,14 +276,14 @@ static var enemy_eagle: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/gray_tank_2.png",
+	"res://image/characters/jeep_1.png",
 	SCRIPT_ENEMY_EAGLE
 )
 
 static var elite_enemy_easy: TankData = TankData.new(
 	150,
 	Team.ELITE_ENEMY,
-	Vector2i(2, 2),
+	Vector2i.ONE * 2, 
 	DEFAULT_TANK_HP + 1,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
@@ -300,7 +301,7 @@ static var elite_enemy_easy: TankData = TankData.new(
 static var mini_boss_enemy_easy: TankData = TankData.new(
 	110,
 	Team.BOSS_ENEMY,
-	Vector2i(3, 3), 
+	Vector2i.ONE * 3, 
 	DEFAULT_TANK_HP + 10,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
@@ -318,7 +319,7 @@ static var mini_boss_enemy_easy: TankData = TankData.new(
 static var boss_enemy_easy: TankData = TankData.new(
 	120,
 	Team.BOSS_ENEMY,
-	Vector2i(4, 4), 
+	Vector2i.ONE * 4, 
 	DEFAULT_TANK_HP + 20,
 	DEFAULT_ENEMY_TANK_SPEED,
 	DEFAULT_BULLET_SPEED,
@@ -336,7 +337,7 @@ static var boss_enemy_easy: TankData = TankData.new(
 
 # ----------------------------------------------------------------------------------------------------------------------
 static var player_faction: Array[TankConfig.Team] = [TankConfig.Team.PLAYER, TankConfig.Team.PARTNER]
-static var enemy_faction: Array[TankConfig.Team] = [TankConfig.Team.ENEMY, TankConfig.Team.ELITE_ENEMY, TankConfig.Team.BOSS_ENEMY]
+static var enemy_faction: Array[TankConfig.Team] = [TankConfig.Team.ENEMY, TankConfig.Team.ENEMY_JEEP, TankConfig.Team.ELITE_ENEMY, TankConfig.Team.BOSS_ENEMY]
 
 
 static func is_same_faction(a: Team, b: Team) -> bool:
@@ -347,4 +348,3 @@ static func is_player_faction(team: Team) -> bool:
 
 static func is_enemy_faction(team: Team) -> bool:
 	return team in enemy_faction
-

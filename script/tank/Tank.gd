@@ -130,7 +130,7 @@ func is_alive() -> bool:
 	return hp > 0
 
 func is_enemy() -> bool:
-	return team == TankConfig.Team.ENEMY || team == TankConfig.Team.ELITE_ENEMY || team == TankConfig.Team.BOSS_ENEMY
+	return team == TankConfig.Team.ENEMY || team == TankConfig.Team.ENEMY_JEEP || team == TankConfig.Team.ELITE_ENEMY || team == TankConfig.Team.BOSS_ENEMY
 
 func is_alive_enemy() -> bool:
 	return is_enemy() && is_alive()
