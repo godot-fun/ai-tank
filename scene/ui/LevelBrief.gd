@@ -217,7 +217,7 @@ func get_buff_description(buff_type: int) -> String:
 			return "冻结全场敌人一段时间"
 		IBuff.BuffType.AIR_STRIKE:
 			return "呼叫空袭，对场上敌人造成伤害"
-		IBuff.BuffType.BASE_STEEL:
+		IBuff.BuffType.EAGLE_STEEL:
 			return "将基地周围砖墙临时变为钢墙"
 		_:
 			return ""

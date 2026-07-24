@@ -42,9 +42,9 @@ func _ready() -> void:
 	BuffHelper.create_buff(BuffConfig.air_strike_buff, Vector2i(25, 6))
 	BuffHelper.create_buff(BuffConfig.air_strike_buff, Vector2i(25, 8))
 	
-	BuffHelper.create_buff(BuffConfig.base_steel_buff, Vector2i(28, 4))
-	BuffHelper.create_buff(BuffConfig.base_steel_buff, Vector2i(28, 6))
-	BuffHelper.create_buff(BuffConfig.base_steel_buff, Vector2i(28, 8))
+	BuffHelper.create_buff(BuffConfig.eagle_steel_buff, Vector2i(28, 4))
+	BuffHelper.create_buff(BuffConfig.eagle_steel_buff, Vector2i(28, 6))
+	BuffHelper.create_buff(BuffConfig.eagle_steel_buff, Vector2i(28, 8))
 	
 	await ThreadUtils.async_sleep(3000)
 	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(10, 0))
