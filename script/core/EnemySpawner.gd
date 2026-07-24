@@ -188,9 +188,6 @@ func spawn_boss_enemy() -> void:
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
 	if tank == null:
 		return
-	var tank_resources := ["res://image/characters/red_tank_7.png", "res://image/characters/red_tank_8.png"]
-	var tank_resource: String = RandomUtils.random_ele(tank_resources)
-	tank.tank_resource = tank_resource
 	tank.scale_tank()
 	tank.hp = tank.hp + BattleProgress.level * 6
 	spawn_boss_enemy_seconds = 0
