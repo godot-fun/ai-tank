@@ -28,8 +28,28 @@ const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 1, 1, 1, 2, 2, 1
 									, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1
 									, 1, 1, 2, 3, 4]
 
-const MINI_BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [3, 8, 9, 13, 18, 19, 23, 28, 29, 33, 34]
-const BOSS_ENEMY_SPAWN_LEVEL: Array[int] = [4, 9, 14, 19, 24, 29, 34]
+static var MINI_BOSS_ENEMY_SPAWN_LEVEL: Dictionary[int, TankConfig.TankData] = {
+	3: TankConfig.mini_boss_enemy_easy_1,
+	8: TankConfig.mini_boss_enemy_easy_1,
+	9: TankConfig.mini_boss_enemy_easy_1,
+	13: TankConfig.mini_boss_enemy_easy_2,
+	18: TankConfig.mini_boss_enemy_easy_2,
+	19: TankConfig.mini_boss_enemy_easy_2,
+	23: TankConfig.mini_boss_enemy_easy_3,
+	28: TankConfig.mini_boss_enemy_easy_3,
+	29: TankConfig.mini_boss_enemy_easy_3,
+	33: TankConfig.mini_boss_enemy_easy_3,
+	34: TankConfig.mini_boss_enemy_easy_3,
+}
+static var BOSS_ENEMY_SPAWN_LEVEL: Dictionary[int, TankConfig.TankData] = {
+	4: TankConfig.boss_enemy_easy_1,
+	9: TankConfig.boss_enemy_easy_1,
+	14: TankConfig.boss_enemy_easy_1,
+	19: TankConfig.boss_enemy_easy_2,
+	24: TankConfig.boss_enemy_easy_2,
+	29: TankConfig.boss_enemy_easy_2,
+	34: TankConfig.boss_enemy_easy_2,
+}
 
 const ENEMY_WAVE_SPAWN_INTERVAL := 3.1
 const ENEMY_JEEP_WAVE_SPAWN_INTERVAL := 5.3
@@ -59,10 +79,10 @@ func setup(time_limit: float, _level: int) -> void:
 	elite_enemy_spawn_timer = 0.0
 	remaining_time = time_limit
 	
-	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if MINI_BOSS_ENEMY_SPAWN_LEVEL.has(level):
 		spawn_mini_boss_enemy_seconds = time_limit * 0.75
 		
-	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if BOSS_ENEMY_SPAWN_LEVEL.has(level):
 		spawn_boss_enemy_seconds = time_limit * 0.7
 
 
@@ -125,7 +145,7 @@ func spawn_enemy_wave() -> void:
 func spawn_enemy_jeep_wave() -> void:
 	if jeep_enemies_spawned_wave >= get_enemy_jeep_wave_count():
 		return
-	var buff_size := jeep_enemies_spawned_wave / 3
+	var buff_size := jeep_enemies_spawned_wave / 4
 	jeep_enemies_spawned_wave += 1
 	spawn_wave_tanks(TankConfig.enemy_jeep, buff_size)
 
@@ -133,7 +153,7 @@ func spawn_enemy_jeep_wave() -> void:
 func spawn_elite_enemy_wave() -> void:
 	if elite_enemies_spawned_wave >= get_elite_enemy_wave_count():
 		return
-	var buff_size := elite_enemies_spawned_wave / 3
+	var buff_size := elite_enemies_spawned_wave / 2
 	elite_enemies_spawned_wave += 1
 	spawn_wave_tanks(TankConfig.elite_enemy_easy, buff_size)
 
@@ -148,15 +168,12 @@ func spawn_wave_tanks(tank_data: TankConfig.TankData, buff_size: int) -> void:
 
 
 func spawn_mini_boss_enemy() -> void:
-	var tank_data: TankConfig.TankData = TankConfig.mini_boss_enemy_easy
+	var tank_data: TankConfig.TankData = MINI_BOSS_ENEMY_SPAWN_LEVEL[level]
 	var buff_size: int= BattleProgress.level / 4
 	var buffs := enemy_random_buff(buff_size)
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
 	if tank == null:
 		return
-	var tank_resources := ["res://image/characters/gray_tank_7.png", "res://image/characters/gray_tank_8.png", "res://image/characters/gray_tank_9.png"]
-	var tank_resource: String = RandomUtils.random_ele(tank_resources)
-	tank.tank_resource = tank_resource
 	tank.scale_tank()
 	tank.hp = tank.hp + BattleProgress.level * 5
 	spawn_mini_boss_enemy_seconds = 0
@@ -165,7 +182,7 @@ func spawn_mini_boss_enemy() -> void:
 	pass
 	
 func spawn_boss_enemy() -> void:
-	var tank_data: TankConfig.TankData = TankConfig.boss_enemy_easy
+	var tank_data: TankConfig.TankData = BOSS_ENEMY_SPAWN_LEVEL[level]
 	var buff_size: int= BattleProgress.level / 3
 	var buffs := enemy_random_buff(buff_size)
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
@@ -203,9 +220,9 @@ func get_total_enemy_wave_count() -> int:
 
 func get_total_enemies() -> int:
 	var total := get_total_enemy_wave_count() * spawn_grids.size()
-	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if MINI_BOSS_ENEMY_SPAWN_LEVEL.has(level):
 		total += 1
-	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if BOSS_ENEMY_SPAWN_LEVEL.has(level):
 		total += 1
 	return total
 

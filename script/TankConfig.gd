@@ -298,7 +298,7 @@ static var elite_enemy_easy: TankData = TankData.new(
 	SCRIPT_ENEMY_EASY
 )
 
-static var mini_boss_enemy_easy: TankData = TankData.new(
+static var mini_boss_enemy_easy_1: TankData = TankData.new(
 	110,
 	Team.BOSS_ENEMY,
 	Vector2i.ONE * 3, 
@@ -312,11 +312,47 @@ static var mini_boss_enemy_easy: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/gray_tank_7.png",
+	"res://image/characters/mini_boss_gray_tank_1.png",
 	SCRIPT_ENEMY_EASY
 )
 
-static var boss_enemy_easy: TankData = TankData.new(
+static var mini_boss_enemy_easy_2: TankData = TankData.new(
+	111,
+	Team.BOSS_ENEMY,
+	Vector2i.ONE * 3, 
+	DEFAULT_TANK_HP + 10,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	DEFAULT_BULLET_DAMAGE,
+	DEFAULT_BULLET_SIZE * 2,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.7,
+	"res://image/bullets/tank/gray/7.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/mini_boss_gray_tank_2.png",
+	SCRIPT_ENEMY_EASY
+)
+
+static var mini_boss_enemy_easy_3: TankData = TankData.new(
+	112,
+	Team.BOSS_ENEMY,
+	Vector2i.ONE * 3, 
+	DEFAULT_TANK_HP + 10,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	DEFAULT_BULLET_DAMAGE,
+	DEFAULT_BULLET_SIZE * 2,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.7,
+	"res://image/bullets/tank/gray/7.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/mini_boss_gray_tank_3.png",
+	SCRIPT_ENEMY_EASY
+)
+
+static var boss_enemy_easy_1: TankData = TankData.new(
 	120,
 	Team.BOSS_ENEMY,
 	Vector2i.ONE * 4, 
@@ -330,7 +366,25 @@ static var boss_enemy_easy: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/red_tank_7.png",
+	"res://image/characters/boss_red_tank_1.png",
+	SCRIPT_ENEMY_EASY
+)
+
+static var boss_enemy_easy_2: TankData = TankData.new(
+	121,
+	Team.BOSS_ENEMY,
+	Vector2i.ONE * 4, 
+	DEFAULT_TANK_HP + 20,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE * 3,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL * 0.6,
+	"res://image/bullets/tank/red/7.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/boss_red_tank_2.png",
 	SCRIPT_ENEMY_EASY
 )
 
