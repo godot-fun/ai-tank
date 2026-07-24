@@ -7,14 +7,20 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const ENEMY_WAVE: Array[int] = [2, 3, 3, 4, 5, 6, 7, 7, 8, 9, 
-								12, 13, 13, 14, 15, 16, 17, 17, 18, 19, 
-								22, 23, 23, 24, 25, 26, 27, 27, 28, 29, 
-								33, 33, 33, 34, 35]
+const ENEMY_WAVE: Array[int] = [2, 3, 3, 4, 5, 
+								4, 5, 5, 6, 7, 
+								6, 7, 7, 8, 9,
+								8, 9, 9, 10, 11, 
+								10, 11, 11, 12, 13, 
+								12, 13, 13, 14, 15, 
+								14, 15, 15, 16, 17]
 
-const ENEMY_JEEP_WAVE: Array[int] = [1, 1, 1, 2, 2, 2, 2, 2, 3, 3,
-									3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 
-									5, 5, 5, 6, 6, 6, 6, 6, 7, 7,  
+const ENEMY_JEEP_WAVE: Array[int] = [1, 1, 1, 2, 2, 
+									2, 2, 2, 3, 3,
+									3, 3, 3, 4, 4, 
+									4, 4, 4, 5, 5, 
+									5, 5, 5, 6, 6, 
+									6, 6, 6, 7, 7,  
 									7, 7, 7, 8, 8]
 
 const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 1, 1, 1, 2, 2, 1
@@ -38,8 +44,8 @@ var enemy_spawn_timer := 0.0
 var enemy_jeep_spawn_timer := 0.0
 var elite_enemy_spawn_timer := 0.0
 var remaining_time := 0.0
-var spawn_mini_boss_enemy_seconds := -100.0
-var spawn_boss_enemy_seconds := -100.0
+var spawn_mini_boss_enemy_seconds := 0.0
+var spawn_boss_enemy_seconds := 0.0
 
 
 func setup(time_limit: float, _level: int) -> void:
@@ -53,10 +59,10 @@ func setup(time_limit: float, _level: int) -> void:
 	elite_enemy_spawn_timer = 0.0
 	remaining_time = time_limit
 	
-	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) > 0:
 		spawn_mini_boss_enemy_seconds = time_limit * 0.75
 		
-	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
+	if BOSS_ENEMY_SPAWN_LEVEL.find(level) > 0:
 		spawn_boss_enemy_seconds = time_limit * 0.7
 
 
