@@ -126,17 +126,12 @@ static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 	if tank.team != TankConfig.Team.PLAYER && tank.team != TankConfig.Team.ENEMY && tank.team != TankConfig.Team.ENEMY_JEEP:
 		return
-	var bullet_resource_template := "res://image/bullets/tank/{}/{}.png"
-	var tank_resource_template := "res://image/characters/{}_tank_{}.png"
 	var appearance: TankConfig.Appearance = TankConfig.Appearance.blue
 	match tank.team:
 		TankConfig.Team.PLAYER:
 			appearance = TankConfig.Appearance.blue
-		TankConfig.Team.ENEMY:
+		TankConfig.Team.ENEMY, TankConfig.Team.ENEMY_JEEP:
 			appearance = TankConfig.Appearance.gray
-		TankConfig.Team.ENEMY_JEEP:
-			appearance = TankConfig.Appearance.gray
-			tank_resource_template = "res://image/characters/jeep_{}.png"
 		TankConfig.Team.ELITE_ENEMY:
 			appearance = TankConfig.Appearance.red
 	var buff_container := get_buff_container(tank.id)
@@ -151,13 +146,15 @@ static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 	
 	var tank_color: String = TankConfig.Appearance.keys()[appearance].to_lower()
 	
+	var bullet_resource_template := "res://image/bullets/tank/{}/{}.png"
+	var tank_resource_template := "res://image/characters/{}_tank_{}.png"
 	var bullet_id := clampi(bullet_buff_count, 1, 6)
 	var tank_id := clampi(tank_buff_count, 1, 6)
 	
 	var bullet_resource := StringUtils.format(bullet_resource_template, tank_color, bullet_id)
 	var tank_resource := StringUtils.format(tank_resource_template, tank_color,    tank_id)
-	if tank.bullet_resource == bullet_resource && tank.tank_resource == tank_resource:
-		return
+	if tank.team == TankConfig.Team.ENEMY_JEEP:
+		tank_resource = StringUtils.format("res://image/characters/jeep_{}.png", RandomUtils.random_int_range(1, 7))
 	tank.bullet_resource = bullet_resource
 	tank.tank_resource = tank_resource
 	tank.scale_tank()
