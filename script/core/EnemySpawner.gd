@@ -59,10 +59,10 @@ func setup(time_limit: float, _level: int) -> void:
 	elite_enemy_spawn_timer = 0.0
 	remaining_time = time_limit
 	
-	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) > 0:
+	if MINI_BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
 		spawn_mini_boss_enemy_seconds = time_limit * 0.75
 		
-	if BOSS_ENEMY_SPAWN_LEVEL.find(level) > 0:
+	if BOSS_ENEMY_SPAWN_LEVEL.find(level) >= 0:
 		spawn_boss_enemy_seconds = time_limit * 0.7
 
 
@@ -73,11 +73,11 @@ func spawn_initial_wave() -> void:
 func update(delta: float, time_remaining: float) -> void:
 	remaining_time = time_remaining
 
-	if time_remaining <= spawn_mini_boss_enemy_seconds:
+	if time_remaining < spawn_mini_boss_enemy_seconds:
 		spawn_mini_boss_enemy()
 		return
 	
-	if time_remaining <= spawn_boss_enemy_seconds:
+	if time_remaining < spawn_boss_enemy_seconds:
 		spawn_boss_enemy()
 		return
 
