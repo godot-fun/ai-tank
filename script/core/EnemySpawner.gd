@@ -42,13 +42,13 @@ static var MINI_BOSS_ENEMY_SPAWN_LEVEL: Dictionary[int, TankConfig.TankData] = {
 	34: TankConfig.mini_boss_enemy_easy_3,
 }
 static var BOSS_ENEMY_SPAWN_LEVEL: Dictionary[int, TankConfig.TankData] = {
-	4: TankConfig.boss_enemy_easy_1,
-	9: TankConfig.boss_enemy_easy_1,
-	14: TankConfig.boss_enemy_easy_1,
-	19: TankConfig.boss_enemy_easy_2,
-	24: TankConfig.boss_enemy_easy_2,
-	29: TankConfig.boss_enemy_easy_2,
-	34: TankConfig.boss_enemy_easy_2,
+	4: TankConfig.boss_enemy_easy,
+	9: TankConfig.boss_enemy_normal,
+	14: TankConfig.boss_enemy_easy,
+	19: TankConfig.boss_enemy_enhance_2,
+	24: TankConfig.boss_enemy_easy,
+	29: TankConfig.boss_enemy_normal,
+	34: TankConfig.boss_enemy_enhance_4,
 }
 
 const ENEMY_WAVE_SPAWN_INTERVAL := 3.1
