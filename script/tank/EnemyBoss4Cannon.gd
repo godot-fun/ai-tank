@@ -1,5 +1,5 @@
 ﻿extends Tank
-class_name Enemy4Boss
+class_name EnemyBoss4Cannon
 
 func fire() -> void:
 	if can_fire():

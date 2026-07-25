@@ -45,10 +45,10 @@ static var BOSS_ENEMY_SPAWN_LEVEL: Dictionary[int, TankConfig.TankData] = {
 	4: TankConfig.boss_enemy_easy,
 	9: TankConfig.boss_enemy_normal,
 	14: TankConfig.boss_enemy_easy,
-	19: TankConfig.boss_enemy_enhance_2,
+	19: TankConfig.enemy_boss_2_cannon,
 	24: TankConfig.boss_enemy_easy,
 	29: TankConfig.boss_enemy_normal,
-	34: TankConfig.boss_enemy_enhance_4,
+	34: TankConfig.enemy_boss_4_cannon,
 }
 
 const ENEMY_WAVE_SPAWN_INTERVAL := 3.1

@@ -30,6 +30,8 @@ const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
 const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
 const SCRIPT_ENEMY_EAGLE := "res://script/tank/EnemyEagle.gd"
+const SCRIPT_ENEMY_BOSS_2_CANNON := "res://script/tank/EnemyBoss2Cannon.gd"
+const SCRIPT_ENEMY_BOSS_4_CANNON := "res://script/tank/EnemyBoss4Cannon.gd"
 
 static var tank_datas: Dictionary[int, TankData] = {}
 
@@ -377,13 +379,31 @@ static var boss_enemy_normal: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/boss_red_tank_2.png",
+	"res://image/characters/boss_red_2_cannon.png",
 	SCRIPT_ENEMY_EASY
 )
 
 
-static var boss_enemy_enhance_2: TankData = TankData.new(
-	121,
+static var enemy_boss_2_cannon: TankData = TankData.new(
+	130,
+	Team.BOSS_ENEMY,
+	Vector2i.ONE * 4, 
+	DEFAULT_TANK_HP + 20,
+	DEFAULT_ENEMY_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	DEFAULT_BULLET_DAMAGE + BulletSizeBuff.BULLET_DAMAGE_EFFECT_VALUE * 4,
+	DEFAULT_BULLET_SIZE + BulletSizeBuff.BULLET_SIZE_EFFECT_VALUE * 4,
+	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL - BulletFireIntervalBuff.EFFECT_VALUE * 4,
+	"res://image/bullets/tank/boss/boss_1.png",
+	null,
+	AudioConfig.TANK_DEATH_ENEMY,
+	EFFECT_TANK_ENEMY_EXPLOSION,
+	"res://image/characters/boss_purple_4_cannon.png",
+	SCRIPT_ENEMY_BOSS_2_CANNON
+)
+
+static var enemy_boss_4_cannon: TankData = TankData.new(
+	131,
 	Team.BOSS_ENEMY,
 	Vector2i.ONE * 4, 
 	DEFAULT_TANK_HP + 20,
@@ -397,25 +417,7 @@ static var boss_enemy_enhance_2: TankData = TankData.new(
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/boss_red_tank_2.png",
-	SCRIPT_ENEMY_EASY
-)
-
-static var boss_enemy_enhance_4: TankData = TankData.new(
-	121,
-	Team.BOSS_ENEMY,
-	Vector2i.ONE * 4, 
-	DEFAULT_TANK_HP + 20,
-	DEFAULT_ENEMY_TANK_SPEED,
-	DEFAULT_BULLET_SPEED,
-	DEFAULT_BULLET_DAMAGE + BulletSizeBuff.BULLET_DAMAGE_EFFECT_VALUE * 4,
-	DEFAULT_BULLET_SIZE + BulletSizeBuff.BULLET_SIZE_EFFECT_VALUE * 4,
-	DEFAULT_ENEMY_BULLET_FIRE_INTERVAL - BulletFireIntervalBuff.EFFECT_VALUE * 4,
-	"res://image/bullets/tank/boss/boss_1.png",
-	null,
-	AudioConfig.TANK_DEATH_ENEMY,
-	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/boss_red_tank_2.png",
-	SCRIPT_ENEMY_EASY
+	SCRIPT_ENEMY_BOSS_4_CANNON
 )
 
 # ----------------------------------------------------------------------------------------------------------------------
