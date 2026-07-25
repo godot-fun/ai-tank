@@ -132,7 +132,7 @@ def collect_images(
     globber = target.rglob if recursive else target.glob
     patterns = {pattern}
     if pattern == "*.png":
-        patterns.update("*.jpg", "*.jpeg", "*.webp", "*.bmp")
+        patterns.update(["*.jpg", "*.jpeg", "*.webp", "*.bmp"])
 
     images: list[Path] = []
     seen: set[Path] = set()
