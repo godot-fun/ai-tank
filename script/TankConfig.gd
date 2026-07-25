@@ -398,7 +398,7 @@ static var enemy_boss_2_cannon: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/boss_purple_4_cannon.png",
+	"res://image/characters/boss_purple_2_cannon.png",
 	SCRIPT_ENEMY_BOSS_2_CANNON
 )
 
@@ -416,7 +416,7 @@ static var enemy_boss_4_cannon: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/boss_red_tank_2.png",
+	"res://image/characters/boss_purple_4_cannon.png",
 	SCRIPT_ENEMY_BOSS_4_CANNON
 )
 

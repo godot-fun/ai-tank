@@ -1,4 +1,4 @@
-﻿extends Tank
+﻿extends EnemyEasy
 class_name EnemyBoss4Cannon
 
 func fire() -> void:

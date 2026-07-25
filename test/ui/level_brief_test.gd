@@ -1,8 +1,8 @@
 extends Node2D
 
 const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
-const MIN_BUFF_COUNT := 0
-const MAX_BUFF_COUNT := 8
+const MIN_BUFF_COUNT := 12
+const MAX_BUFF_COUNT := 24
 
 ## 会进入 buff_map 的可叠加 buff（即时类 buff 不计入）
 const STACKABLE_BUFF_TYPES: Array[int] = [
@@ -19,7 +19,7 @@ const STACKABLE_BUFF_TYPES: Array[int] = [
 func _ready() -> void:
 	GameManager.init()
 	# 解锁全部友军坦克，便于查看完整列表
-	BattleProgress.level = 23
+	BattleProgress.level = 19
 
 	var tanks: Array[TankConfig.TankData] = [
 		TankConfig.my_tank,
