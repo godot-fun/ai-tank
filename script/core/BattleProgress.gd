@@ -80,7 +80,8 @@ static func start_level() -> void:
 	if level >= 23:
 		TankHelper.create_tank(TankConfig.partner_tank_6, Eagle.partner_tank_start_grid_pos)
 	pass
-	
+
+
 static func end_level() -> void:
 	level_ended = true
 	level += 1
@@ -90,3 +91,7 @@ static func end_level() -> void:
 static func fail_level() -> void:
 	level_ended = true
 	pass
+
+
+static func is_game_cleared() -> bool:
+	return level >= LevelConfig.MAP_DATA.size()
