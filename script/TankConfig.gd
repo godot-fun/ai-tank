@@ -131,7 +131,7 @@ static var partner_tank_1: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_1.png",
-	"res://script/tank/PartnerTank.gd",
+	"res://script/tank/PartnerSmartTank.gd",
 )
 
 static var partner_tank_2: TankData = TankData.new(
@@ -149,7 +149,7 @@ static var partner_tank_2: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_2.png",
-	"res://script/tank/PartnerTank.gd",
+	"res://script/tank/PartnerSmartTank.gd",
 )
 
 static var partner_tank_3: TankData = TankData.new(

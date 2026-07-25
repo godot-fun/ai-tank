@@ -7,11 +7,8 @@ func _ready() -> void:
 	
 	TankHelper.create_tank(TankConfig.my_tank, Vector2i(1, 10))
 	TankHelper.create_tank(TankConfig.partner_tank_1, Vector2i(28, 10))
-	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(0, 0))
-	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(6, 0))
-	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(9, 0))
 	TankHelper.create_tank(TankConfig.enemy_easy, Vector2i(12, 0))
-	TankHelper.create_tank(TankConfig.mini_boss_enemy_easy, Vector2i(18 , 0))
+	TankHelper.create_tank(TankConfig.mini_boss_enemy_easy_1, Vector2i(18 , 0))
 	for i in 32:
 		TileHelper.create_tile(TileConfig.brick_wall, Vector2i(i, 8))
 	for i in 32:
@@ -26,6 +23,8 @@ func _ready() -> void:
 	for i in range(20, 26):
 		for j in range(14, 17):
 			TileHelper.create_tile(TileConfig.ice, Vector2i(i, j))
+	
+	BuffHelper.create_buff(BuffConfig.bullet_size_buff, Vector2i(6, 16))
 	pass # Replace with function body.
 
 
