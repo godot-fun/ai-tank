@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tsrr83oa2jge"
-path="res://.godot/imported/7.png-6b178c5ed9c50cafd3f1c3c35c4da76c.ctex"
+uid="uid://7evwe387ljb5"
+path="res://.godot/imported/boss_1.png-96d39d49b67978dd8616da8f61b4d1ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/bullets/tank/red/7.png"
-dest_files=["res://.godot/imported/7.png-6b178c5ed9c50cafd3f1c3c35c4da76c.ctex"]
+source_file="res://image/bullets/tank/boss/boss_1.png"
+dest_files=["res://.godot/imported/boss_1.png-96d39d49b67978dd8616da8f61b4d1ce.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kt2wjk1yt5rp"
-path="res://.godot/imported/7.png-b98502e4f796a7caa259a34416d4762d.ctex"
+uid="uid://s4cy64kggfg2"
+path="res://.godot/imported/mini_boss_1.png-4e6dd935d2d7a97c53713814dca1df0a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/bullets/tank/gray/7.png"
-dest_files=["res://.godot/imported/7.png-b98502e4f796a7caa259a34416d4762d.ctex"]
+source_file="res://image/bullets/tank/boss/mini_boss_1.png"
+dest_files=["res://.godot/imported/mini_boss_1.png-4e6dd935d2d7a97c53713814dca1df0a.ctex"]
 
 [params]
 
