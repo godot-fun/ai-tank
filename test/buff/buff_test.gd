@@ -47,7 +47,7 @@ func _ready() -> void:
 	BuffHelper.create_buff(BuffConfig.eagle_steel_buff, Vector2i(28, 8))
 	
 	await ThreadUtils.async_sleep(3000)
-	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(10, 0))
+	TankHelper.create_tank(TankConfig.enemy_boss_2_cannon, Vector2i(10, 0))
 	await ThreadUtils.async_sleep(3000)
 	TankHelper.create_tank(TankConfig.elite_enemy_easy, Vector2i(15, 0))
 	await ThreadUtils.async_sleep(3000)
