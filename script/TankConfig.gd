@@ -9,13 +9,6 @@ enum Team {
 	BOSS_ENEMY,
 }
 
-enum Appearance {
-	blue,
-	green,
-	gray,
-	red
-}
-
 
 const DEFAULT_TANK_SPEED := 280.0
 const DEFAULT_ENEMY_TANK_SPEED := 300.0

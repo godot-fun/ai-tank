@@ -122,18 +122,24 @@ static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
+enum Appearance {
+	blue,
+	green,
+	gray,
+	red
+}
 
 static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 	if tank.team != TankConfig.Team.PLAYER && tank.team != TankConfig.Team.ENEMY && tank.team != TankConfig.Team.ENEMY_JEEP:
 		return
-	var appearance: TankConfig.Appearance = TankConfig.Appearance.blue
+	var appearance: Appearance = Appearance.blue
 	match tank.team:
 		TankConfig.Team.PLAYER:
-			appearance = TankConfig.Appearance.blue
+			appearance = Appearance.blue
 		TankConfig.Team.ENEMY, TankConfig.Team.ENEMY_JEEP:
-			appearance = TankConfig.Appearance.gray
+			appearance = Appearance.gray
 		TankConfig.Team.ELITE_ENEMY:
-			appearance = TankConfig.Appearance.red
+			appearance = Appearance.red
 	var buff_container := get_buff_container(tank.id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
@@ -144,7 +150,7 @@ static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_HP)
 	
-	var tank_color: String = TankConfig.Appearance.keys()[appearance].to_lower()
+	var tank_color: String = Appearance.keys()[appearance].to_lower()
 	
 	var bullet_resource_template := "res://image/bullets/tank/{}/{}.png"
 	var tank_resource_template := "res://image/characters/{}_tank_{}.png"
