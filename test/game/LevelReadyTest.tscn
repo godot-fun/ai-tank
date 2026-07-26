@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://d3al5dj2qhng6" path="res://test/game/level_ready_test.gd" id="1_level_ready_test"]
+
+[node name="LevelReadyTest" type="Node2D"]
+script = ExtResource("1_level_ready_test")

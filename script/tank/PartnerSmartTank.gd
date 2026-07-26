@@ -48,17 +48,17 @@ func pick_move_direction() -> Vector2i:
 	return go_to(target_grid)
 
 
-## 传入目标格子：A* 算整条路径，沿首段直线连续走完再转弯。
+## 传入目标格子：A* 算整条路径，沿首段直线连续走完再转弯。无路则不动（不贪心挤窄缝）。
 func go_to(target_grid: Vector2i) -> Vector2i:
 	var path := PathFinderHelper.find_path(grid_pos, target_grid, grid_size, self)
 	if path.size() < 2:
-		return pick_direction_toward(target_grid)
+		return Vector2i.ZERO
 
 	var direction := path[1] - path[0]
 	if absi(direction.x) + absi(direction.y) != 1:
-		return pick_direction_toward(target_grid)
+		return Vector2i.ZERO
 	if TankHelper.is_move_blocked(path[1], grid_size, self):
-		return pick_random_not_blocked_direction()
+		return Vector2i.ZERO
 
 	pending_steps = 1
 	while pending_steps + 1 < path.size():

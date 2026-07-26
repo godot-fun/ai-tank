@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://cb3ya0m5mhk8q"]
 
-[ext_resource type="Script" uid="uid://do4joiemsulhq" path="res://scene/Main.gd" id="1_main"]
-
 [node name="Main" type="Control" unique_id=264583349]
 layout_mode = 3
 anchors_preset = 15
@@ -9,7 +7,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_main")
 
 [node name="Background" type="ColorRect" parent="." unique_id=503554219]
 layout_mode = 1
@@ -30,7 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 expand = true
 
-[node name="EnterPrompt" type="Label" parent="."]
+[node name="EnterPrompt" type="Label" parent="." unique_id=1466322359]
 visible = false
 layout_mode = 1
 anchors_preset = 7
@@ -43,7 +40,7 @@ offset_top = -120.0
 offset_right = 200.0
 offset_bottom = -48.0
 grow_horizontal = 2
-mouse_filter = 2
+grow_vertical = 0
 theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
 theme_override_font_sizes/font_size = 36
 text = "点击进入"

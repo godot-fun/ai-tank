@@ -8,7 +8,7 @@ enum FailReason {
 
 const SCENE := "res://scene/effects/GameOverEffect.tscn"
 const HOME_SCENE_PATH := "res://scene/Home.tscn"
-const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
+const LEVEL_READY_SCENE_PATH := "res://scene/game/LevelReady.tscn"
 const BANNER_DURATION := 2.0
 const DROP_DURATION := 0.7
 const DROP_START_OFFSET := 200.0
@@ -129,7 +129,7 @@ func _on_retry_pressed() -> void:
 	_buttons.visible = false
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	BuffManager.remove_current_level_buffs()
-	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
+	await SceneHelper.async_change_scene_to_file(LEVEL_READY_SCENE_PATH)
 	pass
 
 

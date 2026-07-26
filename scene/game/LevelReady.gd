@@ -1,6 +1,7 @@
 extends Control
 
-const BATTLE_SCENE_PATH := "res://scene/map/BattleMap.tscn"
+const BATTLE_SCENE_PATH := "res://scene/game/BattleMap.tscn"
+const COUNTDOWN_SECONDS := 5
 const TANK_ICON_SIZE := 72.0
 const BUFF_ICON_SIZE := 48.0
 const KILL_COL_WIDTH := 140.0
@@ -21,13 +22,15 @@ const DISPLAY_BUFF_TYPES: Array[int] = [
 @onready var tank_stats: VBoxContainer = $CenterContainer/VBox/TankStats
 @onready var tap_prompt: Label = $TapPrompt
 
+var transitioning := false
+
 
 func _ready() -> void:
-	set_process_input(false)
+	set_process_input(true)
 	level_label.text = "第 %d 关" % (BattleProgress.level + 1)
 	populate_tank_stats()
-	show_tap_prompt()
 	Audios.play_sfx(AudioConfig.STAGE_START)
+	start_countdown()
 	pass
 
 
@@ -41,7 +44,7 @@ func populate_tank_stats() -> void:
 	if !show_stats:
 		return
 	tank_stats.add_child(make_header_row())
-	for tank_data: TankConfig.TankData in get_brief_tanks():
+	for tank_data: TankConfig.TankData in get_ready_tanks():
 		tank_stats.add_child(make_tank_row(tank_data))
 	pass
 
@@ -49,7 +52,7 @@ func populate_tank_stats() -> void:
 func should_show_stats() -> bool:
 	if not BuffManager.enemy_kill_counts.is_empty():
 		return true
-	for tank_data: TankConfig.TankData in get_brief_tanks():
+	for tank_data: TankConfig.TankData in get_ready_tanks():
 		if !BuffManager.buff_map.has(tank_data.id):
 			continue
 		if BuffManager.buff_map[tank_data.id].buffs.size() > 0:
@@ -57,7 +60,7 @@ func should_show_stats() -> bool:
 	return false
 
 
-func get_brief_tanks() -> Array[TankConfig.TankData]:
+func get_ready_tanks() -> Array[TankConfig.TankData]:
 	var tanks: Array[TankConfig.TankData] = [
 		TankConfig.my_tank,
 		TankConfig.partner_tank_1,
@@ -223,19 +226,24 @@ func get_buff_description(buff_type: int) -> String:
 			return ""
 
 
-func show_tap_prompt() -> void:
-	tap_prompt.modulate.a = 0.0
+func start_countdown() -> void:
 	tap_prompt.visible = true
-
-	var fade_tween := create_tween()
-	fade_tween.tween_property(tap_prompt, "modulate:a", 1.0, 0.5)
-	await fade_tween.finished
-
-	set_process_input(true)
-
-	var pulse_tween := create_tween().set_loops()
-	pulse_tween.tween_property(tap_prompt, "modulate:a", 0.4, 0.8)
-	pulse_tween.tween_property(tap_prompt, "modulate:a", 1.0, 0.8)
+	for remaining: int in range(COUNTDOWN_SECONDS, 0, -1):
+		if transitioning:
+			return
+		tap_prompt.text = "READY %d" % remaining
+		tap_prompt.modulate.a = 1.0
+		var pulse_tween := create_tween()
+		pulse_tween.tween_property(tap_prompt, "modulate:a", 0.45, 0.9)
+		await get_tree().create_timer(1.0).timeout
+	if transitioning:
+		return
+	tap_prompt.text = "GO!"
+	tap_prompt.modulate.a = 1.0
+	await get_tree().create_timer(0.6).timeout
+	if transitioning:
+		return
+	go_to_battle()
 	pass
 
 
@@ -249,5 +257,14 @@ func _input(event: InputEvent) -> void:
 
 func on_screen_tapped() -> void:
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
+	go_to_battle()
+	pass
+
+
+func go_to_battle() -> void:
+	if transitioning:
+		return
+	transitioning = true
+	set_process_input(false)
 	await SceneHelper.async_change_scene_to_file(BATTLE_SCENE_PATH)
 	pass

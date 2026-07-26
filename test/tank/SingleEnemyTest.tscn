@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dx5la7l1j5giq"]
 
-[ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/map/AssistMap.tscn" id="1_gcpdx"]
+[ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/game/AssistMap.tscn" id="1_gcpdx"]
 [ext_resource type="Script" uid="uid://haun04xmv7kw" path="res://test/tank/single_enemy_test.gd" id="1_noak4"]
 
 [node name="SigngleEnemy" type="Node2D" unique_id=1597659567]

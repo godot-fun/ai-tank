@@ -81,7 +81,7 @@ func on_start_pressed() -> void:
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	GameManager.init()
 	Audio.stop_voice_fade()
-	await SceneHelper.async_change_scene_to_file("res://scene/ui/LevelBrief.tscn")
+	await SceneHelper.async_change_scene_to_file("res://scene/game/LevelReady.tscn")
 	pass
 
 

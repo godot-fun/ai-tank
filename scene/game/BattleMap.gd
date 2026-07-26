@@ -1,6 +1,6 @@
 extends Node2D
 
-const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
+const LEVEL_READY_SCENE_PATH := "res://scene/game/LevelReady.tscn"
 const ENDING_SCENE_PATH := "res://scene/Ending.tscn"
 const HOME_SCENE_PATH := "res://scene/Home.tscn"
 const STAGE_CLEAR_EFFECT_SCENE := "res://scene/effects/StageClearEffect.tscn"
@@ -88,7 +88,7 @@ func end_level(fail_reason = null) -> void:
 		if BattleProgress.is_game_cleared():
 			await SceneHelper.async_change_scene_to_file(ENDING_SCENE_PATH)
 		else:
-			await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
+			await SceneHelper.async_change_scene_to_file(LEVEL_READY_SCENE_PATH)
 	else:
 		BattleProgress.fail_level()
 		Audios.play_sfx(AudioConfig.GAME_OVER)

@@ -1,6 +1,6 @@
 extends Node2D
 
-const LEVEL_BRIEF_SCENE_PATH := "res://scene/ui/LevelBrief.tscn"
+const LEVEL_READY_SCENE_PATH := "res://scene/game/LevelReady.tscn"
 const MIN_BUFF_COUNT := 12
 const MAX_BUFF_COUNT := 24
 
@@ -34,7 +34,7 @@ func _ready() -> void:
 		BuffManager.enemy_kill_counts[tank_data.id] = randi_range(0, 20)
 		seed_random_buffs(tank_data.id)
 
-	await SceneHelper.async_change_scene_to_file(LEVEL_BRIEF_SCENE_PATH)
+	await SceneHelper.async_change_scene_to_file(LEVEL_READY_SCENE_PATH)
 	pass
 
 

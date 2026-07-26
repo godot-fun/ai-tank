@@ -2,6 +2,7 @@ class_name PathFinderHelper
 
 ## 基于 Godot 内置 AStarGrid2D 的格子寻路。
 ## from / to 为坦克左上角格子；返回路径含起点，相邻点为四方向一步。
+## 每个 A* 点按完整 tank_grid_size 占地判定（默认 2×2），墙缝只有 1 格宽时不可走。
 
 
 static func find_path(
@@ -44,6 +45,7 @@ static func find_path(
 	return id_path
 
 
+## cell 为左上角：任一占地格有挡坦克的地块即不可走（故 1 格宽通道对 2×2 坦克为 solid）。
 static func is_solid(
 	cell: Vector2i,
 	tank_grid_size: Vector2i,
@@ -54,10 +56,20 @@ static func is_solid(
 		return true
 	if TileHelper.is_area_blocked_for_tank(cell, tank_grid_size):
 		return true
-	# 目标格允许落在敌方/友方坦克上，否则无法朝目标规划路径
-	if cell == goal:
+	# 与目标占地重叠时忽略坦克碰撞，否则 2×2 追 2×2 时四邻都会重叠导致无路
+	if footprints_overlap(cell, tank_grid_size, goal, tank_grid_size):
 		return false
 	return TankHelper.is_area_blocked_by_tank(cell, tank_grid_size, exclude)
+
+
+static func footprints_overlap(
+	a: Vector2i,
+	a_size: Vector2i,
+	b: Vector2i,
+	b_size: Vector2i,
+) -> bool:
+	return a.x < b.x + b_size.x and a.x + a_size.x > b.x \
+		and a.y < b.y + b_size.y and a.y + a_size.y > b.y
 
 
 static func resolve_goal(astar: AStarGrid2D, to: Vector2i, region_size: Vector2i) -> Vector2i:

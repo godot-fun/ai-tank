@@ -1,6 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="Script" path="res://test/ui/level_brief_test.gd" id="1_level_brief_test"]
-
-[node name="LevelBriefTest" type="Node2D"]
-script = ExtResource("1_level_brief_test")
