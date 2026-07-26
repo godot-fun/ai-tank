@@ -1,13 +1,9 @@
 extends PartnerTank
 class_name PartnerSmartTank
 
-## 使用 AStarGrid2D 格子寻路跟随目标，替代 PartnerTank 的贪心朝向。
+## 更大范围找 buff；A* 一次后沿直线连走多步，减少重算。
 const BUFF_SEEK_RANGE_SMART := 28
-const MAX_STRAIGHT_STEPS := 4
 
-var path: Array[Vector2i] = []
-var path_index := 0
-var path_target := Vector2i.ZERO
 var pending_steps := 1
 
 
@@ -32,83 +28,45 @@ func physics_update(delta: float) -> void:
 
 
 func pick_move_direction() -> Vector2i:
-	var target_grid := resolve_target_grid()
-	if target_grid == Vector2i.ZERO:
-		clear_path()
-		return Vector2i.ZERO
+	var target_grid := Vector2i.ZERO
 
-	if not ensure_path(target_grid):
-		return pick_direction_toward(target_grid)
-
-	var next_cell := path[path_index]
-	var direction := next_cell - grid_pos
-	if absi(direction.x) + absi(direction.y) != 1:
-		clear_path()
-		return pick_direction_toward(target_grid)
-
-	if TankHelper.is_move_blocked(next_cell, grid_size, self):
-		clear_path()
-		return pick_random_not_blocked_direction()
-
-	pending_steps = count_straight_steps(direction)
-	path_index += pending_steps
-	return direction
-
-
-func resolve_target_grid() -> Vector2i:
 	var nearby_buff := BuffHelper.find_nearest_obtainable_buff(self, BUFF_SEEK_RANGE_SMART)
 	if nearby_buff != null:
-		return nearby_buff.grid_pos
-
-	var enemy := TankHelper.find_nearest_enemy(self)
-	if enemy != null:
-		return enemy.grid_pos
-
-	var leader := TankHelper.find_player()
-	if leader != null and leader != self:
-		return leader.grid_pos
-
-	return Vector2i.ZERO
-
-
-func ensure_path(target_grid: Vector2i) -> bool:
-	if path.is_empty() or path_target != target_grid:
-		rebuild_path(target_grid)
-	elif path_index > 0 and path[path_index - 1] != grid_pos:
-		var found := path.find(grid_pos)
-		if found >= 0:
-			path_index = found + 1
+		target_grid = nearby_buff.grid_pos
+	else:
+		var enemy := TankHelper.find_nearest_enemy(self)
+		if enemy != null:
+			target_grid = enemy.grid_pos
 		else:
-			rebuild_path(target_grid)
+			var leader := TankHelper.find_player()
+			if leader != null and leader != self:
+				target_grid = leader.grid_pos
 
-	return path_index < path.size()
+	if target_grid == Vector2i.ZERO:
+		return Vector2i.ZERO
 
-
-func rebuild_path(target_grid: Vector2i) -> void:
-	path = PathFinderHelper.find_path(grid_pos, target_grid, grid_size, self)
-	path_target = target_grid
-	path_index = 0
-	if not path.is_empty() and path[0] == grid_pos:
-		path_index = 1
-	pass
+	return go_to(target_grid)
 
 
-func clear_path() -> void:
-	path.clear()
-	path_index = 0
-	path_target = Vector2i.ZERO
-	pass
+## 传入目标格子：A* 算整条路径，沿首段直线连续走完再转弯。
+func go_to(target_grid: Vector2i) -> Vector2i:
+	var path := PathFinderHelper.find_path(grid_pos, target_grid, grid_size, self)
+	if path.size() < 2:
+		return pick_direction_toward(target_grid)
 
+	var direction := path[1] - path[0]
+	if absi(direction.x) + absi(direction.y) != 1:
+		return pick_direction_toward(target_grid)
+	if TankHelper.is_move_blocked(path[1], grid_size, self):
+		return pick_random_not_blocked_direction()
 
-func count_straight_steps(direction: Vector2i) -> int:
-	var steps := 1
-	var cursor := path_index
-	while steps < MAX_STRAIGHT_STEPS and cursor + 1 < path.size():
-		var step_dir := path[cursor + 1] - path[cursor]
-		if step_dir != direction:
+	pending_steps = 1
+	while pending_steps + 1 < path.size():
+		var next_cell := path[pending_steps + 1]
+		if next_cell - path[pending_steps] != direction:
 			break
-		if TankHelper.is_move_blocked(path[cursor + 1], grid_size, self):
+		if TankHelper.is_move_blocked(next_cell, grid_size, self):
 			break
-		steps += 1
-		cursor += 1
-	return steps
+		pending_steps += 1
+
+	return direction
