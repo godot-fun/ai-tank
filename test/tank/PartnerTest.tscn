@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cbasc2oebbhif"]
+
+[ext_resource type="Script" uid="uid://bqyybe5jpxpop" path="res://test/tank/partner_test.gd" id="1_214gx"]
+[ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/game/AssistMap.tscn" id="2_sq44b"]
+
+[node name="PartnerTest" type="Node2D" unique_id=980027308]
+script = ExtResource("1_214gx")
+
+[node name="AssistMap" parent="." unique_id=2094860258 instance=ExtResource("2_sq44b")]
