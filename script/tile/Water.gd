@@ -7,6 +7,7 @@ static var wave_material: ShaderMaterial
 
 
 func start() -> void:
+	z_index = -8
 	setup_wave_material()
 	pass
 
