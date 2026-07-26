@@ -54,38 +54,14 @@ func pick_move_direction() -> Vector2i:
 
 
 func fire() -> void:
-	if is_aiming_at_home():
+	if would_hit_home():
 		return
 	super.fire()
 
 
-## 朝向基地且直线上无阻挡时禁止开火。
-func is_aiming_at_home() -> bool:
-	if not is_facing_home():
-		return false
-
-	var home := Eagle.egale_first_grid_pos
-	var home_max := home + Vector2i.ONE
-
-	for ox in range(grid_size.x):
-		for oy in range(grid_size.y):
-			var cell := grid_pos + Vector2i(ox, oy) + facing
-			# 下一格仍在自身内，说明不是朝向前沿
-			if cell.x >= grid_pos.x and cell.x < grid_pos.x + grid_size.x \
-				and cell.y >= grid_pos.y and cell.y < grid_pos.y + grid_size.y:
-				continue
-
-			while TileHelper.is_cell_in_bounds(cell):
-				if cell.x >= home.x and cell.x <= home_max.x and cell.y >= home.y and cell.y <= home_max.y:
-					return not has_enemy_in_facing()
-
-				var tile := TileHelper.get_tile(cell)
-				if tile != null and tile.blocks_bullet():
-					return false
-
-				cell += facing
-
-	return false
+## 开火会打到基地（直面基地、无挡子弹地块、无敌方坦克）。
+func would_hit_home() -> bool:
+	return is_facing_home() and not has_blocking_tile_in_facing() and not has_enemy_in_facing()
 
 
 ## 是否直面基地。
@@ -105,6 +81,32 @@ func is_facing_home() -> bool:
 			return grid_pos.y > home_max.y and x_overlap
 		Vector2i.DOWN:
 			return self_max.y < home.y and x_overlap
+	return false
+
+
+## 朝向上是否有可阻挡子弹的地块。
+func has_blocking_tile_in_facing() -> bool:
+	var home := Eagle.egale_first_grid_pos
+	var home_max := home + Vector2i.ONE
+
+	for ox in range(grid_size.x):
+		for oy in range(grid_size.y):
+			var cell := grid_pos + Vector2i(ox, oy) + facing
+			# 下一格仍在自身内，说明不是朝向前沿
+			if cell.x >= grid_pos.x and cell.x < grid_pos.x + grid_size.x \
+				and cell.y >= grid_pos.y and cell.y < grid_pos.y + grid_size.y:
+				continue
+
+			while TileHelper.is_cell_in_bounds(cell):
+				if cell.x >= home.x and cell.x <= home_max.x and cell.y >= home.y and cell.y <= home_max.y:
+					break
+
+				var tile := TileHelper.get_tile(cell)
+				if tile != null and tile.blocks_bullet():
+					return true
+
+				cell += facing
+
 	return false
 
 
