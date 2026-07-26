@@ -199,7 +199,8 @@ func update_facing(direction: Vector2i) -> void:
 	sprite.rotation = Vector2(direction).angle() + PI / 2.0
 	pass
 
-func move(direction: Vector2i, ice_slides_left: int = -1) -> void:
+## extra_steps: 本步之后同方向还要连走几格；-1 表示未指定，落地后若在冰面则自动滑 ICE_SLIDE_TILES。
+func move(direction: Vector2i, extra_steps: int = -1) -> void:
 	update_facing(direction)
 
 	var target_grid := grid_pos + direction
@@ -212,16 +213,16 @@ func move(direction: Vector2i, ice_slides_left: int = -1) -> void:
 	var move_duration := TileConfig.TILE_SIZE / speed
 	var tween := create_tween()
 	tween.tween_property(self, "global_position", TileConfig.grid_to_world(grid_pos, grid_size), move_duration)
-	tween.finished.connect(on_move_finished.bind(ice_slides_left))
+	tween.finished.connect(on_move_finished.bind(extra_steps))
 	pass
 
 
-func on_move_finished(ice_slides_left: int) -> void:
+func on_move_finished(extra_steps: int) -> void:
 	moving = false
-	if ice_slides_left == -1 and TileHelper.is_area_on_ice(grid_pos, grid_size):
-		ice_slides_left = ICE_SLIDE_TILES
-	if ice_slides_left > 0:
-		move(facing, ice_slides_left - 1)
+	if extra_steps == -1 and TileHelper.is_area_on_ice(grid_pos, grid_size):
+		extra_steps = ICE_SLIDE_TILES
+	if extra_steps > 0:
+		move(facing, extra_steps - 1)
 		return
 	pass
 
