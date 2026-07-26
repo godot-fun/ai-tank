@@ -85,27 +85,51 @@ func is_facing_home() -> bool:
 
 
 ## 朝向上是否有可阻挡子弹的地块。
+## 先取朝向前沿，再一层一层向外推进。
+## 同层碰到基地直接 false（旁侧墙不算挡在基地前）；整层扫完仍有阻挡才 true。
 func has_blocking_tile_in_facing() -> bool:
 	var home := Eagle.egale_first_grid_pos
 	var home_max := home + Vector2i.ONE
 
-	for ox in range(grid_size.x):
-		for oy in range(grid_size.y):
-			var cell := grid_pos + Vector2i(ox, oy) + facing
-			# 下一格仍在自身内，说明不是朝向前沿
-			if cell.x >= grid_pos.x and cell.x < grid_pos.x + grid_size.x \
-				and cell.y >= grid_pos.y and cell.y < grid_pos.y + grid_size.y:
+	var layer: Array[Vector2i] = []
+	match facing:
+		Vector2i.LEFT:
+			for oy in range(grid_size.y):
+				layer.append(Vector2i(grid_pos.x - 1, grid_pos.y + oy))
+		Vector2i.RIGHT:
+			for oy in range(grid_size.y):
+				layer.append(Vector2i(grid_pos.x + grid_size.x, grid_pos.y + oy))
+		Vector2i.UP:
+			for ox in range(grid_size.x):
+				layer.append(Vector2i(grid_pos.x + ox, grid_pos.y - 1))
+		Vector2i.DOWN:
+			for ox in range(grid_size.x):
+				layer.append(Vector2i(grid_pos.x + ox, grid_pos.y + grid_size.y))
+		_:
+			return false
+
+	while not layer.is_empty():
+		var next_layer: Array[Vector2i] = []
+		var has_blocker := false
+
+		for cell in layer:
+			if not TileHelper.is_cell_in_bounds(cell):
+				continue
+			# 同层碰到基地（即便旁边还有墙）→ 无保护
+			if cell.x >= home.x and cell.x <= home_max.x \
+					and cell.y >= home.y and cell.y <= home_max.y:
+				return false
+
+			var tile := TileHelper.get_tile(cell)
+			if tile != null and tile.blocks_bullet():
+				has_blocker = true
 				continue
 
-			while TileHelper.is_cell_in_bounds(cell):
-				if cell.x >= home.x and cell.x <= home_max.x and cell.y >= home.y and cell.y <= home_max.y:
-					break
+			next_layer.append(cell + facing)
 
-				var tile := TileHelper.get_tile(cell)
-				if tile != null and tile.blocks_bullet():
-					return true
-
-				cell += facing
+		if has_blocker:
+			return true
+		layer = next_layer
 
 	return false
 
