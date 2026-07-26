@@ -23,6 +23,8 @@ func physics_update(delta: float) -> void:
 				move(direction)
 			else:
 				move(direction, pending_steps - 1)
+		else:
+			move(pick_random_not_blocked_direction(), RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
 		fire()
 	pass
 
