@@ -2,7 +2,7 @@ extends PartnerTank
 class_name PartnerSmartTank
 
 ## 使用 AStarGrid2D 格子寻路跟随目标，替代 PartnerTank 的贪心朝向。
-const BUFF_SEEK_RANGE_SMART := 18
+const BUFF_SEEK_RANGE_SMART := 28
 const MAX_STRAIGHT_STEPS := 4
 
 var path: Array[Vector2i] = []
