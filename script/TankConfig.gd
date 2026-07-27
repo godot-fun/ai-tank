@@ -379,7 +379,7 @@ static var boss_enemy_normal: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH_ENEMY,
 	EFFECT_TANK_ENEMY_EXPLOSION,
-	"res://image/characters/boss_red_2_cannon.png",
+	"res://image/characters/boss_red_2.png",
 	SCRIPT_ENEMY_EASY
 )
 
