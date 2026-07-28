@@ -59,7 +59,7 @@ func fire() -> void:
 	super.fire()
 
 
-## 开火会打到基地（直面基地、无挡子弹地块、无敌方坦克）。
+## 开火会打到基地（直面基地、基地前无挡子弹地块、基地前无敌方坦克）。
 func would_hit_home() -> bool:
 	return is_facing_home() and not has_blocking_tile_in_facing() and not has_enemy_in_facing()
 
@@ -134,8 +134,10 @@ func has_blocking_tile_in_facing() -> bool:
 	return false
 
 
-## 朝向上是否有敌方坦克。
+## 朝向上、且在基地之前是否有敌方坦克（可挡子弹；基地后的敌人不算）。
 func has_enemy_in_facing() -> bool:
+	var home := Eagle.egale_first_grid_pos
+	var home_max := home + Vector2i.ONE
 	var self_max := grid_pos + grid_size - Vector2i.ONE
 
 	for tank in TankHelper.tanks:
@@ -145,15 +147,19 @@ func has_enemy_in_facing() -> bool:
 		var t_max := tank.grid_pos + tank.grid_size - Vector2i.ONE
 		match facing:
 			Vector2i.LEFT:
-				if t_max.x < grid_pos.x and t_min.y <= self_max.y and t_max.y >= grid_pos.y:
+				if t_max.x < grid_pos.x and t_min.x > home_max.x \
+						and t_min.y <= self_max.y and t_max.y >= grid_pos.y:
 					return true
 			Vector2i.RIGHT:
-				if t_min.x > self_max.x and t_min.y <= self_max.y and t_max.y >= grid_pos.y:
+				if t_min.x > self_max.x and t_max.x < home.x \
+						and t_min.y <= self_max.y and t_max.y >= grid_pos.y:
 					return true
 			Vector2i.UP:
-				if t_max.y < grid_pos.y and t_min.x <= self_max.x and t_max.x >= grid_pos.x:
+				if t_max.y < grid_pos.y and t_min.y > home_max.y \
+						and t_min.x <= self_max.x and t_max.x >= grid_pos.x:
 					return true
 			Vector2i.DOWN:
-				if t_min.y > self_max.y and t_min.x <= self_max.x and t_max.x >= grid_pos.x:
+				if t_min.y > self_max.y and t_max.y < home.y \
+						and t_min.x <= self_max.x and t_max.x >= grid_pos.x:
 					return true
 	return false
