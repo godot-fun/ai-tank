@@ -1,56 +1,34 @@
 extends Tank
 class_name PartnerTank
 
-const AI_THINK_INTERVAL := 0.5
-const RANDOM_MOVE_EXTRA_STEPS_MAX := 2
 const BUFF_SEEK_RANGE := 5
+const FORWARD_DETECT_RADIUS := TileConfig.TILE_SIZE * 0.35
 
-
-var ai_think_timer := 0.0
+var forward_shape_cast: ShapeCast2D
 
 
 func start() -> void:
 	facing = Vector2i.UP
 	update_facing(facing)
-	ai_think_timer = AI_THINK_INTERVAL
+	ensure_forward_shape_cast()
 	pass
 
 
-func physics_update(delta: float) -> void:
-	ai_think_timer -= delta
-
-	if moving:
-		fire()
-		return
-
-	if ai_think_timer <= 0.0:
-		ai_think_timer = AI_THINK_INTERVAL
-		var direction := pick_move_direction()
-		if direction != Vector2i.ZERO:
-			move(direction, RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
-		fire()
-	pass
-
-
-func pick_move_direction() -> Vector2i:
-	var target_grid := Vector2i.ZERO
-
+## 选取朝向目标格的方向：优先 buff，其次最近敌人，再次跟随玩家。
+func pick_partner_target_grid() -> Vector2i:
 	var nearby_buff := BuffHelper.find_nearest_obtainable_buff(self, BUFF_SEEK_RANGE)
 	if nearby_buff != null:
-		target_grid = nearby_buff.grid_pos
-	else:
-		var enemy := TankHelper.find_nearest_enemy(self)
-		if enemy != null:
-			target_grid = enemy.grid_pos
-		else:
-			var leader := TankHelper.find_player()
-			if leader != null and leader != self:
-				target_grid = leader.grid_pos
+		return nearby_buff.grid_pos
 
-	if target_grid == Vector2i.ZERO:
-		return Vector2i.ZERO
+	var enemy := TankHelper.find_nearest_enemy(self)
+	if enemy != null:
+		return enemy.grid_pos
 
-	return pick_direction_toward(target_grid)
+	var leader := TankHelper.find_player()
+	if leader != null and leader != self:
+		return leader.grid_pos
+
+	return Vector2i.ZERO
 
 
 func fire() -> void:
@@ -163,3 +141,58 @@ func has_enemy_in_facing() -> bool:
 						and t_min.x <= self_max.x and t_max.x >= grid_pos.x:
 					return true
 	return false
+
+
+## 用 ShapeCast2D 检测坦克正前方第一个碰到的物体。
+## 由于扫射有宽度，同层可能命中多个；这里按前向投影距离取最近一个。
+func detect_first_object_in_front(max_distance: float = -1.0) -> Node2D:
+	var cast_distance := max_distance
+	if cast_distance <= 0.0:
+		cast_distance = float(maxi(TileConfig.MAP_GRID_WIDTH, TileConfig.MAP_GRID_HEIGHT) * TileConfig.TILE_SIZE)
+
+	var forward := Vector2(facing).normalized()
+	var front_offset := Vector2(grid_size) * TileConfig.TILE_SIZE * 0.5
+	forward_shape_cast.position = forward * (minf(front_offset.x, front_offset.y) + FORWARD_DETECT_RADIUS + 1.0)
+	forward_shape_cast.target_position = forward * cast_distance
+	forward_shape_cast.force_shapecast_update()
+
+	var hit_count := forward_shape_cast.get_collision_count()
+	if hit_count <= 0:
+		return null
+
+	var origin := forward_shape_cast.global_position
+	var nearest_hit_distance := INF
+	var nearest_collider: Node2D
+	for index in range(hit_count):
+		var collider := forward_shape_cast.get_collider(index)
+		if collider == null or collider == self:
+			continue
+		if not collider is Node2D:
+			continue
+
+		var hit_point := forward_shape_cast.get_collision_point(index)
+		var distance_on_forward := (hit_point - origin).dot(forward)
+		if distance_on_forward < 0.0:
+			continue
+		if distance_on_forward < nearest_hit_distance:
+			nearest_hit_distance = distance_on_forward
+			nearest_collider = collider as Node2D
+	return nearest_collider
+
+
+func ensure_forward_shape_cast() -> void:
+	if forward_shape_cast != null:
+		return
+
+	forward_shape_cast = ShapeCast2D.new()
+	forward_shape_cast.enabled = true
+	forward_shape_cast.exclude_parent = true
+	forward_shape_cast.collide_with_areas = true
+	forward_shape_cast.collide_with_bodies = true
+
+	var shape := CircleShape2D.new()
+	shape.radius = FORWARD_DETECT_RADIUS
+	forward_shape_cast.shape = shape
+
+	add_child(forward_shape_cast)
+	pass

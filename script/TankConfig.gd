@@ -28,6 +28,9 @@ const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
 const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
+const SCRIPT_PARTNER_EASY := "res://script/tank/PartnerEasyTank.gd"
+const SCRIPT_PARTNER_SMART := "res://script/tank/PartnerSmartTank.gd"
+const SCRIPT_PARTNER_MY := "res://script/tank/MyPartnerTank.gd"
 const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
 const SCRIPT_ENEMY_EAGLE := "res://script/tank/EnemyEagle.gd"
 const SCRIPT_ENEMY_BOSS_2_CANNON := "res://script/tank/EnemyBoss2Cannon.gd"
@@ -126,7 +129,7 @@ static var partner_tank_1: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_1.png",
-	"res://script/tank/PartnerSmartTank.gd",
+	SCRIPT_PARTNER_SMART,
 )
 
 static var partner_tank_2: TankData = TankData.new(
@@ -144,7 +147,7 @@ static var partner_tank_2: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_2.png",
-	"res://script/tank/PartnerSmartTank.gd",
+	SCRIPT_PARTNER_SMART,
 )
 
 static var partner_tank_3: TankData = TankData.new(
@@ -162,7 +165,7 @@ static var partner_tank_3: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_3.png",
-	"res://script/tank/PartnerTank.gd",
+	SCRIPT_PARTNER_EASY,
 )
 
 static var partner_tank_4: TankData = TankData.new(
@@ -180,7 +183,7 @@ static var partner_tank_4: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_4.png",
-	"res://script/tank/PartnerTank.gd",
+	SCRIPT_PARTNER_EASY,
 )
 
 static var partner_tank_5: TankData = TankData.new(
@@ -198,7 +201,7 @@ static var partner_tank_5: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_5.png",
-	"res://script/tank/PartnerTank.gd",
+	SCRIPT_PARTNER_EASY,
 )
 
 static var partner_tank_6: TankData = TankData.new(
@@ -216,7 +219,7 @@ static var partner_tank_6: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/green_tank_6.png",
-	"res://script/tank/PartnerTank.gd",
+	SCRIPT_PARTNER_EASY,
 )
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -236,6 +239,25 @@ static var only_fire_enemy: TankData = TankData.new(
 	EFFECT_TANK_ENEMY_EXPLOSION,
 	"res://image/characters/gray_tank_2.png",
 	"res://script/tank/OnlyFireEnemy.gd",
+)
+
+
+static var my_partner_tank: TankData = TankData.new(
+	5,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP,
+	DEFAULT_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	"res://image/bullets/tank/blue/1.png",
+	AudioConfig.TANK_FIRE,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	"res://image/characters/blue_tank_1.png",
+	SCRIPT_PARTNER_MY
 )
 
 # ----------------------------------------------------------------------------------------------------------------------

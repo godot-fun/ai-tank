@@ -1,4 +1,4 @@
-extends PartnerTank
+extends PartnerEasyTank
 class_name PartnerSmartTank
 
 ## 更大范围找 buff；A* 一次后沿直线连走多步，减少重算。
