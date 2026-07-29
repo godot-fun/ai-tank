@@ -181,17 +181,14 @@ func detect_first_object_in_front(max_distance: float = -1.0) -> Node2D:
 
 
 func ensure_forward_shape_cast() -> void:
-	if forward_shape_cast != null:
-		return
-
 	forward_shape_cast = ShapeCast2D.new()
 	forward_shape_cast.enabled = true
 	forward_shape_cast.exclude_parent = true
 	forward_shape_cast.collide_with_areas = true
 	forward_shape_cast.collide_with_bodies = true
 
-	var shape := CircleShape2D.new()
-	shape.radius = FORWARD_DETECT_RADIUS
+	var shape := RectangleShape2D.new()
+	shape.size = Vector2(FORWARD_DETECT_RADIUS * 2.0, FORWARD_DETECT_RADIUS * 2.0)
 	forward_shape_cast.shape = shape
 
 	add_child(forward_shape_cast)
