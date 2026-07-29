@@ -18,11 +18,15 @@ func type() -> BuffType:
 
 static func fortify_eagle() -> void:
 	for grid in Eagle.base_wall_grids():
+		if TankHelper.is_area_blocked_by_tank(grid, Vector2i.ONE):
+			continue
 		TileHelper.replace_tile(TileConfig.steel_wall, grid)
 	pass
 
 
 static func restore_eagle() -> void:
 	for grid in Eagle.base_wall_grids():
+		if TankHelper.is_area_blocked_by_tank(grid, Vector2i.ONE):
+			continue
 		TileHelper.replace_tile(TileConfig.brick_wall_eagle, grid)
 	pass
