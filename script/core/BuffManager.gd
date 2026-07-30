@@ -67,14 +67,11 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 	var buff_data := BuffConfig.buff_datas[buff_type]
 	var buff_container := get_buff_container(tank.id)
 	var buff: IBuff = buff_data.buff.new_buff()
-	match buff_type:
-		IBuff.BuffType.FREEZE, IBuff.BuffType.AIR_STRIKE, IBuff.BuffType.EAGLE_STEEL:
-			buff.trigger(tank)
-			return true
-	buff_container.add_buff(buff)
-	add_current_level_buff(tank.id, buff)
+	if buff_data.max_stack > 0:
+		buff_container.add_buff(buff)
+		add_current_level_buff(tank.id, buff)
+		update_tank_appearance(tank, buff_container.buffs)
 	buff.trigger(tank)
-	update_tank_appearance(tank, buff_container.buffs)
 	return true
 
 
