@@ -30,7 +30,7 @@ func physics_update(delta: float) -> void:
 
 
 func fire() -> void:
-	var detect_objects := ray_detect_nearest_objects_in_front()
+	var detect_objects := ray_detect_nearest_objects_in_front(4)
 	for obj in detect_objects:
 		if obj is Eagle:
 			return
@@ -38,6 +38,8 @@ func fire() -> void:
 		if obj is Enemy:
 			super.fire()
 			return
+	if detect_objects.all(func(it) -> bool: return it is BrickWall):
+		super.fire()
 	pass
 	
 
