@@ -53,40 +53,24 @@ static func add_current_level_buff(id: int, buff: IBuff) -> void:
 	current_level_buff_map[id].add_buff(buff)
 	pass
 
-static func add_buff(tank: Tank, buff_type: int) -> bool:
+static func can_add_buff(tank: Tank, buff_type: int) -> bool:
 	var buff_data := BuffConfig.buff_datas[buff_type]
 	var buff_container := get_buff_container(tank.id)
 	var buff_type_of_size := buff_container.buff_type_of_size(buff_type)
 	if buff_data.max_stack >= 0 and buff_type_of_size >= buff_data.max_stack:
 		return false
-	var buff: IBuff = null
+	return true
+
+static func add_buff(tank: Tank, buff_type: int) -> bool:
+	if !can_add_buff(tank, buff_type):
+		return false
+	var buff_data := BuffConfig.buff_datas[buff_type]
+	var buff_container := get_buff_container(tank.id)
+	var buff: IBuff = buff_data.buff.new_buff()
 	match buff_type:
-		IBuff.BuffType.BULLET_SIZE:
-			buff = BulletSizeBuff.new()
-		IBuff.BuffType.BULLET_SPEED:
-			buff = BulletSpeedBuff.new()
-		IBuff.BuffType.BULLET_FIRE_INTERVAL:
-			buff = BulletFireIntervalBuff.new()
-		IBuff.BuffType.TANK_SPEED:
-			buff = TankSpeedBuff.new()
-		IBuff.BuffType.TANK_HP:
-			buff = TankHpBuff.new()
-		IBuff.BuffType.TANK_RESPAWN:
-			buff = TankRespawnBuff.new()
-		IBuff.BuffType.TANK_SIZE:
-			buff = TankSizeBuff.new()
-		IBuff.BuffType.FREEZE:
-			FreezeBuff.new().trigger(tank)
+		IBuff.BuffType.FREEZE, IBuff.BuffType.AIR_STRIKE, IBuff.BuffType.EAGLE_STEEL:
+			buff.trigger(tank)
 			return true
-		IBuff.BuffType.AIR_STRIKE:
-			AirStrikeBuff.new().trigger(tank)
-			return true
-		IBuff.BuffType.EAGLE_STEEL:
-			EagleSteelBuff.new().trigger(tank)
-			return true
-		_:
-			Log.error("unknwon buff type:[{}]", buff_type)
-			return false
 	buff_container.add_buff(buff)
 	add_current_level_buff(tank.id, buff)
 	buff.trigger(tank)

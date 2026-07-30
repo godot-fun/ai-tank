@@ -193,11 +193,7 @@ func make_buff_count_cell(buff_type: int, count: int) -> Control:
 
 
 func get_buff_resource(buff_type: int) -> String:
-	for id: int in BuffConfig.buff_datas:
-		var data := BuffConfig.buff_datas[id]
-		if data.buff == buff_type:
-			return data.buff_resource
-	return ""
+	return BuffConfig.buff_datas[buff_type].buff_resource
 
 
 func get_buff_description(buff_type: int) -> String:

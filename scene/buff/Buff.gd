@@ -9,8 +9,8 @@ const WARN_FADE := Color(0.55, 0.55, 0.55, 0.0)
 
 static var flash_material: ShaderMaterial
 
-var id: int
-var buff: int
+var type: int
+var buff: Script
 var grid_size: Vector2i
 var buff_resource: String
 
@@ -43,7 +43,7 @@ func start_despawn_warning() -> void:
 	pass
 
 func apply_data(data: BuffConfig.BuffData, grid: Vector2i) -> void:
-	id = data.id
+	type = data.type
 	buff = data.buff
 	grid_size = data.grid_size
 	buff_resource = data.buff_resource
@@ -76,7 +76,7 @@ func on_body_entered(body: Node2D) -> void:
 	pass
 
 func trigger_buff(tank: Tank) -> void:
-	if BuffManager.add_buff(tank, buff):
+	if BuffManager.add_buff(tank, type):
 		Audios.play_sfx(AudioConfig.BUFF_LEVEL_UP)
 		queue_free()
 	pass
