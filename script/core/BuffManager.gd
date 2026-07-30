@@ -54,37 +54,26 @@ static func add_current_level_buff(id: int, buff: IBuff) -> void:
 	pass
 
 static func add_buff(tank: Tank, buff_type: int) -> bool:
+	var buff_data := BuffConfig.buff_datas[buff_type]
 	var buff_container := get_buff_container(tank.id)
 	var buff_type_of_size := buff_container.buff_type_of_size(buff_type)
+	if buff_data.max_stack >= 0 and buff_type_of_size >= buff_data.max_stack:
+		return false
 	var buff: IBuff = null
 	match buff_type:
 		IBuff.BuffType.BULLET_SIZE:
-			if buff_type_of_size >= 3:
-				return false
 			buff = BulletSizeBuff.new()
 		IBuff.BuffType.BULLET_SPEED:
-			if buff_type_of_size >= 3:
-				return false
 			buff = BulletSpeedBuff.new()
 		IBuff.BuffType.BULLET_FIRE_INTERVAL:
-			if buff_type_of_size >= 3:
-				return false
 			buff = BulletFireIntervalBuff.new()
 		IBuff.BuffType.TANK_SPEED:
-			if buff_type_of_size >= 3:
-				return false
 			buff = TankSpeedBuff.new()
 		IBuff.BuffType.TANK_HP:
-			if buff_type_of_size >= 3:
-				return false
 			buff = TankHpBuff.new()
 		IBuff.BuffType.TANK_RESPAWN:
-			if buff_type_of_size >= 3:
-				return false
 			buff = TankRespawnBuff.new()
 		IBuff.BuffType.TANK_SIZE:
-			if buff_type_of_size >= 1:
-				return false
 			buff = TankSizeBuff.new()
 		IBuff.BuffType.FREEZE:
 			FreezeBuff.new().trigger(tank)
