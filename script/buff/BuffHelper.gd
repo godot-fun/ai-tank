@@ -34,6 +34,8 @@ static func find_nearest_obtainable_buff(from_tank: Tank, max_dist: int) -> Buff
 	for buff in map_buffs:
 		if not is_instance_valid(buff):
 			continue
+		if !BuffManager.can_add_buff(from_tank, buff.type()):
+			continue
 		var dist := absi(from_tank.grid_pos.x - buff.grid_pos.x) + absi(from_tank.grid_pos.y - buff.grid_pos.y)
 		if dist <= max_dist and dist < nearest_dist:
 			nearest_dist = dist
