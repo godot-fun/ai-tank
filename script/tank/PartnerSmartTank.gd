@@ -8,7 +8,12 @@ var pending_steps := 1
 
 
 func physics_update(delta: float) -> void:
+	fire()
+	
 	ai_think_timer -= delta
+
+	if moving:
+		return
 
 	if ai_think_timer <= 0.0:
 		ai_think_timer = AI_THINK_INTERVAL
@@ -21,11 +26,12 @@ func physics_update(delta: float) -> void:
 				move(direction, pending_steps - 1)
 		else:
 			move(pick_random_not_blocked_direction(), RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
-	fire()
 	pass
 
 
 func fire() -> void:
+	if !can_fire():
+		return
 	var detect_objects := ray_detect_nearest_objects_in_front(4)
 	for obj in detect_objects:
 		if obj is Eagle:
