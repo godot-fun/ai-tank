@@ -10,7 +10,7 @@ const WARN_FADE := Color(0.55, 0.55, 0.55, 0.0)
 static var flash_material: ShaderMaterial
 
 var type: int
-var buff: Script
+var buff: IBuff
 var grid_size: Vector2i
 var buff_resource: String
 

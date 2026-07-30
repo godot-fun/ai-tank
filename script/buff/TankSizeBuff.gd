@@ -1,4 +1,4 @@
-﻿class_name TankSizeBuff
+class_name TankSizeBuff
 extends IBuff
 
 const EFFECT_VALUE := Vector2i(1, 1)
@@ -8,8 +8,8 @@ func trigger(tank: Tank) -> void:
 	tank.scale_tank_deferred()
 	pass
 
-static func type() -> BuffType:
+func type() -> BuffType:
 	return BuffType.TANK_SIZE
 
-static func new_buff() -> IBuff:
+func new_buff() -> IBuff:
 	return TankSizeBuff.new()

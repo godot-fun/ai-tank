@@ -1,4 +1,4 @@
-﻿class_name TankRespawnBuff
+class_name TankRespawnBuff
 extends IBuff
 
 const EFFECT_VALUE := 1.5
@@ -6,8 +6,8 @@ const EFFECT_VALUE := 1.5
 func trigger(tank: Tank) -> void:
 	pass
 
-static func type() -> BuffType:
+func type() -> BuffType:
 	return BuffType.TANK_RESPAWN
 
-static func new_buff() -> IBuff:
+func new_buff() -> IBuff:
 	return TankRespawnBuff.new()

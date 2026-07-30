@@ -1,4 +1,4 @@
-﻿class_name IBuff
+class_name IBuff
 
 enum BuffType {
 	BULLET_SIZE,
@@ -21,9 +21,9 @@ enum BuffType {
 func trigger(tank: Tank) -> void:
 	pass
 
-static func type() -> BuffType:
+func type() -> BuffType:
 	return BuffType.UNKNOWN
 
-static func new_buff() -> IBuff:
+func new_buff() -> IBuff:
 	return null
 # Interface-End

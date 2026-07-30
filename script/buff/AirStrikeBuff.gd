@@ -1,4 +1,4 @@
-﻿class_name AirStrikeBuff
+class_name AirStrikeBuff
 extends IBuff
 
 const AIRCRAFT_TEXTURE := "res://image/buff/air_strike.png"
@@ -9,10 +9,10 @@ const AIRCRAFT_WIDTH_RATIO := 0.22
 const ENEMY_EXPLOSION_INTERVAL := 0.25
 
 
-static func type() -> BuffType:
+func type() -> BuffType:
 	return BuffType.AIR_STRIKE
 
-static func new_buff() -> IBuff:
+func new_buff() -> IBuff:
 	return AirStrikeBuff.new()
 
 

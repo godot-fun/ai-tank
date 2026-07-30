@@ -1,4 +1,4 @@
-﻿class_name FreezeBuff
+class_name FreezeBuff
 extends IBuff
 
 const EFFECT_DURATION := 10
@@ -15,10 +15,10 @@ func trigger(tank: Tank) -> void:
 	freeze_all_enemies()
 
 
-static func type() -> BuffType:
+func type() -> BuffType:
 	return BuffType.FREEZE
 
-static func new_buff() -> IBuff:
+func new_buff() -> IBuff:
 	return FreezeBuff.new()
 
 

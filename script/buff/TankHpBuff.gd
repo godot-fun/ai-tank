@@ -1,4 +1,4 @@
-﻿class_name TankHpBuff
+class_name TankHpBuff
 extends IBuff
 
 const EFFECT_VALUE: int = 1
@@ -9,8 +9,8 @@ func trigger(tank: Tank) -> void:
 	tank.update_hp_color()
 	pass
 
-static func type() -> BuffType:
+func type() -> BuffType:
 	return BuffType.TANK_HP
 
-static func new_buff() -> IBuff:
+func new_buff() -> IBuff:
 	return TankHpBuff.new()

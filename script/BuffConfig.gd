@@ -6,13 +6,13 @@ static var buff_datas: Dictionary[int, BuffData] = {}
 
 class BuffData:
 	var type: int
-	var buff: Script
+	var buff: IBuff
 	var grid_size: Vector2i
 	var max_stack: int
 	var buff_resource: String
 
 	func _init(
-		_buff: Script,
+		_buff: IBuff,
 		_grid_size: Vector2i,
 		_max_stack: int,
 		_buff_resource: String,
@@ -27,70 +27,70 @@ class BuffData:
 
 
 static var bullet_size_buff: BuffData = BuffData.new(
-	BulletSizeBuff,
+	BulletSizeBuff.new(),
 	DEFAULT_GRID_SIZE,
 	3,
 	"res://image/buff/bullet_size.png"
 )
 
 static var bullet_speed_buff: BuffData = BuffData.new(
-	BulletSpeedBuff,
+	BulletSpeedBuff.new(),
 	DEFAULT_GRID_SIZE,
 	3,
 	"res://image/buff/bullet_speed.png"
 )
 
 static var bullet_fire_interval_buff: BuffData = BuffData.new(
-	BulletFireIntervalBuff,
+	BulletFireIntervalBuff.new(),
 	DEFAULT_GRID_SIZE,
 	3,
 	"res://image/buff/bullet_fire_interval.png"
 )
 
 static var tank_speed_buff: BuffData = BuffData.new(
-	TankSpeedBuff,
+	TankSpeedBuff.new(),
 	DEFAULT_GRID_SIZE,
 	3,
 	"res://image/buff/tank_speed.png"
 )
 
 static var tank_hp_buff: BuffData = BuffData.new(
-	TankHpBuff,
+	TankHpBuff.new(),
 	DEFAULT_GRID_SIZE,
 	3,
 	"res://image/buff/tank_hp.png"
 )
 
 static var tank_respawn_buff: BuffData = BuffData.new(
-	TankRespawnBuff,
+	TankRespawnBuff.new(),
 	DEFAULT_GRID_SIZE,
 	3,
 	"res://image/buff/tank_respawn.png"
 )
 
 static var tank_size_buff: BuffData = BuffData.new(
-	TankSizeBuff,
+	TankSizeBuff.new(),
 	Vector2i.ONE,
 	1,
 	"res://image/buff/tank_size.png"
 )
 
 static var freeze_buff: BuffData = BuffData.new(
-	FreezeBuff,
+	FreezeBuff.new(),
 	DEFAULT_GRID_SIZE,
 	-1,
 	"res://image/buff/buff_freeze.png"
 )
 
 static var air_strike_buff: BuffData = BuffData.new(
-	AirStrikeBuff,
+	AirStrikeBuff.new(),
 	DEFAULT_GRID_SIZE,
 	-1,
 	"res://image/buff/buff_air_strike.png"
 )
 
 static var eagle_steel_buff: BuffData = BuffData.new(
-	EagleSteelBuff,
+	EagleSteelBuff.new(),
 	Vector2i.ONE,
 	-1,
 	"res://image/tiles/steel_wall_1.png"
