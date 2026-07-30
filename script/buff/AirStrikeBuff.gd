@@ -53,6 +53,11 @@ func trigger(tank: Tank) -> void:
 	kill_tween.tween_callback(kill_all)
 	pass
 
+
+static func type() -> BuffType:
+	return BuffType.AIR_STRIKE
+
+
 static func kill_all() -> void:
 	var enemies: Array[Tank] = []
 	for target in TankHelper.tanks:

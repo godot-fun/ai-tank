@@ -9,5 +9,5 @@ func trigger(tank: Tank) -> void:
 	tank.update_hp_color()
 	pass
 
-func type() -> BuffType:
+static func type() -> BuffType:
 	return BuffType.TANK_HP

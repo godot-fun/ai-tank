@@ -7,5 +7,5 @@ func trigger(tank: Tank) -> void:
 	tank.bullet_speed = tank.bullet_speed + EFFECT_VALUE
 	pass
 
-func type() -> BuffType:
+static func type() -> BuffType:
 	return BuffType.BULLET_SPEED

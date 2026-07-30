@@ -12,7 +12,7 @@ func trigger(tank: Tank) -> void:
 	pass
 
 
-func type() -> BuffType:
+static func type() -> BuffType:
 	return BuffType.EAGLE_STEEL
 
 

@@ -9,5 +9,5 @@ func trigger(tank: Tank) -> void:
 	tank.bullet_damage = tank.bullet_damage + BULLET_DAMAGE_EFFECT_VALUE
 	pass
 
-func type() -> BuffType:
+static func type() -> BuffType:
 	return BuffType.BULLET_SIZE

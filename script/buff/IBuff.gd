@@ -21,6 +21,6 @@ enum BuffType {
 func trigger(tank: Tank) -> void:
 	pass
 
-func type() -> BuffType:
+static func type() -> BuffType:
 	return BuffType.UNKNOWN
 # Interface-End

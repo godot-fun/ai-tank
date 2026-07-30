@@ -8,5 +8,5 @@ func trigger(tank: Tank) -> void:
 	tank.scale_tank_deferred()
 	pass
 
-func type() -> BuffType:
+static func type() -> BuffType:
 	return BuffType.TANK_SIZE
