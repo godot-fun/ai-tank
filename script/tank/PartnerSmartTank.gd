@@ -13,6 +13,14 @@ func physics_update(delta: float) -> void:
 	ai_think_timer -= delta
 
 	if moving:
+		fire()
+		return
+	
+	# 远程火力优先：四向任一能直接打到敌人则转向并原地开火。
+	var fire_dir := find_direct_fire_direction()
+	if fire_dir != Vector2i.ZERO:
+		update_facing(fire_dir)
+		fire()
 		return
 
 	if ai_think_timer <= 0.0:
@@ -24,8 +32,6 @@ func physics_update(delta: float) -> void:
 				move(direction)
 			else:
 				move(direction, pending_steps - 1)
-		else:
-			move(pick_random_not_blocked_direction(), RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
 	pass
 
 
@@ -58,10 +64,6 @@ func pick_move_direction() -> Vector2i:
 		var enemy := TankHelper.find_nearest_enemy(self)
 		if enemy != null:
 			target_grid = enemy.grid_pos
-		else:
-			var leader := TankHelper.find_player()
-			if leader != null and leader != self:
-				target_grid = leader.grid_pos
 
 	if target_grid == Vector2i.ZERO:
 		return Vector2i.ZERO
@@ -91,3 +93,12 @@ func go_to(target_grid: Vector2i) -> Vector2i:
 		pending_steps += 1
 
 	return direction
+
+## 上下左右任一方向能直接打到敌人则返回该方向；会误伤基地则跳过。
+func find_direct_fire_direction() -> Vector2i:
+	for dir in directions:
+		var detect_objects := ray_detect_nearest_objects_toward(dir, 4)
+		for obj in detect_objects:
+			if obj is Enemy:
+				return dir
+	return Vector2i.ZERO

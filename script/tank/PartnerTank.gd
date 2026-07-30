@@ -47,13 +47,19 @@ func pick_partner_target_grid() -> Vector2i:
 	return Vector2i.ZERO
 
 ## 用 ShapeCast2D 检测坦克正前方最近的物体。
-## 由于扫射有宽度，同层可能命中多个；按前向投影距离取最近 max_count 个（默认 2）。
 func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
+	return ray_detect_nearest_objects_toward(facing, max_count)
+
+
+## 沿指定方向扫射；同层可能命中多个，按前向投影距离取最近 max_count 个（默认 2）。
+func ray_detect_nearest_objects_toward(dir: Vector2i, max_count: int = 2) -> Array[Node2D]:
 	var result: Array[Node2D] = []
+	if dir == Vector2i.ZERO:
+		return result
 
 	var cast_distance := TileConfig.MAP_MAX_DISTANCE
-	forward_shape_cast.position = facing
-	forward_shape_cast.target_position = facing * cast_distance
+	forward_shape_cast.position = dir
+	forward_shape_cast.target_position = dir * cast_distance
 	forward_shape_cast.force_shapecast_update()
 
 	var hit_count := forward_shape_cast.get_collision_count()
@@ -61,6 +67,7 @@ func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
 		return result
 
 	var origin := forward_shape_cast.global_position
+	var dir_f := Vector2(dir)
 	var hits: Array[Dictionary] = []
 	for index in range(hit_count):
 		var collider := forward_shape_cast.get_collider(index)
@@ -70,7 +77,7 @@ func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
 			continue
 
 		var hit_point := forward_shape_cast.get_collision_point(index)
-		var distance_on_forward := (hit_point - origin).dot(facing)
+		var distance_on_forward := (hit_point - origin).dot(dir_f)
 		hits.append({ "node": collider as Node2D, "distance": distance_on_forward })
 
 	hits.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
