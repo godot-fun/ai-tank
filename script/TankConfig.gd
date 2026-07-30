@@ -28,9 +28,14 @@ const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
 const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
+
+
+const SCRIPT_MY_TANK := "res://script/tank/MyTank.gd"
 const SCRIPT_PARTNER_EASY := "res://script/tank/PartnerEasyTank.gd"
 const SCRIPT_PARTNER_SMART := "res://script/tank/PartnerSmartTank.gd"
 const SCRIPT_PARTNER_MY := "res://script/tank/MyPartnerTank.gd"
+
+
 const SCRIPT_ENEMY_EASY := "res://script/tank/EnemyEasy.gd"
 const SCRIPT_ENEMY_EAGLE := "res://script/tank/EnemyEagle.gd"
 const SCRIPT_ENEMY_BOSS_2_CANNON := "res://script/tank/EnemyBoss2Cannon.gd"
@@ -111,7 +116,7 @@ static var my_tank: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	"res://image/characters/blue_tank_1.png",
-	"res://script/tank/MyTank.gd",
+	SCRIPT_MY_TANK
 )
 
 static var partner_tank_1: TankData = TankData.new(
