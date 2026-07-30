@@ -23,9 +23,9 @@ const ENEMY_JEEP_WAVE: Array[int] = [1, 1, 1, 2, 2,
 									6, 6, 6, 7, 7,  
 									7, 7, 7, 8, 8]
 
-const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 2, 1, 1, 1, 1, 2, 2, 1
-									, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1
-									, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1
+const ELITE_ENEMY_WAVE: Array[int] = [1, 1, 1, 2, 1, 1, 1, 2, 2, 1
+									, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1
+									, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1
 									, 1, 1, 2, 3, 4]
 
 static var MINI_BOSS_ENEMY_SPAWN_LEVEL: Dictionary[int, TankConfig.TankData] = {
