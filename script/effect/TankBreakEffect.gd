@@ -6,7 +6,7 @@
 ## - 继承击毁前炮塔朝向：碎块 position / burst 按 sprite_rotation 旋转，重力仍沿屏幕向下。
 ##
 ## 【缩放】
-## 原坦克：贴图 × CharacterBody2D.scale → 屏幕 grid_size×TILE_SIZE。
+## 原坦克：贴图 × Sprite2D.scale → 屏幕 grid_size×TILE_SIZE（根节点 scale 保持 1）。
 ## 碎块 region 为贴图 1/CHUNK 宽，再乘 tank_scale，单块宽 = 坦克宽 / CHUNK_COLS。
 class_name TankBreakEffect
 extends Node2D

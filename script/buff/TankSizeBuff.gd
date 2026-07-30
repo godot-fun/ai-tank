@@ -5,7 +5,7 @@ const EFFECT_VALUE := Vector2i(1, 1)
 
 func trigger(tank: Tank) -> void:
 	tank.grid_size = EFFECT_VALUE
-	tank.scale_tank()
+	tank.scale_tank_deferred()
 	pass
 
 func type() -> BuffType:

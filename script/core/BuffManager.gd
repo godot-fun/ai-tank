@@ -163,7 +163,7 @@ static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 		tank_resource = StringUtils.format("res://image/characters/jeep_{}.png", RandomUtils.random_int_range(1, 7))
 	tank.bullet_resource = bullet_resource
 	tank.tank_resource = tank_resource
-	tank.scale_tank()
+	tank.scale_tank_deferred()
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------

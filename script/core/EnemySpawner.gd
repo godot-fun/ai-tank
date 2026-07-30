@@ -174,7 +174,7 @@ func spawn_mini_boss_enemy() -> void:
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
 	if tank == null:
 		return
-	tank.scale_tank()
+	tank.scale_tank_deferred()
 	tank.hp = tank.hp + BattleProgress.level * 5
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_FC_BOSS_BATTLE)
@@ -188,7 +188,7 @@ func spawn_boss_enemy() -> void:
 	var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[1], buffs)
 	if tank == null:
 		return
-	tank.scale_tank()
+	tank.scale_tank_deferred()
 	tank.hp = tank.hp + BattleProgress.level * 6
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_BOSS_BATTLE)

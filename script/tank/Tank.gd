@@ -30,6 +30,7 @@ var max_hp := 1
 var killed_by_tank_id := -1
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 
 func _ready() -> void:
@@ -74,14 +75,23 @@ func apply_data(data: TankConfig.TankData, grid: Vector2i) -> void:
 
 # ----------------------------------------------------------------------------------------------------------------------
 
+## 玩法根节点保持 scale=1，只缩放视觉与碰撞，避免子节点局部坐标被连带缩放。
 func scale_tank() -> void:
 	sprite.texture = load(tank_resource)
 
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(grid_size) * TileConfig.TILE_SIZE
-	scale = target_size / texture_size
+	scale = Vector2.ONE
+	sprite.scale = target_size / texture_size
+
+	var rect_shape := RectangleShape2D.new()
+	rect_shape.size = target_size
+	collision_shape.shape = rect_shape
 	pass
 
+func scale_tank_deferred() -> void:
+	gdf.callable_deferred(scale_tank)
+	pass
 
 func update_hp_color() -> void:
 	if max_hp <= hp:
@@ -151,7 +161,7 @@ func take_damage(amount: int, damage_from_tank_id: int = -1) -> bool:
 
 	sprite.visible = false
 	killed_by_tank_id = damage_from_tank_id
-	TankBreakEffect.spawn(global_position, scale, grid_size, sprite.rotation, sprite.texture,  get_parent())
+	TankBreakEffect.spawn(global_position, sprite.scale, grid_size, sprite.rotation, sprite.texture, get_parent())
 	EffectAnimation2D.spawn(
 		global_position,
 		get_tree().current_scene,

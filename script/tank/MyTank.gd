@@ -35,7 +35,7 @@ func update_shake_shader() -> void:
 	if shake_material == null:
 		return
 	shake_material.set_shader_parameter("move_amount", 1.0 if moving else 0.0)
-	shake_material.set_shader_parameter("world_scale", absf(scale.x))
+	shake_material.set_shader_parameter("world_scale", absf(sprite.scale.x))
 	pass
 
 
