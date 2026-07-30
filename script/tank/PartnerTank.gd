@@ -20,7 +20,7 @@ func set_up_ray() -> void:
 	forward_shape_cast.exclude_parent = true
 	forward_shape_cast.collide_with_areas = true
 	forward_shape_cast.collide_with_bodies = true
-	forward_shape_cast.max_results = 4
+	forward_shape_cast.max_results = 8
 
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(FORWARD_DETECT_RADIUS * 2.0, FORWARD_DETECT_RADIUS * 2.0)
@@ -70,10 +70,8 @@ func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 
 	var cast_distance := TileConfig.MAP_MAX_DISTANCE
-	var forward := Vector2(facing).normalized()
-	var front_offset := Vector2(grid_size) * TileConfig.TILE_SIZE * 0.5
-	forward_shape_cast.position = forward * (minf(front_offset.x, front_offset.y) + FORWARD_DETECT_RADIUS + 1.0)
-	forward_shape_cast.target_position = forward * cast_distance
+	forward_shape_cast.position = facing
+	forward_shape_cast.target_position = facing * cast_distance
 	forward_shape_cast.force_shapecast_update()
 
 	var hit_count := forward_shape_cast.get_collision_count()
@@ -90,7 +88,7 @@ func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
 			continue
 
 		var hit_point := forward_shape_cast.get_collision_point(index)
-		var distance_on_forward := (hit_point - origin).dot(forward)
+		var distance_on_forward := (hit_point - origin).dot(facing)
 		hits.append({ "node": collider as Node2D, "distance": distance_on_forward })
 
 	hits.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:

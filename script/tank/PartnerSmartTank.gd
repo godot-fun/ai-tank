@@ -33,11 +33,11 @@ func fire() -> void:
 	var detect_objects := ray_detect_nearest_objects_in_front()
 	for obj in detect_objects:
 		if obj is Eagle:
-			return 
+			return
 	for obj in detect_objects:
 		if obj is Enemy:
+			super.fire()
 			return
-	super.fire()
 	pass
 	
 

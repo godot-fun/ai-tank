@@ -1,4 +1,4 @@
-extends Tank
+extends Enemy
 class_name OnlyFireEnemy
 
 

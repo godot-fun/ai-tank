@@ -38,3 +38,16 @@ func read_direction() -> Vector2i:
 	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
 		return Vector2i.RIGHT
 	return Vector2i.ZERO
+
+
+func fire() -> void:
+	var detect_objects := ray_detect_nearest_objects_in_front()
+	for obj in detect_objects:
+		if obj is Eagle:
+			return
+	for obj in detect_objects:
+		if obj is Enemy:
+			super.fire()
+			return
+	pass
+	
