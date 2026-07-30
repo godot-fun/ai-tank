@@ -191,7 +191,7 @@ func ensure_forward_shape_cast() -> void:
 	forward_shape_cast.exclude_parent = true
 	forward_shape_cast.collide_with_areas = true
 	forward_shape_cast.collide_with_bodies = true
-	forward_shape_cast.max_results = 32
+	forward_shape_cast.max_results = 4
 
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(FORWARD_DETECT_RADIUS * 2.0, FORWARD_DETECT_RADIUS * 2.0)
