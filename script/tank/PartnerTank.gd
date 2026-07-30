@@ -145,10 +145,8 @@ func has_enemy_in_facing() -> bool:
 
 ## 用 ShapeCast2D 检测坦克正前方第一个碰到的物体。
 ## 由于扫射有宽度，同层可能命中多个；这里按前向投影距离取最近一个。
-func detect_first_object_in_front(max_distance: float = -1.0) -> Node2D:
-	var cast_distance := max_distance
-	if cast_distance <= 0.0:
-		cast_distance = float(maxi(TileConfig.MAP_GRID_WIDTH, TileConfig.MAP_GRID_HEIGHT) * TileConfig.TILE_SIZE)
+func detect_first_object_in_front() -> Node2D:
+	var cast_distance := TileConfig.MAP_MAX_DISTANCE
 
 	var forward := Vector2(facing).normalized()
 	var front_offset := Vector2(grid_size) * TileConfig.TILE_SIZE * 0.5

@@ -9,7 +9,7 @@ const GRID_2_2: Vector2i = Vector2.ONE * 2
 # 地图的格子的长宽
 static var MAP_GRID_WIDTH: int = ProjectSettings.get_setting("display/window/size/viewport_width") / TILE_SIZE
 static var MAP_GRID_HEIGHT: int = ProjectSettings.get_setting("display/window/size/viewport_height") / TILE_SIZE
-
+static var MAP_MAX_DISTANCE: int = maxi(MAP_GRID_WIDTH, MAP_GRID_HEIGHT) * TILE_SIZE
 
 class TileCell:
 	var id: int
