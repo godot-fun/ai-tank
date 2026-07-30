@@ -9,3 +9,6 @@ func trigger(tank: Tank) -> void:
 
 static func type() -> BuffType:
 	return BuffType.BULLET_SPEED
+
+static func new_buff() -> IBuff:
+	return BulletSpeedBuff.new()

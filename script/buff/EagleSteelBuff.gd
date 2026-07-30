@@ -15,6 +15,9 @@ func trigger(tank: Tank) -> void:
 static func type() -> BuffType:
 	return BuffType.EAGLE_STEEL
 
+static func new_buff() -> IBuff:
+	return EagleSteelBuff.new()
+
 
 static func fortify_eagle() -> void:
 	for grid in Eagle.base_wall_grids():

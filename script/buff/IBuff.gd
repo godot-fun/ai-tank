@@ -23,4 +23,7 @@ func trigger(tank: Tank) -> void:
 
 static func type() -> BuffType:
 	return BuffType.UNKNOWN
+
+static func new_buff() -> IBuff:
+	return null
 # Interface-End

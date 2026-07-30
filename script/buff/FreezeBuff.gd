@@ -15,6 +15,13 @@ func trigger(tank: Tank) -> void:
 	freeze_all_enemies()
 
 
+static func type() -> BuffType:
+	return BuffType.FREEZE
+
+static func new_buff() -> IBuff:
+	return FreezeBuff.new()
+
+
 static func start_poll(tank: Tank) -> void:
 	poll_timer = Timer.new()
 	poll_timer.wait_time = POLL_INTERVAL

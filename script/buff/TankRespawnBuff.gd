@@ -8,3 +8,6 @@ func trigger(tank: Tank) -> void:
 
 static func type() -> BuffType:
 	return BuffType.TANK_RESPAWN
+
+static func new_buff() -> IBuff:
+	return TankRespawnBuff.new()

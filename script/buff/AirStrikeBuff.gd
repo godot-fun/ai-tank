@@ -9,6 +9,13 @@ const AIRCRAFT_WIDTH_RATIO := 0.22
 const ENEMY_EXPLOSION_INTERVAL := 0.25
 
 
+static func type() -> BuffType:
+	return BuffType.AIR_STRIKE
+
+static func new_buff() -> IBuff:
+	return AirStrikeBuff.new()
+
+
 func trigger(tank: Tank) -> void:
 	if tank.is_enemy():
 		return
@@ -52,10 +59,6 @@ func trigger(tank: Tank) -> void:
 	kill_tween.tween_interval(FLIGHT_DURATION)
 	kill_tween.tween_callback(kill_all)
 	pass
-
-
-static func type() -> BuffType:
-	return BuffType.AIR_STRIKE
 
 
 static func kill_all() -> void:
