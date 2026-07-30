@@ -7,13 +7,13 @@ static var spawn_grids: Array[Vector2i] = [
 	Vector2i(TileConfig.MAP_GRID_WIDTH - TankConfig.enemy_easy.grid_size.x, 0),
 ]
 
-const ENEMY_WAVE: Array[int] = [2, 3, 3, 4, 5, 
-								4, 5, 5, 6, 7, 
-								6, 7, 7, 8, 9,
-								8, 9, 9, 10, 11, 
-								10, 11, 11, 12, 13, 
+const ENEMY_WAVE: Array[int] = [2, 3, 3, 5, 6, 
+								4, 5, 5, 8, 9, 
+								6, 7, 7, 9, 10,
+								8, 9, 9, 12, 13, 
+								10, 11, 11, 13, 14, 
 								12, 13, 13, 14, 15, 
-								14, 15, 15, 16, 17]
+								14, 15, 15, 18, 20]
 
 const ENEMY_JEEP_WAVE: Array[int] = [1, 1, 1, 2, 2, 
 									2, 2, 2, 3, 3,
@@ -179,6 +179,7 @@ func spawn_mini_boss_enemy() -> void:
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_FC_BOSS_BATTLE)
 	SchedulerBus.schedule(spawn_enemy_wave, 1000)
+	SchedulerBus.schedule(spawn_enemy_wave, 2000)
 	pass
 	
 func spawn_boss_enemy() -> void:
@@ -193,6 +194,8 @@ func spawn_boss_enemy() -> void:
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_BOSS_BATTLE)
 	SchedulerBus.schedule(spawn_enemy_wave, 1000)
+	SchedulerBus.schedule(spawn_enemy_wave, 2000)
+	SchedulerBus.schedule(spawn_enemy_wave, 3000)
 	pass
 # ----------------------------------------------------------------------------------------------------------------------
 func get_waves_spawned() -> int:
