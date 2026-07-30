@@ -10,7 +10,7 @@ func physics_update(_delta: float) -> void:
 		fire()
 
 	if Input.is_key_pressed(KEY_R):
-		var objs := detect_nearest_objects_in_front()
+		var objs := ray_detect_nearest_objects_in_front()
 		print("detect_nearest_objects_in_front: ", objs)
 
 	if moving:
