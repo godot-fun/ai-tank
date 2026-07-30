@@ -1,9 +1,12 @@
-extends PartnerEasyTank
+extends PartnerTank
 class_name PartnerSmartTank
 
 ## 更大范围找 buff；A* 一次后沿直线连走多步，减少重算。
 const BUFF_SEEK_RANGE_SMART := 28
+const AI_THINK_INTERVAL := 0.5
+const RANDOM_MOVE_EXTRA_STEPS_MAX := 2
 
+var ai_think_timer := 0.0
 var pending_steps := 1
 
 
