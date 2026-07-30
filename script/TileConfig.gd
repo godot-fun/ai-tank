@@ -36,42 +36,42 @@ static var brick_wall: TileCell = TileCell.new(
 )
 
 static var brick_wall_eagle: TileCell = TileCell.new(
-	0,
+	1,
 	1,
 	"res://image/tiles/brick_wall_6.png",
-	"res://script/tile/BrickWall.gd",
+	"res://script/tile/BrickWallEagle.gd",
 )
 
 static var water: TileCell = TileCell.new(
-	1,
+	5,
 	0,
 	"res://image/tiles/water_4.png",
 	"res://script/tile/Water.gd",
 )
 
 static var steel_wall: TileCell = TileCell.new(
-	2,
+	10,
 	0,
 	"res://image/tiles/steel_wall_3.png",
 	"res://script/tile/SteelWall.gd",
 )
 
 static var forest: TileCell = TileCell.new(
-	3,
+	15,
 	0,
 	"res://image/tiles/forest_3.png",
 	"res://script/tile/Forest.gd",
 )
 
 static var ice: TileCell = TileCell.new(
-	4,
+	20,
 	0,
 	"res://image/tiles/ice_3.png",
 	"res://script/tile/Ice.gd",
 )
 
 static var eagle: TileCell = TileCell.new(
-	5,
+	25,
 	1,
 	"res://image/transparent_512x512.png",
 	"res://script/tile/Eagle.gd",

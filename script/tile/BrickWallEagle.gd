@@ -1,0 +1,2 @@
+﻿extends BrickWall
+class_name BrickWallEagle
