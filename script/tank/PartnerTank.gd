@@ -46,24 +46,6 @@ func pick_partner_target_grid() -> Vector2i:
 
 	return Vector2i.ZERO
 
-
-## 开火会打到基地（直面基地、基地前无挡子弹地块、基地前无敌方坦克）。
-func is_firing_at_home() -> bool:
-	var detect_objects := ray_detect_nearest_objects_in_front()
-	for obj in detect_objects:
-		if obj is Eagle:
-			return true
-	return false
-
-func is_aiming_at_enemy() -> bool:
-	var detect_objects := ray_detect_nearest_objects_in_front()
-	for obj in detect_objects:
-		if obj is Enemy:
-			return true
-	return false
-
-
-
 ## 用 ShapeCast2D 检测坦克正前方最近的物体。
 ## 由于扫射有宽度，同层可能命中多个；按前向投影距离取最近 max_count 个（默认 2）。
 func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
@@ -102,3 +84,23 @@ func ray_detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
 		if result.size() >= max_count:
 			break
 	return result
+
+
+## 是否直面基地。
+func is_facing_home() -> bool:
+	var home := Eagle.egale_first_grid_pos
+	var home_max := home + Vector2i.ONE
+	var self_max := grid_pos + grid_size - Vector2i.ONE
+	var x_overlap := grid_pos.x <= home_max.x and self_max.x >= home.x
+	var y_overlap := grid_pos.y <= home_max.y and self_max.y >= home.y
+
+	match facing:
+		Vector2i.LEFT:
+			return grid_pos.x > home_max.x and y_overlap
+		Vector2i.RIGHT:
+			return self_max.x < home.x and y_overlap
+		Vector2i.UP:
+			return grid_pos.y > home_max.y and x_overlap
+		Vector2i.DOWN:
+			return self_max.y < home.y and x_overlap
+	return false

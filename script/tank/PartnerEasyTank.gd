@@ -33,6 +33,6 @@ func physics_update(delta: float) -> void:
 
 
 func fire() -> void:
-	if is_firing_at_home():
+	if is_facing_home():
 		return
 	super.fire()
