@@ -143,11 +143,12 @@ func has_enemy_in_facing() -> bool:
 	return false
 
 
-## 用 ShapeCast2D 检测坦克正前方第一个碰到的物体。
-## 由于扫射有宽度，同层可能命中多个；这里按前向投影距离取最近一个。
-func detect_first_object_in_front() -> Node2D:
-	var cast_distance := TileConfig.MAP_MAX_DISTANCE
+## 用 ShapeCast2D 检测坦克正前方最近的物体。
+## 由于扫射有宽度，同层可能命中多个；按前向投影距离取最近 max_count 个（默认 2）。
+func detect_nearest_objects_in_front(max_count: int = 2) -> Array[Node2D]:
+	var result: Array[Node2D] = []
 
+	var cast_distance := TileConfig.MAP_MAX_DISTANCE
 	var forward := Vector2(facing).normalized()
 	var front_offset := Vector2(grid_size) * TileConfig.TILE_SIZE * 0.5
 	forward_shape_cast.position = forward * (minf(front_offset.x, front_offset.y) + FORWARD_DETECT_RADIUS + 1.0)
@@ -156,11 +157,10 @@ func detect_first_object_in_front() -> Node2D:
 
 	var hit_count := forward_shape_cast.get_collision_count()
 	if hit_count <= 0:
-		return null
+		return result
 
 	var origin := forward_shape_cast.global_position
-	var nearest_hit_distance := INF
-	var nearest_collider: Node2D
+	var hits: Array[Dictionary] = []
 	for index in range(hit_count):
 		var collider := forward_shape_cast.get_collider(index)
 		if collider == null or collider == self:
@@ -170,12 +170,19 @@ func detect_first_object_in_front() -> Node2D:
 
 		var hit_point := forward_shape_cast.get_collision_point(index)
 		var distance_on_forward := (hit_point - origin).dot(forward)
-		if distance_on_forward < 0.0:
+		hits.append({ "node": collider as Node2D, "distance": distance_on_forward })
+
+	hits.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return a.distance < b.distance
+	)
+	for hit in hits:
+		var node: Node2D = hit.node
+		if node in result:
 			continue
-		if distance_on_forward < nearest_hit_distance:
-			nearest_hit_distance = distance_on_forward
-			nearest_collider = collider as Node2D
-	return nearest_collider
+		result.append(node)
+		if result.size() >= max_count:
+			break
+	return result
 
 
 func ensure_forward_shape_cast() -> void:
@@ -184,6 +191,7 @@ func ensure_forward_shape_cast() -> void:
 	forward_shape_cast.exclude_parent = true
 	forward_shape_cast.collide_with_areas = true
 	forward_shape_cast.collide_with_bodies = true
+	forward_shape_cast.max_results = 32
 
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(FORWARD_DETECT_RADIUS * 2.0, FORWARD_DETECT_RADIUS * 2.0)
