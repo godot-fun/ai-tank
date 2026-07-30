@@ -150,8 +150,8 @@ static func on_enemy_tank_death(tank: Tank) -> void:
 	if tank.team == TankConfig.Team.ELITE_ENEMY:
 		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos))
 	if tank.team == TankConfig.Team.BOSS_ENEMY:
-		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos))
-		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos + Vector2i.ONE * 2))
+		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_enhance_buff(), grid_pos))
+		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_enhance_buff(), grid_pos + Vector2i.ONE * 2))
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------

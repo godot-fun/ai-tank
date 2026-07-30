@@ -99,3 +99,10 @@ static var eagle_steel_buff: BuffData = BuffData.new(
 
 static func random_buff() -> BuffData:
 	return RandomUtils.random_ele(buff_datas.values())
+
+static func random_enhance_buff() -> BuffData:
+	var candidates: Array[BuffData] = []
+	for data: BuffData in buff_datas.values():
+		if data.max_stack > 1:
+			candidates.append(data)
+	return RandomUtils.random_ele(candidates)
