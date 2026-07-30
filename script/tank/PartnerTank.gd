@@ -57,11 +57,11 @@ func fire() -> void:
 func would_hit_home() -> bool:
 	var detect_objects := ray_detect_nearest_objects_in_front()
 	for obj in detect_objects:
-		if obj is Enemy:
-			return false
-	for obj in detect_objects:
 		if obj is Eagle:
 			return true
+	for obj in detect_objects:
+		if obj is Enemy:
+			return false
 	return false
 
 
