@@ -29,6 +29,18 @@ func physics_update(delta: float) -> void:
 	pass
 
 
+func fire() -> void:
+	var detect_objects := ray_detect_nearest_objects_in_front()
+	for obj in detect_objects:
+		if obj is Eagle:
+			return 
+	for obj in detect_objects:
+		if obj is Enemy:
+			return
+	super.fire()
+	pass
+	
+
 func pick_move_direction() -> Vector2i:
 	var target_grid := Vector2i.ZERO
 

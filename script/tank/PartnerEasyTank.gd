@@ -30,3 +30,9 @@ func physics_update(delta: float) -> void:
 			move(direction, RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
 		fire()
 	pass
+
+
+func fire() -> void:
+	if is_firing_at_home():
+		return
+	super.fire()

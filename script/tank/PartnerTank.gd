@@ -47,21 +47,19 @@ func pick_partner_target_grid() -> Vector2i:
 	return Vector2i.ZERO
 
 
-func fire() -> void:
-	if would_hit_home():
-		return
-	super.fire()
-
-
 ## 开火会打到基地（直面基地、基地前无挡子弹地块、基地前无敌方坦克）。
-func would_hit_home() -> bool:
+func is_firing_at_home() -> bool:
 	var detect_objects := ray_detect_nearest_objects_in_front()
 	for obj in detect_objects:
 		if obj is Eagle:
 			return true
+	return false
+
+func is_aiming_at_enemy() -> bool:
+	var detect_objects := ray_detect_nearest_objects_in_front()
 	for obj in detect_objects:
 		if obj is Enemy:
-			return false
+			return true
 	return false
 
 
