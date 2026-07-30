@@ -81,12 +81,10 @@ func scale_tank() -> void:
 
 	var texture_size := sprite.texture.get_size()
 	var target_size := Vector2(grid_size) * TileConfig.TILE_SIZE
-	scale = Vector2.ONE
-	sprite.scale = target_size / texture_size
+	var scale_param := target_size / texture_size
+	sprite.scale = scale_param
 
-	var rect_shape := RectangleShape2D.new()
-	rect_shape.size = target_size
-	collision_shape.shape = rect_shape
+	collision_shape.scale = scale_param
 	pass
 
 func scale_tank_deferred() -> void:
