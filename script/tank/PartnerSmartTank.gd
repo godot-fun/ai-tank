@@ -59,7 +59,7 @@ func fire() -> void:
 	if detect_objects.all(func(it) -> bool: return it is BrickWall):
 		super.fire()
 	pass
-	
+
 
 func pick_move_direction() -> Vector2i:
 	var target_grid := Vector2i.ZERO
