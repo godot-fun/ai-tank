@@ -32,6 +32,10 @@ func physics_update(delta: float) -> void:
 				move(direction)
 			else:
 				move(direction, pending_steps - 1)
+		else:
+			# A* 无路或下一步被挡时随机走动，避免站桩只打砖墙。
+			move(pick_random_not_blocked_direction(), RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
+		fire()
 	pass
 
 
