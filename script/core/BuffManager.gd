@@ -176,9 +176,12 @@ static func on_enemy_tank_death(tank: Tank) -> void:
 	var killer_id := tank.killed_by_tank_id
 	if killer_id >= 0 and TankConfig.tank_datas.has(killer_id):
 		enemy_kill_counts[killer_id] = enemy_kill_counts.get(killer_id, 0) + 1
+	var grid_pos := tank.grid_pos
 	if tank.team == TankConfig.Team.ELITE_ENEMY:
-		var grid_pos := tank.grid_pos
 		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos))
+	if tank.team == TankConfig.Team.BOSS_ENEMY:
+		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos))
+		gdf.callable_deferred(func() -> void: BuffHelper.create_buff(BuffConfig.random_buff(), grid_pos + Vector2i.ONE * 2))
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
