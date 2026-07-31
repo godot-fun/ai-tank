@@ -141,12 +141,12 @@ func _auto_retry_after_countdown() -> void:
 	label.offset_bottom = 310.0
 	_overlay_layer.add_child(label)
 
-	var remaining := AI_RETRY_COUNTDOWN
-	while remaining > 0:
-		label.text = "AI模式下自动重试 %d" % remaining
-		await get_tree().create_timer(1.0, true).timeout
-		remaining -= 1
-
+	var tween := create_tween()
+	for remaining: int in range(AI_RETRY_COUNTDOWN, 0, -1):
+		var n := remaining
+		tween.tween_callback(func() -> void: label.text = "AI模式下自动重试 %d" % n)
+		tween.tween_interval(1.0)
+	await tween.finished
 	_on_retry_pressed()
 	pass
 

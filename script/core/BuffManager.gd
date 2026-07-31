@@ -35,6 +35,9 @@ static func start_level() -> void:
 static func get_player_tank_ids() -> Array[int]:
 	var tank_ids: Array[int] = []
 	for tank_id: int in buff_map:
+		var tank_config := TankConfig.tank_datas[tank_id]
+		if TankConfig.is_enemy_faction(tank_config.team):
+			continue
 		tank_ids.append(tank_id)
 	tank_ids.sort()
 	return tank_ids
