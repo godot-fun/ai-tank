@@ -28,6 +28,9 @@ const EFFECT_BULLET_HIT_ENEMY := "res://image/effects/bullet_hit_enemy.png"
 const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
+const BULLET_BLUE_1 := "res://image/bullets/tank/blue/1.png"
+const TANK_BLUE_1 := "res://image/characters/blue_tank_1.png"
+
 
 
 const SCRIPT_MY_TANK := "res://script/tank/MyTank.gd"
@@ -111,12 +114,30 @@ static var my_tank: TankData = TankData.new(
 	1,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/tank/blue/1.png",
+	BULLET_BLUE_1,
 	AudioConfig.TANK_FIRE,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/blue_tank_1.png",
+	TANK_BLUE_1,
 	SCRIPT_MY_TANK
+)
+
+static var my_tank_ai: TankData = TankData.new(
+	1,
+	Team.PLAYER,
+	Vector2i(2, 2),
+	DEFAULT_TANK_HP,
+	DEFAULT_TANK_SPEED,
+	DEFAULT_BULLET_SPEED,
+	1,
+	DEFAULT_BULLET_SIZE,
+	DEFAULT_BULLET_FIRE_INTERVAL,
+	BULLET_BLUE_1,
+	AudioConfig.TANK_FIRE,
+	AudioConfig.TANK_DEATH,
+	EFFECT_TANK_PARTNER_EXPLOSION,
+	TANK_BLUE_1,
+	SCRIPT_PARTNER_SMART
 )
 
 static var partner_tank_1: TankData = TankData.new(
@@ -257,11 +278,11 @@ static var my_partner_tank: TankData = TankData.new(
 	1,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/tank/blue/1.png",
+	BULLET_BLUE_1,
 	AudioConfig.TANK_FIRE,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/blue_tank_1.png",
+	TANK_BLUE_1,
 	SCRIPT_PARTNER_MY
 )
 
