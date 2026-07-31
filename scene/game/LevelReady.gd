@@ -44,39 +44,18 @@ func populate_tank_stats() -> void:
 	if !show_stats:
 		return
 	tank_stats.add_child(make_header_row())
-	for tank_data: TankConfig.TankData in get_ready_tanks():
-		tank_stats.add_child(make_tank_row(tank_data))
+	for tank_id: int in BuffManager.get_player_tank_ids():
+		tank_stats.add_child(make_tank_row(TankConfig.tank_datas[tank_id]))
 	pass
 
 
 func should_show_stats() -> bool:
 	if not BuffManager.enemy_kill_counts.is_empty():
 		return true
-	for tank_data: TankConfig.TankData in get_ready_tanks():
-		if !BuffManager.buff_map.has(tank_data.id):
-			continue
-		if BuffManager.buff_map[tank_data.id].buffs.size() > 0:
+	for tank_id: int in BuffManager.get_player_tank_ids():
+		if BuffManager.buff_map[tank_id].buffs.size() > 0:
 			return true
 	return false
-
-
-func get_ready_tanks() -> Array[TankConfig.TankData]:
-	var tanks: Array[TankConfig.TankData] = [
-		TankConfig.my_tank,
-		TankConfig.partner_tank_1,
-	]
-	var level := BattleProgress.level
-	if level >= 3:
-		tanks.append(TankConfig.partner_tank_2)
-	if level >= 8:
-		tanks.append(TankConfig.partner_tank_3)
-	if level >= 13:
-		tanks.append(TankConfig.partner_tank_4)
-	if level >= 18:
-		tanks.append(TankConfig.partner_tank_5)
-	if level >= 23:
-		tanks.append(TankConfig.partner_tank_6)
-	return tanks
 
 
 func make_header_row() -> Control:

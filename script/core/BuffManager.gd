@@ -30,6 +30,15 @@ static func start_level() -> void:
 	enemy_kill_counts.clear()
 	pass
 
+
+## buff_map 中己方坦克 id，按 key 升序
+static func get_player_tank_ids() -> Array[int]:
+	var tank_ids: Array[int] = []
+	for tank_id: int in buff_map:
+		tank_ids.append(tank_id)
+	tank_ids.sort()
+	return tank_ids
+
 static func remove_current_level_buffs() -> void:
 	for id: int in current_level_buff_map:
 		if !buff_map.has(id):
