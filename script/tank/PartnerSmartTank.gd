@@ -13,11 +13,11 @@ var pending_steps := 1
 func physics_update(delta: float) -> void:
 	ai_think_timer -= delta
 
-	if fire_on_enemy():
-		return
-
 	if moving:
 		fire()
+		return
+
+	if fire_on_enemy():
 		return
 
 	if ai_think_timer <= 0.0:
