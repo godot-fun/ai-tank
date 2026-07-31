@@ -175,7 +175,7 @@ static func on_partner_tank_death(tank: Tank) -> void:
 static func on_respawn(tank_config: TankConfig.TankData) -> void:
 	if BattleProgress.level_ended:
 		return
-	if tank_config.id == 0:
+	if tank_config.team == TankConfig.Team.PLAYER:
 		TankHelper.create_tank(tank_config, Eagle.player_tank_start_grid_pos)
 	else:
 		TankHelper.create_tank(tank_config, Eagle.partner_tank_start_grid_pos)

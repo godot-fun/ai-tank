@@ -11,18 +11,12 @@ var pending_steps := 1
 
 
 func physics_update(delta: float) -> void:
-	fire()
-	
 	ai_think_timer -= delta
 
-	if moving:
-		fire()
+	if fire_on_enemy():
 		return
-	
-	# 远程火力优先：四向任一能直接打到敌人则转向并原地开火。
-	var fire_dir := find_direct_fire_direction()
-	if fire_dir != Vector2i.ZERO:
-		update_facing(fire_dir)
+
+	if moving:
 		fire()
 		return
 
@@ -40,6 +34,18 @@ func physics_update(delta: float) -> void:
 			move(pick_random_not_blocked_direction(), RandomUtils.random_int_limit(RANDOM_MOVE_EXTRA_STEPS_MAX))
 		fire()
 	pass
+
+
+## 见敌开火：四向任一能直接打到敌人则转向并原地开火。成功则返回 true。
+func fire_on_enemy() -> bool:
+	if not can_fire():
+		return false
+	var fire_dir := find_direct_fire_direction()
+	if fire_dir == Vector2i.ZERO:
+		return false
+	update_facing(fire_dir)
+	fire()
+	return true
 
 
 func fire() -> void:
@@ -104,4 +110,8 @@ func find_direct_fire_direction() -> Vector2i:
 		for obj in detect_objects:
 			if obj is Enemy:
 				return dir
+			if obj is BasicBullet:
+				var bullet := obj as BasicBullet
+				if TankConfig.is_enemy_faction(bullet.team):
+					return dir
 	return Vector2i.ZERO
