@@ -15,16 +15,19 @@ const TANK_ANIMATION_FPS := 5.0
 @onready var title_label: Label = $CenterContainer/VBox/HeaderRow/TitleLabel
 @onready var tank_sprite: AnimatedSprite2D = $CenterContainer/VBox/HeaderRow/TankArea/TankSprite
 @onready var menu_buttons: VBoxContainer = $CenterContainer/VBox/MenuButtons
-@onready var start_button: Button = $CenterContainer/VBox/MenuButtons/StartButton
+@onready var ai_mode_button: Button = $CenterContainer/VBox/MenuButtons/AiModeButton
+@onready var human_mode_button: Button = $CenterContainer/VBox/MenuButtons/HumanModeButton
 @onready var exit_button: Button = $CenterContainer/VBox/MenuButtons/ExitButton
 
 
 func _ready() -> void:
 	menu_buttons.modulate.a = 0.0
 	menu_buttons.visible = false
-	start_button.pressed.connect(on_start_pressed)
+	ai_mode_button.pressed.connect(on_ai_mode_pressed)
+	human_mode_button.pressed.connect(on_human_mode_pressed)
 	exit_button.pressed.connect(on_exit_pressed)
-	start_button.mouse_entered.connect(on_button_hover)
+	ai_mode_button.mouse_entered.connect(on_button_hover)
+	human_mode_button.mouse_entered.connect(on_button_hover)
 	exit_button.mouse_entered.connect(on_button_hover)
 	setup_tank_animation()
 	play_intro()
@@ -77,9 +80,20 @@ func on_button_hover() -> void:
 	pass
 
 
-func on_start_pressed() -> void:
+func on_ai_mode_pressed() -> void:
+	await start_game(BattleProgress.PlayMode.AI)
+	pass
+
+
+func on_human_mode_pressed() -> void:
+	await start_game(BattleProgress.PlayMode.HUMAN)
+	pass
+
+
+func start_game(mode: BattleProgress.PlayMode) -> void:
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	GameManager.init()
+	BattleProgress.play_mode = mode
 	Audio.stop_voice_fade()
 	await SceneHelper.async_change_scene_to_file("res://scene/game/LevelReady.tscn")
 	pass

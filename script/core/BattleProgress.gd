@@ -35,16 +35,25 @@ static var LEVEL_MUSIC_RANGES: Array[LevelMusicRange] = [
 	LevelMusicRange.new(34, 35, AudioConfig.BGM_STAGE_6),
 ]
 
+enum PlayMode {
+	HUMAN,
+	AI,
+}
+
 static var level := 0
 
 static var score := 0
 
 static var level_ended := false
 
+static var play_mode := PlayMode.HUMAN
+
+
 static func init() -> void:
 	level = 0
 	score = 0
 	level_ended = false
+	play_mode = PlayMode.HUMAN
 	pass
 
 
@@ -67,7 +76,8 @@ static func start_level() -> void:
 	BuffManager.start_level()
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
-	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)
+	var player_tank: TankConfig.TankData = TankConfig.my_tank_ai if play_mode == PlayMode.AI else TankConfig.my_tank
+	TankHelper.create_tank(player_tank, Eagle.player_tank_start_grid_pos)
 	TankHelper.create_tank(TankConfig.partner_tank_1, Eagle.partner_tank_start_grid_pos)
 	if level >= 3:
 		TankHelper.create_tank(TankConfig.partner_tank_2, Eagle.partner_tank_start_grid_pos)
