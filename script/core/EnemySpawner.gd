@@ -134,27 +134,30 @@ func update_elite_enemy_spawn(delta: float) -> void:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-func spawn_enemy_wave() -> void:
-	if enemies_spawned_wave >= get_enemy_wave_count():
+func spawn_enemy_wave(count_wave: bool = true) -> void:
+	if count_wave and enemies_spawned_wave >= get_enemy_wave_count():
 		return
 	var buff_size := enemies_spawned_wave / 3
-	enemies_spawned_wave += 1
+	if count_wave:
+		enemies_spawned_wave += 1
 	spawn_wave_tanks(TankConfig.enemy_easy, buff_size)
 
 
-func spawn_enemy_jeep_wave() -> void:
-	if jeep_enemies_spawned_wave >= get_enemy_jeep_wave_count():
+func spawn_enemy_jeep_wave(count_wave: bool = true) -> void:
+	if count_wave and jeep_enemies_spawned_wave >= get_enemy_jeep_wave_count():
 		return
 	var buff_size := jeep_enemies_spawned_wave / 4
-	jeep_enemies_spawned_wave += 1
+	if count_wave:
+		jeep_enemies_spawned_wave += 1
 	spawn_wave_tanks(TankConfig.enemy_jeep, buff_size)
 
 
-func spawn_elite_enemy_wave() -> void:
-	if elite_enemies_spawned_wave >= get_elite_enemy_wave_count():
+func spawn_elite_enemy_wave(count_wave: bool = true) -> void:
+	if count_wave and elite_enemies_spawned_wave >= get_elite_enemy_wave_count():
 		return
 	var buff_size := elite_enemies_spawned_wave / 2
-	elite_enemies_spawned_wave += 1
+	if count_wave:
+		elite_enemies_spawned_wave += 1
 	spawn_wave_tanks(TankConfig.elite_enemy_easy, buff_size)
 
 
@@ -178,8 +181,8 @@ func spawn_mini_boss_enemy() -> void:
 	tank.hp = tank.hp + BattleProgress.level * 5
 	spawn_mini_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_FC_BOSS_BATTLE)
-	SchedulerBus.schedule(spawn_enemy_wave, 1000)
-	SchedulerBus.schedule(spawn_enemy_wave, 2000)
+	SchedulerBus.schedule(spawn_enemy_wave.bind(false), 1000)
+	SchedulerBus.schedule(spawn_enemy_wave.bind(false), 2000)
 	pass
 	
 func spawn_boss_enemy() -> void:
@@ -193,9 +196,9 @@ func spawn_boss_enemy() -> void:
 	tank.hp = tank.hp + BattleProgress.level * 6
 	spawn_boss_enemy_seconds = 0
 	Audio.play_music(AudioConfig.BGM_BOSS_BATTLE)
-	SchedulerBus.schedule(spawn_enemy_wave, 1000)
-	SchedulerBus.schedule(spawn_enemy_wave, 2000)
-	SchedulerBus.schedule(spawn_enemy_wave, 3000)
+	SchedulerBus.schedule(spawn_enemy_wave.bind(false), 1000)
+	SchedulerBus.schedule(spawn_enemy_wave.bind(false), 2000)
+	SchedulerBus.schedule(spawn_enemy_jeep_wave.bind(false), 3000)
 	pass
 # ----------------------------------------------------------------------------------------------------------------------
 func get_waves_spawned() -> int:
