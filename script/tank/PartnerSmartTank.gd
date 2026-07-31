@@ -87,15 +87,11 @@ func go_to(target_grid: Vector2i) -> Vector2i:
 	var direction := path[1] - path[0]
 	if absi(direction.x) + absi(direction.y) != 1:
 		return Vector2i.ZERO
-	if TankHelper.is_move_blocked(path[1], grid_size, self):
-		return Vector2i.ZERO
 
 	pending_steps = 1
 	while pending_steps + 1 < path.size():
 		var next_cell := path[pending_steps + 1]
 		if next_cell - path[pending_steps] != direction:
-			break
-		if TankHelper.is_move_blocked(next_cell, grid_size, self):
 			break
 		pending_steps += 1
 
