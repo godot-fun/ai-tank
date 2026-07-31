@@ -15,6 +15,7 @@ const DROP_DURATION := 0.7
 const DROP_START_OFFSET := 200.0
 
 var fail_reason := FailReason.TIME_UP
+var transitioning := false
 
 var _particles: Array[GPUParticles2D] = []
 var _overlay_layer: CanvasLayer
@@ -152,6 +153,9 @@ func _auto_retry_after_countdown() -> void:
 
 
 func _on_retry_pressed() -> void:
+	if transitioning:
+		return
+	transitioning = true
 	_buttons.visible = false
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	BuffManager.remove_current_level_buffs()
@@ -160,6 +164,9 @@ func _on_retry_pressed() -> void:
 
 
 func _on_home_pressed() -> void:
+	if transitioning:
+		return
+	transitioning = true
 	_buttons.visible = false
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	await SceneHelper.async_change_scene_to_file(HOME_SCENE_PATH)
