@@ -10,6 +10,7 @@ const SCENE := "res://scene/effects/GameOverEffect.tscn"
 const HOME_SCENE_PATH := "res://scene/Home.tscn"
 const LEVEL_READY_SCENE_PATH := "res://scene/game/LevelReady.tscn"
 const BANNER_DURATION := 2.0
+const AI_RETRY_COUNTDOWN := 5
 const DROP_DURATION := 0.7
 const DROP_START_OFFSET := 200.0
 
@@ -54,6 +55,8 @@ func play_defeat() -> void:
 	await get_tree().create_timer(BANNER_DURATION, true).timeout
 	_stop_particles()
 	_spawn_action_buttons()
+	if BattleProgress.play_mode == BattleProgress.PlayMode.AI:
+		await _auto_retry_after_countdown()
 	pass
 
 
@@ -122,6 +125,29 @@ func _add_button(text: String, on_pressed: Callable) -> void:
 	button.pressed.connect(on_pressed)
 	button.mouse_entered.connect(func() -> void: Audios.play_sfx(AudioConfig.UI_SELECT))
 	_buttons.add_child(button)
+	pass
+
+
+func _auto_retry_after_countdown() -> void:
+	var label := Label.new()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 36)
+	label.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98))
+	label.set_anchors_preset(Control.PRESET_CENTER)
+	label.offset_left = -360.0
+	label.offset_top = 250.0
+	label.offset_right = 360.0
+	label.offset_bottom = 310.0
+	_overlay_layer.add_child(label)
+
+	var remaining := AI_RETRY_COUNTDOWN
+	while remaining > 0:
+		label.text = "AI模式下自动重试 %d" % remaining
+		await get_tree().create_timer(1.0, true).timeout
+		remaining -= 1
+
+	_on_retry_pressed()
 	pass
 
 
