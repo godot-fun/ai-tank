@@ -105,6 +105,7 @@ func go_to(target_grid: Vector2i) -> Vector2i:
 
 ## 上下左右任一方向能直接打到敌人则返回该方向；会误伤基地则跳过。
 func find_direct_fire_direction() -> Vector2i:
+	directions.shuffle()
 	for dir in directions:
 		var detect_objects := ray_detect_nearest_objects_toward(dir, 4)
 		for obj in detect_objects:
