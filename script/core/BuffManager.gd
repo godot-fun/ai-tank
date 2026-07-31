@@ -22,7 +22,7 @@ static func init() -> void:
 	initialized = true
 	EventBus.events.enemy_tank_death.connect(on_enemy_tank_death)
 	EventBus.events.player_tank_death.connect(on_player_tank_death)
-	EventBus.events.partnet_tank_death.connect(on_partner_tank_death)
+	EventBus.events.partner_tank_death.connect(on_partner_tank_death)
 	pass
 
 static func start_level() -> void:
