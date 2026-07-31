@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://xpmmo55nbcewa" path="res://test/pathfinder/pathfinder_test.gd" id="1_pf"]
+[ext_resource type="PackedScene" uid="uid://ch5hlyfdokboa" path="res://scene/game/AssistMap.tscn" id="2_map"]
+
+[node name="PathFinderTest" type="Node2D"]
+script = ExtResource("1_pf")
+
+[node name="AssistMap" parent="." instance=ExtResource("2_map")]
