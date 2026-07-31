@@ -9,7 +9,6 @@ static func find_path(
 	from: Vector2i,
 	to: Vector2i,
 	tank_grid_size: Vector2i,
-	exclude: Tank = null,
 ) -> Array[Vector2i]:
 	var region_size := Vector2i(
 		TileConfig.MAP_GRID_WIDTH - tank_grid_size.x + 1,
@@ -31,7 +30,7 @@ static func find_path(
 	for x in region_size.x:
 		for y in region_size.y:
 			var cell := Vector2i(x, y)
-			if is_solid(cell, tank_grid_size, exclude, to):
+			if is_solid(cell, tank_grid_size, to):
 				astar.set_point_solid(cell, true)
 
 	# 自身当前位置必须可走，避免被瞬时阻挡卡死
@@ -49,7 +48,6 @@ static func find_path(
 static func is_solid(
 	cell: Vector2i,
 	tank_grid_size: Vector2i,
-	exclude: Tank,
 	goal: Vector2i,
 ) -> bool:
 	if not TileConfig.is_in_bounds(cell, tank_grid_size):
@@ -59,7 +57,7 @@ static func is_solid(
 	# 与目标占地重叠时忽略坦克碰撞，否则 2×2 追 2×2 时四邻都会重叠导致无路
 	if footprints_overlap(cell, tank_grid_size, goal, tank_grid_size):
 		return false
-	return TankHelper.is_area_blocked_by_tank(cell, tank_grid_size, exclude)
+	return false
 
 
 static func footprints_overlap(

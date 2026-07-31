@@ -80,7 +80,7 @@ func pick_move_direction() -> Vector2i:
 
 ## 传入目标格子：A* 算整条路径，沿首段直线连续走完再转弯。无路则不动（不贪心挤窄缝）。
 func go_to(target_grid: Vector2i) -> Vector2i:
-	var path := PathFinderHelper.find_path(grid_pos, target_grid, grid_size, self)
+	var path := PathFinderHelper.find_path(grid_pos, target_grid, grid_size)
 	if path.size() < 2:
 		return Vector2i.ZERO
 
