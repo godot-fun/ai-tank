@@ -50,6 +50,17 @@ func apply_data(
 	speed = bullet_speed
 	damage = bullet_damage
 	bullet_size = _bullet_size
+	setup_physics_layers()
+	pass
+
+
+func setup_physics_layers() -> void:
+	if TankConfig.is_player_faction(team):
+		collision_layer = PhysicsLayers.PLAYER_BULLET
+		collision_mask = PhysicsLayers.PLAYER_BULLET_MASK
+	else:
+		collision_layer = PhysicsLayers.ENEMY_BULLET
+		collision_mask = PhysicsLayers.ENEMY_BULLET_MASK
 	pass
 
 

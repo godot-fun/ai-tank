@@ -20,6 +20,7 @@ func set_up_ray() -> void:
 	forward_shape_cast.exclude_parent = true
 	forward_shape_cast.collide_with_areas = true
 	forward_shape_cast.collide_with_bodies = true
+	forward_shape_cast.collision_mask = PhysicsLayers.PARTNER_RAY_MASK
 	forward_shape_cast.max_results = 8
 
 	var shape := RectangleShape2D.new()

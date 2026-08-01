@@ -23,8 +23,15 @@ func _ready() -> void:
 	sprite.texture = load(buff_resource)
 	setup_flash_material()
 	scale_buff()
+	setup_physics_layers()
 	body_entered.connect(on_body_entered)
 	start_lifetime()
+	pass
+
+
+func setup_physics_layers() -> void:
+	collision_layer = PhysicsLayers.BUFF
+	collision_mask = PhysicsLayers.PLAYER_TANK
 	pass
 
 func start_lifetime() -> void:

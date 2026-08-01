@@ -71,6 +71,16 @@ func apply_data(data: TankConfig.TankData, grid: Vector2i) -> void:
 	grid_pos = TileConfig.clamp_grid_to_bounds(grid, data.grid_size)
 	global_position = TileConfig.grid_to_world(grid_pos, grid_size)
 	max_hp = data.hp
+	setup_physics_layers()
+	pass
+
+
+func setup_physics_layers() -> void:
+	if TankConfig.is_player_faction(team):
+		collision_layer = PhysicsLayers.PLAYER_TANK
+	else:
+		collision_layer = PhysicsLayers.ENEMY_TANK
+	collision_mask = 0
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------

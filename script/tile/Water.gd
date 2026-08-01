@@ -12,6 +12,12 @@ func start() -> void:
 	pass
 
 
+func setup_physics_layers() -> void:
+	collision_layer = PhysicsLayers.WATER_TILE
+	collision_mask = 0
+	pass
+
+
 func setup_wave_material() -> void:
 	if wave_material == null:
 		wave_material = ShaderMaterial.new()

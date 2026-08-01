@@ -26,6 +26,17 @@ window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[layer_names]
+
+2d_physics/layer_1="player_tank"
+2d_physics/layer_2="enemy_tank"
+2d_physics/layer_3="solid_tile"
+2d_physics/layer_4="water_tile"
+2d_physics/layer_5="soft_tile"
+2d_physics/layer_6="player_bullet"
+2d_physics/layer_7="enemy_bullet"
+2d_physics/layer_8="buff"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

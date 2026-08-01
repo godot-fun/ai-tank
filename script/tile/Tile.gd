@@ -21,6 +21,13 @@ func apply_data(data: TileConfig.TileCell, grid: Vector2i) -> void:
 	tile_resource = data.tile_resource
 	grid_pos = TileConfig.clamp_grid_to_bounds(grid, Vector2i.ONE)
 	global_position = TileConfig.grid_to_world(grid_pos, Vector2i.ONE)
+	setup_physics_layers()
+	pass
+
+
+func setup_physics_layers() -> void:
+	collision_layer = PhysicsLayers.SOLID_TILE
+	collision_mask = 0
 	pass
 
 func scale_tile() -> void:

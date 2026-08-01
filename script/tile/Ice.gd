@@ -12,6 +12,12 @@ func start() -> void:
 	pass
 
 
+func setup_physics_layers() -> void:
+	collision_layer = PhysicsLayers.SOFT_TILE
+	collision_mask = 0
+	pass
+
+
 func setup_shimmer_material() -> void:
 	if shimmer_material == null:
 		shimmer_material = ShaderMaterial.new()
