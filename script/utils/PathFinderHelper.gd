@@ -48,14 +48,16 @@ static func find_path(
 static func is_solid(
 	cell: Vector2i,
 	tank_grid_size: Vector2i,
-	goal: Vector2i,
+	to: Vector2i,
 ) -> bool:
 	if not TileConfig.is_in_bounds(cell, tank_grid_size):
 		return true
 	if TileHelper.is_area_blocked_for_tank(cell, tank_grid_size):
 		return true
+	if TankHelper.is_area_blocked_by_player_tank(cell, tank_grid_size):
+		return true
 	# 与目标占地重叠时忽略坦克碰撞，否则 2×2 追 2×2 时四邻都会重叠导致无路
-	if footprints_overlap(cell, tank_grid_size, goal, tank_grid_size):
+	if footprints_overlap(cell, tank_grid_size, to, tank_grid_size):
 		return false
 	return false
 
