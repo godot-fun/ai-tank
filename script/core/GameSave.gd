@@ -55,6 +55,12 @@ static func save() -> void:
 	pass
 
 
+static func delete_save() -> void:
+	FileUtils.delete_file(SAVE_PATH)
+	Log.info("game save deleted path:[{}]", SAVE_PATH)
+	pass
+
+
 static func load_save() -> bool:
 	var json := FileUtils.read_file_to_string(SAVE_PATH)
 	if StringUtils.is_blank(json):

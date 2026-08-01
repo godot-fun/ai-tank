@@ -82,7 +82,10 @@ func end_level(fail_reason = null) -> void:
 	
 	if fail_reason == null:
 		BattleProgress.end_level()
-		GameSave.save()
+		if BattleProgress.is_game_cleared():
+			GameSave.delete_save()
+		else:
+			GameSave.save()
 		Audios.play_sfx(AudioConfig.STAGE_CLEAR)
 		var clear_effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
 		clear_effect.name = "StageClearEffect"
