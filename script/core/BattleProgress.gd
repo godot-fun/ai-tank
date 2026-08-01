@@ -42,8 +42,6 @@ enum PlayMode {
 
 static var level := 0
 
-static var score := 0
-
 static var level_ended := false
 
 ## 当前关卡已进行时长（秒），开局重置，每帧累加。
@@ -54,7 +52,6 @@ static var play_mode := PlayMode.HUMAN
 
 static func init() -> void:
 	level = 0
-	score = 0
 	level_ended = false
 	level_elapsed = 0.0
 	play_mode = PlayMode.HUMAN
