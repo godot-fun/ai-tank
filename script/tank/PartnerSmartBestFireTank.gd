@@ -3,7 +3,7 @@ class_name PartnerSmartBestFireTank
 
 ## 关卡进行时间未超过时限的 BEST_FIRE_RATIO：只前往最佳向上射击点并站桩开火，不随机游荡；之后回退为普通智能队友。
 ## 期间若曼哈顿距离 ≤ BUFF_SEEK_RANGE_EARLY 内有可拾取 buff，仍优先去拿。
-const BEST_FIRE_RATIO := 0.6
+const BEST_FIRE_RATIO := 0.5
 const BUFF_SEEK_RANGE_EARLY := 10
 
 
