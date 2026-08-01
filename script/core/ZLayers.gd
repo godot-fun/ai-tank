@@ -7,9 +7,10 @@
 ## | z     | 常量                | 谁用 |
 ## | -10   | ASSIST_MAP          | AssistMap 调试网格 |
 ## | -8    | WATER / ICE         | Water、Ice（坦克驶过其上） |
-## | -4    | BULLET              | BasicBullet |
+## | -4    | BULLET              | BasicBullet 刚发射 |
 ## | 0     | （默认）            | 坦克、砖/钢/基地碰撞格 |
 ## | 1     | EAGLE               | Eagle 独立 Sprite |
+## | 2     | BULLET_OVER         | 子弹飞出约一格后抬高 |
 ## | 8     | FOREST              | Forest（遮挡坦克） |
 ## | 64    | RELOAD_INDICATOR    | ReloadIndicator |
 ## | 128   | BUFF                | Buff 拾取物 |
@@ -25,6 +26,7 @@ const WATER := -8
 const ICE := -8
 const BULLET := -4
 const EAGLE := 1
+const BULLET_OVER := 2
 const FOREST := 8
 const RELOAD_INDICATOR := 64
 const BUFF := 128

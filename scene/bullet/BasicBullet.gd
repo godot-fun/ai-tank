@@ -19,6 +19,7 @@ func _ready() -> void:
 	body_entered.connect(on_body_entered)
 	area_entered.connect(on_area_entered)
 	scale_sprite()
+	schedule_raise_z()
 	pass
 
 
@@ -61,6 +62,16 @@ func setup_physics_layers() -> void:
 	else:
 		collision_layer = PhysicsLayers.ENEMY_BULLET
 		collision_mask = PhysicsLayers.ENEMY_BULLET_MASK
+	pass
+
+
+## 飞出约一格后再抬到坦克之上（穿过友军可见）
+func schedule_raise_z() -> void:
+	if speed <= 0.0:
+		return
+	var tween := create_tween()
+	tween.tween_interval(TileConfig.TILE_SIZE / speed)
+	tween.tween_callback(func() -> void: z_index = ZLayers.BULLET_OVER)
 	pass
 
 
