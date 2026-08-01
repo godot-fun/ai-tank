@@ -51,7 +51,8 @@ static func create_tank_with_buffs(data: TankConfig.TankData, grid: Vector2i, bu
 	var tank: Tank = scene.instantiate()
 	tank.set_script(script)
 	tank.apply_data(data, spawn_grid)
-	
+	tank.name = StringUtils.format("{}_{}_{}", TankConfig.Team.keys()[data.team], spawn_grid.x, spawn_grid.y)
+
 	var parent: Node = (Engine.get_main_loop() as SceneTree).current_scene
 	parent.add_child(tank)
 	

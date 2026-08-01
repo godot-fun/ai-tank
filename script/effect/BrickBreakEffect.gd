@@ -35,6 +35,7 @@ static func spawn(world_center: Vector2, tile_scale: Vector2, texture: Texture2D
 		return
 
 	var effect := BrickBreakEffect.new()
+	effect.name = "BrickBreakEffect"
 	effect.global_position = world_center
 	parent.add_child(effect)
 	effect._play(tile_scale, texture)
@@ -74,6 +75,7 @@ func _spawn_chunk(
 	atlas.filter_clip = true  # 裁切边缘不采样邻格，避免接缝脏边
 
 	var piece := Sprite2D.new()
+	piece.name = StringUtils.format("Chunk_{}_{}", col, row)
 	piece.texture = atlas
 	piece.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST  # 像素风，禁止模糊
 

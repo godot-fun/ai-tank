@@ -16,6 +16,7 @@ static func spawn(world_position: Vector2, duration: float, parent: Node) -> voi
 		return
 
 	var countdown := RespawnCountdown.new()
+	countdown.name = "RespawnCountdown"
 	countdown.duration = duration
 	countdown.global_position = world_position
 	parent.add_child(countdown)
@@ -33,6 +34,7 @@ func _ready() -> void:
 
 func setup_label() -> void:
 	label = Label.new()
+	label.name = "CountdownLabel"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", FONT_SIZE)

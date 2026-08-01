@@ -24,6 +24,7 @@ func new_buff() -> IBuff:
 
 static func start_poll(tank: Tank) -> void:
 	poll_timer = Timer.new()
+	poll_timer.name = "FreezePollTimer"
 	poll_timer.wait_time = POLL_INTERVAL
 	poll_timer.autostart = true
 	tank.get_parent().add_child(poll_timer)

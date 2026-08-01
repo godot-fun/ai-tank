@@ -83,6 +83,7 @@ func end_level(fail_reason = null) -> void:
 		BattleProgress.end_level()
 		Audios.play_sfx(AudioConfig.STAGE_CLEAR)
 		var clear_effect: StageClearEffect = load(STAGE_CLEAR_EFFECT_SCENE).instantiate()
+		clear_effect.name = "StageClearEffect"
 		add_child(clear_effect)
 		await ThreadUtils.async_sleep(4000)
 		if BattleProgress.is_game_cleared():
@@ -93,6 +94,7 @@ func end_level(fail_reason = null) -> void:
 		BattleProgress.fail_level()
 		Audios.play_sfx(AudioConfig.GAME_OVER)
 		var game_over_effect: GameOverEffect = load(GAME_OVER_EFFECT_SCENE).instantiate()
+		game_over_effect.name = "GameOverEffect"
 		game_over_effect.fail_reason = fail_reason
 		add_child(game_over_effect)
 	pass

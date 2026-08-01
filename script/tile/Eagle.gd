@@ -26,6 +26,7 @@ static func create_base() -> void:
 
 static func create_eagle() -> void:
 	egale_sprite = Sprite2D.new()
+	egale_sprite.name = "EagleSprite"
 	egale_sprite.centered = true
 	egale_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	egale_sprite.texture = load(TEXTURE)

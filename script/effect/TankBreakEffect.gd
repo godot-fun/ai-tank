@@ -31,6 +31,7 @@ static func spawn(
 		return
 
 	var effect := TankBreakEffect.new()
+	effect.name = "TankBreakEffect"
 	effect.global_position = world_center
 	parent.add_child(effect)
 	effect.play(tank_scale, grid_size, texture, sprite_rotation)
@@ -77,6 +78,7 @@ func spawn_chunk(
 	atlas.filter_clip = true
 
 	var piece := Sprite2D.new()
+	piece.name = StringUtils.format("Chunk_{}_{}", col, row)
 	piece.texture = atlas
 	piece.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 

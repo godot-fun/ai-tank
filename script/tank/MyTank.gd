@@ -121,6 +121,7 @@ func stop_move_sound() -> void:
 # fire cool down
 func setup_reload_indicator() -> void:
 	reload_indicator = ReloadIndicator.new()
+	reload_indicator.name = "ReloadIndicator"
 	add_child(reload_indicator)
 	pass
 

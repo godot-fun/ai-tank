@@ -114,10 +114,12 @@ func draw_footprint(grid: Vector2i, fill: Color, outline: Color) -> void:
 
 func setup_hud() -> void:
 	var hud_layer := CanvasLayer.new()
+	hud_layer.name = "HudLayer"
 	hud_layer.layer = 10
 	add_child(hud_layer)
 
 	info_label = Label.new()
+	info_label.name = "InfoLabel"
 	info_label.add_theme_font_size_override("font_size", 28)
 	info_label.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98))
 	info_label.position = Vector2(24, 16)

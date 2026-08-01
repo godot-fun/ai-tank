@@ -41,6 +41,7 @@ func play_defeat() -> void:
 	_add_dim_overlay()
 
 	var banner_host := Node2D.new()
+	banner_host.name = "BannerHost"
 	banner_host.position = start_pos
 	add_child(banner_host)
 
@@ -63,10 +64,12 @@ func play_defeat() -> void:
 
 func _add_dim_overlay() -> void:
 	_overlay_layer = CanvasLayer.new()
+	_overlay_layer.name = "DimOverlay"
 	_overlay_layer.layer = 90
 	add_child(_overlay_layer)
 
 	var dim := ColorRect.new()
+	dim.name = "DimRect"
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	dim.color = Color(0.12, 0.0, 0.0, 0.0)
@@ -79,6 +82,7 @@ func _add_dim_overlay() -> void:
 
 func _spawn_banner() -> void:
 	var label := Label.new()
+	label.name = "BannerLabel"
 	label.text = _get_banner_text()
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -103,6 +107,7 @@ func _spawn_banner() -> void:
 
 func _spawn_action_buttons() -> void:
 	_buttons = VBoxContainer.new()
+	_buttons.name = "ActionButtons"
 	_buttons.set_anchors_preset(Control.PRESET_CENTER)
 	_buttons.offset_left = -140.0
 	_buttons.offset_top = 80.0
@@ -120,6 +125,7 @@ func _spawn_action_buttons() -> void:
 
 func _add_button(text: String, on_pressed: Callable) -> void:
 	var button := Button.new()
+	button.name = text
 	button.text = text
 	button.custom_minimum_size = Vector2(280.0, 64.0)
 	button.add_theme_font_size_override("font_size", 32)
@@ -131,6 +137,7 @@ func _add_button(text: String, on_pressed: Callable) -> void:
 
 func _auto_retry_after_countdown() -> void:
 	var label := Label.new()
+	label.name = "RetryCountdownLabel"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 36)
@@ -199,6 +206,7 @@ func _setup_particles(host: Node2D) -> void:
 
 func _create_smoke_particles(position: Vector2, color: Color) -> GPUParticles2D:
 	var particles := GPUParticles2D.new()
+	particles.name = "SmokeParticles"
 	particles.position = position
 	particles.amount = 18
 	particles.lifetime = 2.0

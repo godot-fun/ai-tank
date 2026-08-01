@@ -204,6 +204,7 @@ func fire_to(to: Vector2i) -> void:
 	var bullet: BasicBullet = bullet_scene.instantiate()
 	var spawn_offset := Vector2(to) * TileConfig.TILE_SIZE / 2
 	bullet.apply_data(id, team, global_position + spawn_offset, to, bullet_speed, bullet_damage, bullet_size, bullet_resource)
+	bullet.name = StringUtils.format("Bullet_{}", id)
 	get_tree().current_scene.add_child(bullet)
 
 	fire_cooldown = bullet_fire_interval

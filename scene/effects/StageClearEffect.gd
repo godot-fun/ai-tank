@@ -31,6 +31,7 @@ func play_celebration() -> void:
 	_add_dim_overlay()
 
 	var banner_host := Node2D.new()
+	banner_host.name = "BannerHost"
 	banner_host.position = start_pos
 	add_child(banner_host)
 
@@ -51,10 +52,12 @@ func play_celebration() -> void:
 
 func _add_dim_overlay() -> void:
 	_overlay_layer = CanvasLayer.new()
+	_overlay_layer.name = "DimOverlay"
 	_overlay_layer.layer = 90
 	add_child(_overlay_layer)
 
 	var dim := ColorRect.new()
+	dim.name = "DimRect"
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	dim.color = Color(0.0, 0.0, 0.0, 0.35)
@@ -67,6 +70,7 @@ func _spawn_banner() -> void:
 		return
 
 	var label := Label.new()
+	label.name = "BannerLabel"
 	label.text = "STAGE CLEAR"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -119,6 +123,7 @@ func _setup_particles(host: Node2D) -> void:
 
 func _create_sparkle_particles(position: Vector2, color: Color) -> GPUParticles2D:
 	var particles := GPUParticles2D.new()
+	particles.name = "SparkleParticles"
 	particles.position = position
 	particles.amount = 24
 	particles.lifetime = 1.4

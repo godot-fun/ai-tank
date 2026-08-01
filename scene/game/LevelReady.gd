@@ -60,15 +60,18 @@ func should_show_stats() -> bool:
 
 func make_header_row() -> Control:
 	var row := HBoxContainer.new()
+	row.name = "HeaderRow"
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 16)
 
 	var tank_spacer := Control.new()
+	tank_spacer.name = "TankSpacer"
 	tank_spacer.custom_minimum_size = Vector2(TANK_ICON_SIZE, BUFF_ICON_SIZE)
 	row.add_child(tank_spacer)
 
 	var kill_header := Label.new()
+	kill_header.name = "KillHeader"
 	kill_header.text = "击杀"
 	kill_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	kill_header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -85,6 +88,7 @@ func make_header_row() -> Control:
 
 func make_buff_header_cell(buff_type: int) -> Control:
 	var cell := CenterContainer.new()
+	cell.name = StringUtils.format("BuffHeader_{}", IBuff.BuffType.keys()[buff_type])
 	cell.custom_minimum_size = Vector2(BUFF_COL_WIDTH, BUFF_ICON_SIZE)
 	cell.mouse_filter = Control.MOUSE_FILTER_STOP
 	cell.tooltip_text = get_buff_description(buff_type)
@@ -92,6 +96,7 @@ func make_buff_header_cell(buff_type: int) -> Control:
 	var resource := get_buff_resource(buff_type)
 	if !resource.is_empty():
 		var icon := TextureRect.new()
+		icon.name = "BuffIcon"
 		icon.texture = load(resource)
 		icon.custom_minimum_size = Vector2(BUFF_ICON_SIZE, BUFF_ICON_SIZE)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -104,11 +109,13 @@ func make_buff_header_cell(buff_type: int) -> Control:
 
 func make_tank_row(tank_data: TankConfig.TankData) -> Control:
 	var row := HBoxContainer.new()
+	row.name = StringUtils.format("TankRow_{}", tank_data.id)
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 16)
 
 	var tank_icon := TextureRect.new()
+	tank_icon.name = "TankIcon"
 	tank_icon.texture = load(tank_data.tank_resource)
 	tank_icon.custom_minimum_size = Vector2(TANK_ICON_SIZE, TANK_ICON_SIZE)
 	tank_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -119,6 +126,7 @@ func make_tank_row(tank_data: TankConfig.TankData) -> Control:
 	if BuffManager.enemy_kill_counts.has(tank_data.id):
 		kills = BuffManager.enemy_kill_counts[tank_data.id]
 	var kill_label := Label.new()
+	kill_label.name = "KillCount"
 	kill_label.text = "x%d" % kills
 	kill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	kill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -152,11 +160,13 @@ func get_buff_type_counts(tank_id: int) -> Dictionary[int, int]:
 
 func make_buff_count_cell(buff_type: int, count: int) -> Control:
 	var cell := CenterContainer.new()
+	cell.name = StringUtils.format("BuffCount_{}", IBuff.BuffType.keys()[buff_type])
 	cell.custom_minimum_size = Vector2(BUFF_COL_WIDTH, TANK_ICON_SIZE)
 	cell.mouse_filter = Control.MOUSE_FILTER_STOP
 	cell.tooltip_text = get_buff_description(buff_type)
 
 	var label := Label.new()
+	label.name = "CountLabel"
 	label.text = str(count) if count > 0 else "-"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

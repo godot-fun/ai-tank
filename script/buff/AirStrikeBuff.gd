@@ -33,6 +33,7 @@ func trigger(tank: Tank) -> void:
 	for i in count:
 		Audios.play_sfx(AudioConfig.BUFF_AIR_STRIKE)
 		var aircraft := Sprite2D.new()
+		aircraft.name = StringUtils.format("Aircraft_{}", i)
 		aircraft.texture = texture
 		aircraft.scale = Vector2.ONE * aircraft_scale
 		aircraft.z_index = 512

@@ -32,16 +32,19 @@ func _process(delta: float) -> void:
 
 func _setup_hud() -> void:
 	var hud_layer := CanvasLayer.new()
+	hud_layer.name = "HudLayer"
 	hud_layer.layer = 10
 	add_child(hud_layer)
 
 	_level_label = Label.new()
+	_level_label.name = "LevelLabel"
 	_level_label.add_theme_font_size_override("font_size", 36)
 	_level_label.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98))
 	_level_label.position = Vector2(32, 24)
 	hud_layer.add_child(_level_label)
 
 	_pause_button = Button.new()
+	_pause_button.name = "PauseButton"
 	_pause_button.text = "暂停"
 	_pause_button.custom_minimum_size = Vector2(120, 48)
 	_pause_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
