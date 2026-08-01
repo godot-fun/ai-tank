@@ -4,7 +4,7 @@ class_name BestFireGridStrategy
 ## 若基地正上方弹道无砖且无钢铁，优先返回基地上方站位。
 ## 条件：无友方坦克、站位到顶无钢铁/水/老鹰硬挡（砖可打碎，仍可作为候选）。
 ## 同一行取弹道砖块最少的列；砖数相同则取离当前位置最近的点。找不到返回 Vector2i.MIN。
-const SEARCH_RANGE := 6
+const SEARCH_RANGE := 8
 
 static func find_best_fire_grid(tank: Tank) -> Vector2i:
 	var size := tank.grid_size
