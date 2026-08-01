@@ -29,13 +29,9 @@ func best_fire_update(delta: float) -> void:
 		return
 
 	ai_think_timer = AI_THINK_INTERVAL
-	pending_steps = 1
 	var direction := pick_best_fire_direction()
 	if direction != Vector2i.ZERO:
-		if pending_steps <= 1:
-			move(direction)
-		else:
-			move(direction, pending_steps - 1)
+		move(direction)
 		fire()
 		return
 
