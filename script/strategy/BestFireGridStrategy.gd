@@ -3,7 +3,7 @@ class_name BestFireGridStrategy
 ## 以当前坦克为原点，只在周围 SEARCH_RANGE 格内自底向上找最佳向上射击站位。
 ## 若基地正上方弹道无砖且无钢铁，优先返回基地上方站位。
 ## 条件：无友方坦克、站位到顶无钢铁/水/老鹰硬挡（砖可打碎，仍可作为候选）。
-## 同一行取弹道砖块最少的列。找不到返回 Vector2i.MIN。
+## 同一行取弹道砖块最少的列；砖数相同则取离当前位置最近的点。找不到返回 Vector2i.MIN。
 const SEARCH_RANGE := 6
 
 static func find_best_fire_grid(tank: Tank) -> Vector2i:
@@ -26,6 +26,7 @@ static func find_best_fire_grid(tank: Tank) -> Vector2i:
 	for y in range(y_from, y_to - 1, -1):
 		var best := Vector2i.MIN
 		var best_bricks := 2147483647
+		var best_dist := 2147483647
 		for x in range(x_from, x_to + 1):
 			var grid_pos := Vector2i(x, y)
 			if TankHelper.is_area_blocked_by_player_tank(grid_pos, size, tank):
@@ -34,8 +35,10 @@ static func find_best_fire_grid(tank: Tank) -> Vector2i:
 				continue
 
 			var bricks := count_fire_lane_bricks(grid_pos, size)
-			if bricks < best_bricks:
+			var dist := absi(grid_pos.x - origin.x) + absi(grid_pos.y - origin.y)
+			if bricks < best_bricks or (bricks == best_bricks and dist < best_dist):
 				best_bricks = bricks
+				best_dist = dist
 				best = grid_pos
 
 		if best != Vector2i.MIN:
