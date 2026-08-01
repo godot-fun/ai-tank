@@ -189,6 +189,7 @@ func take_damage(amount: int, damage_from_tank_id: int = -1) -> bool:
 func update_fire_cooldown(delta: float) -> void:
 	if fire_cooldown > 0.0:
 		fire_cooldown -= delta
+	pass
 
 func can_fire() -> bool:
 	return fire_cooldown <= 0.0
