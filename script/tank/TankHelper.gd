@@ -113,8 +113,10 @@ static func is_area_blocked_by_tank(grid: Vector2i, grid_size: Vector2i, exclude
 	return false
 
 
-static func is_area_blocked_by_player_tank(grid: Vector2i, grid_size: Vector2i) -> bool:
+static func is_area_blocked_by_player_tank(grid: Vector2i, grid_size: Vector2i, exclude: Tank = null) -> bool:
 	for tank in tanks:
+		if tank == exclude:
+			continue
 		if TankConfig.is_enemy_faction(tank.team):
 			continue
 		if grid.x < tank.grid_pos.x + tank.grid_size.x and grid.x + grid_size.x > tank.grid_pos.x \
