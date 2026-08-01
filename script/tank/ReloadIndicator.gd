@@ -9,7 +9,7 @@ var progress := 0.0
 
 func _ready() -> void:
 	top_level = true
-	z_index = 64
+	z_index = ZLayers.RELOAD_INDICATOR
 	visible = false
 	pass
 

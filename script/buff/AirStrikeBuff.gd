@@ -36,7 +36,7 @@ func trigger(tank: Tank) -> void:
 		aircraft.name = StringUtils.format("Aircraft_{}", i)
 		aircraft.texture = texture
 		aircraft.scale = Vector2.ONE * aircraft_scale
-		aircraft.z_index = 512
+		aircraft.z_index = ZLayers.AIR_STRIKE
 
 		var flight_material := ShaderMaterial.new()
 		flight_material.shader = shader

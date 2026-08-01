@@ -7,7 +7,7 @@ static var sway_material: ShaderMaterial
 
 
 func start() -> void:
-	z_index = 8
+	z_index = ZLayers.FOREST
 	setup_sway_material()
 	pass
 

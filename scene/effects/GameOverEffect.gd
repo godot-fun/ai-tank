@@ -24,7 +24,7 @@ var _buttons: VBoxContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	z_index = 4096
+	z_index = ZLayers.STAGE_OVERLAY
 	await get_tree().process_frame
 	await play_defeat()
 	pass

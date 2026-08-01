@@ -5,7 +5,7 @@ extends Node2D
 
 func _ready() -> void:
 	Log.info("map size:[{} * {}]", TileConfig.MAP_GRID_WIDTH, TileConfig.MAP_GRID_HEIGHT)
-	z_index = -10
+	z_index = ZLayers.ASSIST_MAP
 	queue_redraw()
 	pass
 

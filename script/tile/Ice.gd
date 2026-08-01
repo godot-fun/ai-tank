@@ -7,7 +7,7 @@ static var shimmer_material: ShaderMaterial
 
 
 func start() -> void:
-	z_index = -8
+	z_index = ZLayers.ICE
 	setup_shimmer_material()
 	pass
 

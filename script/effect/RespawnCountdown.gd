@@ -25,7 +25,7 @@ static func spawn(world_position: Vector2, duration: float, parent: Node) -> voi
 
 func _ready() -> void:
 	top_level = true
-	z_index = 2048
+	z_index = ZLayers.RESPAWN_COUNTDOWN
 	setup_label()
 	update_display(int(ceil(duration)))
 	set_process(true)

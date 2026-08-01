@@ -1,18 +1,23 @@
 class_name BestFireGridStrategy
 
 ## 以当前坦克为原点，只在周围 SEARCH_RANGE 格内自底向上找最佳向上射击站位。
+## 若基地正上方弹道无砖且无钢铁，优先返回基地上方站位。
 ## 条件：无友方坦克、站位到顶无钢铁/水/老鹰硬挡（砖可打碎，仍可作为候选）。
 ## 同一行取弹道砖块最少的列。找不到返回 Vector2i.MIN。
 const SEARCH_RANGE := 6
 
 static func find_best_fire_grid(tank: Tank) -> Vector2i:
 	var size := tank.grid_size
-	var origin := tank.grid_pos
 	var max_x := TileConfig.MAP_GRID_WIDTH - size.x
 	var max_y := TileConfig.MAP_GRID_HEIGHT - size.y
 	if max_x < 0 or max_y < 0:
 		return Vector2i.MIN
 
+	var above_base := find_above_base_grid(tank, size)
+	if above_base != Vector2i.MIN:
+		return above_base
+
+	var origin := tank.grid_pos
 	var y_from := mini(origin.y + SEARCH_RANGE, max_y)
 	var y_to := maxi(origin.y - SEARCH_RANGE, 0)
 	var x_from := maxi(origin.x - SEARCH_RANGE, 0)
@@ -37,6 +42,33 @@ static func find_best_fire_grid(tank: Tank) -> Vector2i:
 			return best
 
 	return Vector2i.MIN
+
+
+## 基地正上方（与老鹰同列、紧贴老鹰上方）弹道无砖且无钢铁时返回该站位，否则 Vector2i.MIN。
+static func find_above_base_grid(tank: Tank, size: Vector2i) -> Vector2i:
+	if not is_base_above_empty():
+		return Vector2i.MIN
+
+	var eagle := Eagle.egale_first_grid_pos
+	var pos := Vector2i(eagle.x, eagle.y - size.y)
+	if not TileConfig.is_in_bounds(pos, size):
+		return Vector2i.MIN
+	if TankHelper.is_area_blocked_by_player_tank(pos, size, tank):
+		return Vector2i.MIN
+	return pos
+
+
+## 老鹰占地正上方到地图顶是否空旷：无砖、无钢铁、无水（不含老鹰自身与基地墙行）。
+static func is_base_above_empty() -> bool:
+	var eagle := Eagle.egale_first_grid_pos
+	for x in range(eagle.x, eagle.x + 2):
+		for y in range(eagle.y - 2, -1, -1):
+			var tile := TileHelper.get_tile(Vector2i(x, y))
+			if tile == null:
+				continue
+			if tile is BrickWall or tile is SteelWall or tile is Water:
+				return false
+	return true
 
 
 ## 站位占地到地图顶是否有钢铁、水或老鹰等硬障碍（砖可打碎，不视为硬挡）。
