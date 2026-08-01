@@ -36,6 +36,7 @@ const TANK_BLUE_1 := "res://image/characters/blue_tank_1.png"
 const SCRIPT_MY_TANK := "res://script/tank/MyTank.gd"
 const SCRIPT_PARTNER_EASY := "res://script/tank/PartnerEasyTank.gd"
 const SCRIPT_PARTNER_SMART := "res://script/tank/PartnerSmartTank.gd"
+const SCRIPT_PARTNER_HOLD_FIRE := "res://script/tank/PartnerHoldFireTank.gd"
 const SCRIPT_PARTNER_MY := "res://script/tank/MyPartnerTank.gd"
 
 
@@ -137,7 +138,7 @@ static var my_tank_ai: TankData = TankData.new(
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
 	TANK_BLUE_1,
-	SCRIPT_PARTNER_SMART
+	SCRIPT_PARTNER_HOLD_FIRE
 )
 
 static var partner_tank_1: TankData = TankData.new(
