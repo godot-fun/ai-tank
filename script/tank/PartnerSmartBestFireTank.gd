@@ -1,12 +1,12 @@
 extends PartnerSmartTank
 class_name PartnerSmartBestFireTank
 
-## 开局前 BEST_FIRE_SECONDS 秒：只前往最佳向上射击点并站桩开火，不随机游荡；之后回退为普通智能队友。
+## 开局前占用当前关卡时限的 BEST_FIRE_RATIO：只前往最佳向上射击点并站桩开火，不随机游荡；之后回退为普通智能队友。
 ## 期间若曼哈顿距离 ≤ BUFF_SEEK_RANGE_EARLY 内有可拾取 buff，仍优先去拿。
-const BEST_FIRE_SECONDS := 30.0
+const BEST_FIRE_RATIO := 0.6
 const BUFF_SEEK_RANGE_EARLY := 10
 
-var best_fire_remain := BEST_FIRE_SECONDS
+var best_fire_remain := BattleProgress.get_time_limit() * BEST_FIRE_RATIO
 
 
 func physics_update(delta: float) -> void:
