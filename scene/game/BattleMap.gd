@@ -37,6 +37,7 @@ func _process(delta: float) -> void:
 	if BattleProgress.level_ended:
 		return
 
+	BattleProgress.update(delta)
 	battle_timer = maxf(battle_timer - delta, 0.0)
 	battle_hud.update_timer(battle_timer)
 

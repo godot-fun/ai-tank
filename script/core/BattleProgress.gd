@@ -46,6 +46,9 @@ static var score := 0
 
 static var level_ended := false
 
+## 当前关卡已进行时长（秒），开局重置，每帧累加。
+static var level_elapsed := 0.0
+
 static var play_mode := PlayMode.HUMAN
 
 
@@ -53,6 +56,7 @@ static func init() -> void:
 	level = 0
 	score = 0
 	level_ended = false
+	level_elapsed = 0.0
 	play_mode = PlayMode.HUMAN
 	pass
 
@@ -71,8 +75,16 @@ static func get_current_level_music() -> String:
 	return AudioConfig.BGM_STAGE_1
 
 
+static func update(delta: float) -> void:
+	if level_ended:
+		return
+	level_elapsed += delta
+	pass
+
+
 static func start_level() -> void:
 	level_ended = false
+	level_elapsed = 0.0
 	BuffManager.start_level()
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
