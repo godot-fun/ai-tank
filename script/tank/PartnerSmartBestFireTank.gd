@@ -2,7 +2,9 @@ extends PartnerSmartTank
 class_name PartnerSmartBestFireTank
 
 ## 开局前 BEST_FIRE_SECONDS 秒：只前往最佳向上射击点并站桩开火，不随机游荡；之后回退为普通智能队友。
+## 期间若曼哈顿距离 ≤ BUFF_SEEK_RANGE_EARLY 内有可拾取 buff，仍优先去拿。
 const BEST_FIRE_SECONDS := 30.0
+const BUFF_SEEK_RANGE_EARLY := 10
 
 var best_fire_remain := BEST_FIRE_SECONDS
 
@@ -48,6 +50,10 @@ func best_fire_update(delta: float) -> void:
 
 
 func pick_best_fire_direction() -> Vector2i:
+	var nearby_buff := BuffHelper.find_nearest_obtainable_buff(self, BUFF_SEEK_RANGE_EARLY)
+	if nearby_buff != null:
+		return go_to(nearby_buff.grid_pos)
+
 	var target := BestFireGridStrategy.find_best_fire_grid(self)
 	if target == Vector2i.MIN or target == grid_pos:
 		return Vector2i.ZERO
