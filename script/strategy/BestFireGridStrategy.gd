@@ -14,16 +14,16 @@ static func find_best_fire_grid(tank: Tank) -> Vector2i:
 		var best := Vector2i.MIN
 		var best_bricks := 2147483647
 		for x in range(max_x + 1):
-			var pos := Vector2i(x, y)
-			if TankHelper.is_area_blocked_by_player_tank(pos, size, tank):
+			var grid_pos := Vector2i(x, y)
+			if TankHelper.is_area_blocked_by_player_tank(grid_pos, size, tank):
 				continue
-			if fire_lane_has_hard_obstacle(pos, size):
+			if fire_lane_has_hard_obstacle(grid_pos, size):
 				continue
 
-			var bricks := count_fire_lane_bricks(pos, size)
+			var bricks := count_fire_lane_bricks(grid_pos, size)
 			if bricks < best_bricks:
 				best_bricks = bricks
-				best = pos
+				best = grid_pos
 
 		if best != Vector2i.MIN:
 			return best
@@ -45,11 +45,11 @@ static func fire_lane_has_hard_obstacle(grid: Vector2i, grid_size: Vector2i) -> 
 	return false
 
 
-## 统计站位占地及其上方弹道上的砖块数量（含 BrickWallEagle）。
+## 统计站位上方弹道上的砖块数量（不含当前站位占地行，含 BrickWallEagle）。
 static func count_fire_lane_bricks(grid: Vector2i, grid_size: Vector2i) -> int:
 	var count := 0
 	for x in range(grid.x, grid.x + grid_size.x):
-		for y in range(grid.y + grid_size.y - 1, -1, -1):
+		for y in range(grid.y - 1, -1, -1):
 			var tile := TileHelper.get_tile(Vector2i(x, y))
 			if tile is BrickWall:
 				count += 1

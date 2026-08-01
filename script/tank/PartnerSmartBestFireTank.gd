@@ -1,22 +1,22 @@
 extends PartnerSmartTank
-class_name PartnerHoldFireTank
+class_name PartnerSmartBestFireTank
 
-## 开局前 HOLD_FIRE_SECONDS 秒：只前往最佳向上射击点并站桩开火，不随机游荡；之后回退为普通智能队友。
-const HOLD_FIRE_SECONDS := 30.0
+## 开局前 BEST_FIRE_SECONDS 秒：只前往最佳向上射击点并站桩开火，不随机游荡；之后回退为普通智能队友。
+const BEST_FIRE_SECONDS := 30.0
 
-var hold_fire_remain := HOLD_FIRE_SECONDS
+var best_fire_remain := BEST_FIRE_SECONDS
 
 
 func physics_update(delta: float) -> void:
-	if hold_fire_remain > 0.0:
-		hold_fire_remain -= delta
-		hold_fire_update(delta)
+	if best_fire_remain > 0.0:
+		best_fire_remain -= delta
+		best_fire_update(delta)
 		return
 	super.physics_update(delta)
 	pass
 
 
-func hold_fire_update(delta: float) -> void:
+func best_fire_update(delta: float) -> void:
 	ai_think_timer -= delta
 
 	if moving:
@@ -31,7 +31,7 @@ func hold_fire_update(delta: float) -> void:
 
 	ai_think_timer = AI_THINK_INTERVAL
 	pending_steps = 1
-	var direction := pick_hold_fire_direction()
+	var direction := pick_best_fire_direction()
 	if direction != Vector2i.ZERO:
 		if pending_steps <= 1:
 			move(direction)
@@ -47,7 +47,7 @@ func hold_fire_update(delta: float) -> void:
 	pass
 
 
-func pick_hold_fire_direction() -> Vector2i:
+func pick_best_fire_direction() -> Vector2i:
 	var target := BestFireGridStrategy.find_best_fire_grid(self)
 	if target == Vector2i.MIN or target == grid_pos:
 		return Vector2i.ZERO
