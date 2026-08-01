@@ -57,6 +57,13 @@ layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+visible = false
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "继续游戏"
+
 [node name="AiModeButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2

@@ -15,6 +15,7 @@ const TANK_ANIMATION_FPS := 5.0
 @onready var title_label: Label = $CenterContainer/VBox/HeaderRow/TitleLabel
 @onready var tank_sprite: AnimatedSprite2D = $CenterContainer/VBox/HeaderRow/TankArea/TankSprite
 @onready var menu_buttons: VBoxContainer = $CenterContainer/VBox/MenuButtons
+@onready var continue_button: Button = $CenterContainer/VBox/MenuButtons/ContinueButton
 @onready var ai_mode_button: Button = $CenterContainer/VBox/MenuButtons/AiModeButton
 @onready var human_mode_button: Button = $CenterContainer/VBox/MenuButtons/HumanModeButton
 @onready var exit_button: Button = $CenterContainer/VBox/MenuButtons/ExitButton
@@ -23,9 +24,12 @@ const TANK_ANIMATION_FPS := 5.0
 func _ready() -> void:
 	menu_buttons.modulate.a = 0.0
 	menu_buttons.visible = false
+	continue_button.visible = GameSave.has_save()
+	continue_button.pressed.connect(on_continue_pressed)
 	ai_mode_button.pressed.connect(on_ai_mode_pressed)
 	human_mode_button.pressed.connect(on_human_mode_pressed)
 	exit_button.pressed.connect(on_exit_pressed)
+	continue_button.mouse_entered.connect(on_button_hover)
 	ai_mode_button.mouse_entered.connect(on_button_hover)
 	human_mode_button.mouse_entered.connect(on_button_hover)
 	exit_button.mouse_entered.connect(on_button_hover)
@@ -77,6 +81,17 @@ func show_menu_buttons() -> void:
 
 func on_button_hover() -> void:
 	Audios.play_sfx(AudioConfig.UI_SELECT)
+	pass
+
+
+func on_continue_pressed() -> void:
+	Audios.play_sfx(AudioConfig.UI_CONFIRM)
+	GameManager.init()
+	if !GameSave.load_save():
+		continue_button.visible = false
+		return
+	Audio.stop_voice_fade()
+	await SceneHelper.async_change_scene_to_file("res://scene/game/LevelReady.tscn")
 	pass
 
 

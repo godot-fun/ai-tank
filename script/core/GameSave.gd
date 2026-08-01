@@ -43,8 +43,15 @@ func apply() -> void:
 	pass
 
 
+static func has_save() -> bool:
+	if !FileAccess.file_exists(SAVE_PATH):
+		return false
+	return !StringUtils.is_blank(FileUtils.read_file_to_string(SAVE_PATH))
+
+
 static func save() -> void:
 	FileUtils.write_string_to_file(SAVE_PATH, JsonUtils.object_to_json(from_current()))
+	Log.info("game saved level:[{}] play_mode:[{}] path:[{}]", BattleProgress.level, BattleProgress.play_mode, SAVE_PATH)
 	pass
 
 
