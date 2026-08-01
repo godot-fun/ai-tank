@@ -16,6 +16,7 @@ func start() -> void:
 
 func set_up_ray() -> void:
 	forward_shape_cast = ShapeCast2D.new()
+	forward_shape_cast.name = "ForwardShapeCast"
 	forward_shape_cast.enabled = true
 	forward_shape_cast.exclude_parent = true
 	forward_shape_cast.collide_with_areas = true
