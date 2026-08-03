@@ -12,8 +12,8 @@ class BuffMapEntry:
 
 var level: int = 0
 var play_mode: int = 0
-## key 为 tank_id 字符串（JSON 字典 key 必须是字符串）
-var buff_map: Dictionary[String, BuffMapEntry] = {}
+## key 为 tank_id
+var buff_map: Dictionary[int, BuffMapEntry] = {}
 
 
 static func from_current() -> GameSave:
@@ -24,7 +24,7 @@ static func from_current() -> GameSave:
 		var entry := BuffMapEntry.new()
 		for buff: IBuff in BuffManager.buff_map[tank_id].buffs:
 			entry.buff_types.append(buff.type() as int)
-		data.buff_map[str(tank_id)] = entry
+		data.buff_map[tank_id] = entry
 	return data
 
 
@@ -32,10 +32,9 @@ func apply() -> void:
 	BattleProgress.level = level
 	BattleProgress.play_mode = play_mode as BattleProgress.PlayMode
 	BuffManager.buff_map.clear()
-	for tank_id_str: String in buff_map:
-		var tank_id := int(tank_id_str)
+	for tank_id: int in buff_map:
 		var container := BuffContainer.new()
-		for buff_type: int in buff_map[tank_id_str].buff_types:
+		for buff_type: int in buff_map[tank_id].buff_types:
 			if !BuffConfig.buff_datas.has(buff_type):
 				continue
 			container.add_buff(BuffConfig.buff_datas[buff_type].buff.new_buff())
