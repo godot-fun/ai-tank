@@ -85,6 +85,8 @@ func on_button_hover() -> void:
 
 
 func on_continue_pressed() -> void:
+	if RateLimitUtils.limit_second_1():
+		return
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	GameManager.init()
 	if !GameSave.load_save():
@@ -106,6 +108,8 @@ func on_human_mode_pressed() -> void:
 
 
 func start_game(mode: BattleProgress.PlayMode) -> void:
+	if RateLimitUtils.limit_second_1():
+		return
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
 	GameManager.init()
 	BattleProgress.play_mode = mode
