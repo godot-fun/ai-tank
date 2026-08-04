@@ -5,7 +5,7 @@ alwaysApply: true
 
 # godot-framework
 
-A lightweight game framework for godot engine
+A lightweight Godot framework + agent skills for building and shipping games
 
 ## Quick start
 
@@ -16,22 +16,26 @@ A lightweight game framework for godot engine
       |-----------------|-------------------------------|
    | `GodotFramework` | `res://zfoo/GodotFramework.tscn` |
 
-3. Ensure `GodotFramework` loads **before** any scene that uses framework APIs. On startup, `gdf` initializes logging,
-   audio buses, and a top-level UI layer (`gdf_layer`).
-
-The Autoload node runs `GodotFramework.gd`, whose global class name is `gdf`.
-
-```gdscript
-# Defer a callable to the main thread (useful from network / worker callbacks)
-gdf.callable_deferred(func() -> void: refresh_ui())
-
-# Graceful exit (waits a few frames before quit)
-await gdf.quit()
-```
+3. That's it — have fun!
 
 ---
 
 # Usage
+
+## AI — OpenAI-compatible chat
+
+```gdscript
+# Set OPENAI_API_KEY env, or override OpenAiClient.api_key / base_url / model
+var reply := await OpenAiClient.async_chat("hello", "you are a helpful assistant")
+
+# Multi-turn
+var messages: Array[ChatMessage] = []
+messages.append(ChatMessage.new(ChatMessage.ROLE_USER, "hello"))
+var reply2 := await OpenAiClient.async_chat_messages(messages)
+```
+
+---
+
 
 ## Alert — Floating toast messages
 
@@ -41,6 +45,7 @@ Alert.alert("Network error", Colors.error)
 ```
 
 ---
+
 
 ## Audio — play music, sound, voice，SoundEffect
 
@@ -209,6 +214,20 @@ var item = RandomUtils.random_ele(items)
 
 # ThreadUtils — non-blocking wait on main thread
 await ThreadUtils.async_sleep(500)
+```
+
+---
+
+## GodotFramework — gdf
+
+The Autoload node runs `GodotFramework.gd`, whose global class name is `gdf`.
+
+```gdscript
+# Defer a callable to the main thread (useful from network / worker callbacks)
+gdf.callable_deferred(func() -> void: refresh_ui())
+
+# Graceful exit (waits a few frames before quit)
+await gdf.quit()
 ```
 
 
