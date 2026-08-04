@@ -30,8 +30,11 @@ const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
 const BULLET_BLUE_1 := "res://image/bullets/tank/blue/1.png"
 const TANK_BLUE_1 := "res://image/characters/blue_tank_1.png"
-
-
+const JEEP_BLUE_1 := "res://image/characters/blue_jeep_1.png"
+const TANK_GREEN_1 := "res://image/characters/green_tank_1.png"
+const JEEP_GREEN_1 := "res://image/characters/green_jeep_1.png"
+const TANK_CYAN_1 := "res://image/characters/cyan_tank_1.png"
+const JEEP_CYAN_1 := "res://image/characters/cyan_jeep_1.png"
 
 const SCRIPT_MY_TANK := "res://script/tank/MyTank.gd"
 const SCRIPT_PARTNER_EASY := "res://script/tank/PartnerEasyTank.gd"
@@ -151,7 +154,7 @@ static var partner_tank_1: TankData = TankData.new(
 	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/tank/green/1.png",
+	BULLET_BLUE_1,
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,

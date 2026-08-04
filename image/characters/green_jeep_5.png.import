@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brxh8gw8dvdub"
-path="res://.godot/imported/green__jeep_2.png-1541bee75750e6da111d70f586cdae15.ctex"
+uid="uid://se5x1uqgmaco"
+path="res://.godot/imported/green_jeep_5.png-20ef48e69d3963064acb910bbe2e0742.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/characters/green__jeep_2.png"
-dest_files=["res://.godot/imported/green__jeep_2.png-1541bee75750e6da111d70f586cdae15.ctex"]
+source_file="res://image/characters/green_jeep_5.png"
+dest_files=["res://.godot/imported/green_jeep_5.png-20ef48e69d3963064acb910bbe2e0742.ctex"]
 
 [params]
 
