@@ -29,6 +29,7 @@ const EFFECT_BULLET_HIT_STEEL := "res://image/effects/bullet_hit_steel.png"
 const EFFECT_BULLET_HIT_BRICK := "res://image/effects/bullet_hit_brick.png"
 
 const BULLET_BLUE_1 := "res://image/bullets/tank/blue/1.png"
+const BULLET_GREEN_1 := "res://image/bullets/tank/green/1.png"
 const TANK_BLUE_1 := "res://image/characters/blue_tank_1.png"
 const JEEP_BLUE_1 := "res://image/characters/blue_jeep_1.png"
 const TANK_GREEN_1 := "res://image/characters/green_tank_1.png"
@@ -158,7 +159,7 @@ static var partner_tank_1: TankData = TankData.new(
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_1.png",
+	JEEP_BLUE_1,
 	SCRIPT_PARTNER_SMART,
 )
 
@@ -172,11 +173,11 @@ static var partner_tank_2: TankData = TankData.new(
 	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/tank/green/2.png",
+	BULLET_GREEN_1,
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_2.png",
+	TANK_GREEN_1,
 	SCRIPT_PARTNER_SMART,
 )
 
@@ -190,11 +191,11 @@ static var partner_tank_3: TankData = TankData.new(
 	DEFAULT_BULLET_DAMAGE + BulletSizeBuff.BULLET_DAMAGE_EFFECT_VALUE,
 	DEFAULT_BULLET_SIZE + BulletSizeBuff.BULLET_SIZE_EFFECT_VALUE,
 	DEFAULT_BULLET_FIRE_INTERVAL - BulletFireIntervalBuff.EFFECT_VALUE,
-	"res://image/bullets/tank/green/3.png",
+	BULLET_GREEN_1,
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_3.png",
+	JEEP_GREEN_1,
 	SCRIPT_PARTNER_SMART,
 )
 
@@ -208,11 +209,11 @@ static var partner_tank_4: TankData = TankData.new(
 	DEFAULT_BULLET_DAMAGE,
 	DEFAULT_BULLET_SIZE,
 	DEFAULT_BULLET_FIRE_INTERVAL,
-	"res://image/bullets/tank/green/4.png",
+	BULLET_GREEN_1,
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_4.png",
+	TANK_CYAN_1,
 	SCRIPT_PARTNER_SMART,
 )
 
@@ -226,29 +227,11 @@ static var partner_tank_5: TankData = TankData.new(
 	DEFAULT_BULLET_DAMAGE + BulletSizeBuff.BULLET_DAMAGE_EFFECT_VALUE * 2,
 	DEFAULT_BULLET_SIZE + BulletSizeBuff.BULLET_SIZE_EFFECT_VALUE * 2,
 	DEFAULT_BULLET_FIRE_INTERVAL - BulletFireIntervalBuff.EFFECT_VALUE * 2,
-	"res://image/bullets/tank/green/5.png",
+	BULLET_GREEN_1,
 	null,
 	AudioConfig.TANK_DEATH,
 	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_5.png",
-	SCRIPT_PARTNER_SMART,
-)
-
-static var partner_tank_6: TankData = TankData.new(
-	16,
-	Team.PARTNER,
-	Vector2i(2, 2),
-	DEFAULT_TANK_HP + TankHpBuff.EFFECT_VALUE,
-	DEFAULT_TANK_SPEED + TankSpeedBuff.EFFECT_VALUE,
-	DEFAULT_BULLET_SPEED + BulletSpeedBuff.EFFECT_VALUE,
-	DEFAULT_BULLET_DAMAGE + BulletSizeBuff.BULLET_DAMAGE_EFFECT_VALUE,
-	DEFAULT_BULLET_SIZE + BulletSizeBuff.BULLET_SIZE_EFFECT_VALUE,
-	DEFAULT_BULLET_FIRE_INTERVAL - BulletFireIntervalBuff.EFFECT_VALUE,
-	"res://image/bullets/tank/green/6.png",
-	null,
-	AudioConfig.TANK_DEATH,
-	EFFECT_TANK_PARTNER_EXPLOSION,
-	"res://image/characters/green_tank_6.png",
+	JEEP_CYAN_1,
 	SCRIPT_PARTNER_SMART,
 )
 

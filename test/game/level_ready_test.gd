@@ -28,7 +28,6 @@ func _ready() -> void:
 		TankConfig.partner_tank_3,
 		TankConfig.partner_tank_4,
 		TankConfig.partner_tank_5,
-		TankConfig.partner_tank_6,
 	]
 	for tank_data: TankConfig.TankData in tanks:
 		BuffManager.enemy_kill_counts[tank_data.id] = randi_range(0, 20)

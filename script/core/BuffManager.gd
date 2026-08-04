@@ -104,24 +104,11 @@ static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
-enum Appearance {
-	blue,
-	green,
-	gray,
-	red
-}
+
 
 static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
-	if tank.team != TankConfig.Team.PLAYER && tank.team != TankConfig.Team.ENEMY && tank.team != TankConfig.Team.ENEMY_JEEP:
+	if tank.team == TankConfig.Team.BOSS_ENEMY:
 		return
-	var appearance: Appearance = Appearance.blue
-	match tank.team:
-		TankConfig.Team.PLAYER:
-			appearance = Appearance.blue
-		TankConfig.Team.ENEMY, TankConfig.Team.ENEMY_JEEP:
-			appearance = Appearance.gray
-		TankConfig.Team.ELITE_ENEMY:
-			appearance = Appearance.red
 	var buff_container := get_buff_container(tank.id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
@@ -132,17 +119,14 @@ static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_HP)
 	
-	var tank_color: String = Appearance.keys()[appearance].to_lower()
+	var bullet_resource_before: String = StringUtils.substring_before_last(tank.bullet_resource, "/")
+	var tank_resource_before: String = StringUtils.substring_before_last(tank.tank_resource, "_")
 	
-	var bullet_resource_template := "res://image/bullets/tank/{}/{}.png"
-	var tank_resource_template := "res://image/characters/{}_tank_{}.png"
 	var bullet_id := clampi(bullet_buff_count, 1, 6)
 	var tank_id := clampi(tank_buff_count, 1, 6)
 	
-	var bullet_resource := StringUtils.format(bullet_resource_template, tank_color, bullet_id)
-	var tank_resource := StringUtils.format(tank_resource_template, tank_color,    tank_id)
-	if tank.team == TankConfig.Team.ENEMY_JEEP:
-		tank_resource = StringUtils.format("res://image/characters/jeep_{}.png", RandomUtils.random_int_range(1, 7))
+	var bullet_resource := StringUtils.format("{}/{}.png", bullet_resource_before, bullet_id)
+	var tank_resource := StringUtils.format("{}_{}.png", tank_resource_before, tank_id)
 	tank.bullet_resource = bullet_resource
 	tank.tank_resource = tank_resource
 	tank.scale_tank_deferred()

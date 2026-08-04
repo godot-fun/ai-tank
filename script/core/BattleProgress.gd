@@ -96,8 +96,6 @@ static func start_level() -> void:
 		TankHelper.create_tank(TankConfig.partner_tank_4, Eagle.partner_tank_start_grid_pos)
 	if level >= 18:
 		TankHelper.create_tank(TankConfig.partner_tank_5, Eagle.partner_tank_start_grid_pos)
-	if level >= 23:
-		TankHelper.create_tank(TankConfig.partner_tank_6, Eagle.partner_tank_start_grid_pos)
 	pass
 
 
