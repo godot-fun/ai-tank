@@ -6,7 +6,7 @@ func _ready() -> void:
 	Eagle.create_base()
 	
 	TankHelper.create_tank(TankConfig.my_tank, Vector2i(1, 10))
-	TankHelper.create_tank(TankConfig.partner_tank_1, Vector2i(28, 14))
+	TankHelper.create_tank(TankConfig.tank_2, Vector2i(28, 14))
 
 	for i in 32:
 		TileHelper.create_tile(TileConfig.steel_wall, Vector2i(i, 12))

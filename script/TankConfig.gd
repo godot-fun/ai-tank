@@ -127,7 +127,7 @@ static var my_tank: TankData = TankData.new(
 	SCRIPT_MY_TANK
 )
 
-static var my_tank_ai: TankData = TankData.new(
+static var tank_1: TankData = TankData.new(
 	1,
 	Team.PLAYER,
 	Vector2i(2, 2),
@@ -145,7 +145,7 @@ static var my_tank_ai: TankData = TankData.new(
 	SCRIPT_PARTNER_SMART_BEST_FIRE
 )
 
-static var partner_tank_1: TankData = TankData.new(
+static var tank_2: TankData = TankData.new(
 	11,
 	Team.PARTNER,
 	Vector2i(2, 2),
@@ -163,7 +163,7 @@ static var partner_tank_1: TankData = TankData.new(
 	SCRIPT_PARTNER_SMART,
 )
 
-static var partner_tank_2: TankData = TankData.new(
+static var tank_3: TankData = TankData.new(
 	12,
 	Team.PARTNER,
 	Vector2i(2, 2),
@@ -181,7 +181,7 @@ static var partner_tank_2: TankData = TankData.new(
 	SCRIPT_PARTNER_SMART,
 )
 
-static var partner_tank_3: TankData = TankData.new(
+static var tank_4: TankData = TankData.new(
 	13,
 	Team.PARTNER,
 	Vector2i(2, 2),
@@ -199,7 +199,7 @@ static var partner_tank_3: TankData = TankData.new(
 	SCRIPT_PARTNER_SMART,
 )
 
-static var partner_tank_4: TankData = TankData.new(
+static var tank_5: TankData = TankData.new(
 	14,
 	Team.PARTNER,
 	Vector2i(2, 2),
@@ -217,7 +217,7 @@ static var partner_tank_4: TankData = TankData.new(
 	SCRIPT_PARTNER_SMART,
 )
 
-static var partner_tank_5: TankData = TankData.new(
+static var tank_6: TankData = TankData.new(
 	15,
 	Team.PARTNER,
 	Vector2i(2, 2),

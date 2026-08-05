@@ -85,17 +85,17 @@ static func start_level() -> void:
 	BuffManager.start_level()
 	LevelConfig.load_level(BattleProgress.level)
 	Eagle.create_base()
-	var player_tank: TankConfig.TankData = TankConfig.my_tank_ai if play_mode == PlayMode.AI else TankConfig.my_tank
+	var player_tank: TankConfig.TankData = TankConfig.tank_1 if play_mode == PlayMode.AI else TankConfig.my_tank
 	TankHelper.create_tank(player_tank, Eagle.player_tank_start_grid_pos)
-	TankHelper.create_tank(TankConfig.partner_tank_1, Eagle.partner_tank_start_grid_pos)
+	TankHelper.create_tank(TankConfig.tank_2, Eagle.partner_tank_start_grid_pos)
 	if level >= 3:
-		TankHelper.create_tank(TankConfig.partner_tank_2, Eagle.partner_tank_start_grid_pos)
+		TankHelper.create_tank(TankConfig.tank_3, Eagle.partner_tank_start_grid_pos)
 	if level >= 8:
-		TankHelper.create_tank(TankConfig.partner_tank_3, Eagle.partner_tank_start_grid_pos)
+		TankHelper.create_tank(TankConfig.tank_4, Eagle.partner_tank_start_grid_pos)
 	if level >= 13:
-		TankHelper.create_tank(TankConfig.partner_tank_4, Eagle.partner_tank_start_grid_pos)
+		TankHelper.create_tank(TankConfig.tank_5, Eagle.partner_tank_start_grid_pos)
 	if level >= 18:
-		TankHelper.create_tank(TankConfig.partner_tank_5, Eagle.partner_tank_start_grid_pos)
+		TankHelper.create_tank(TankConfig.tank_6, Eagle.partner_tank_start_grid_pos)
 	pass
 
 
