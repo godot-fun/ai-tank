@@ -80,6 +80,18 @@ func build_form() -> void:
 		generate_button.mouse_entered.connect(on_button_hover)
 		generate_button.pressed.connect(on_generate_one_pressed.bind(key))
 		header.add_child(generate_button)
+
+		var script_status := Label.new()
+		script_status.name = "ScriptStatus"
+		script_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		script_status.add_theme_font_size_override("font_size", 22)
+		if TankAgentManager.has_generated_script(key):
+			script_status.text = "已生成脚本"
+			script_status.add_theme_color_override("font_color", Colors.success)
+		else:
+			script_status.text = "未生成脚本"
+			script_status.add_theme_color_override("font_color", Color(0.55, 0.58, 0.65, 1))
+		header.add_child(script_status)
 		row.add_child(header)
 
 		var strategy := TankAgentManager.get_strategy(key)
