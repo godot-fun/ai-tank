@@ -16,6 +16,18 @@ static var AGENT_TANK_IDS: Dictionary[String, int] = {
 	"partner_tank_5": TankConfig.partner_tank_5.id,
 }
 
+## 生成时一并传给 AI 的参考脚本（继承链 + 策略示例 + 常用工具）
+const REFERENCE_SCRIPTS: Array[String] = [
+	"res://script/tank/Tank.gd",
+	"res://script/tank/PartnerTank.gd",
+	"res://script/tank/PartnerSmartTank.gd",
+	"res://script/tank/PartnerSmartBestFireTank.gd",
+	"res://script/strategy/BestFireGridStrategy.gd",
+	"res://script/tank/TankHelper.gd",
+	"res://script/buff/BuffHelper.gd",
+	"res://script/tile/TileHelper.gd",
+]
+
 const SYSTEM_PROMPT := """你是 Godot 4.x GDScript 坦克 AI 代码生成器。根据用户给出的策略描述，生成完整可运行的坦克脚本。
 
 硬性要求：
@@ -23,7 +35,7 @@ const SYSTEM_PROMPT := """你是 Godot 4.x GDScript 坦克 AI 代码生成器。
 2. 禁止使用 class_name
 3. 只输出纯 GDScript 源码，不要 Markdown 代码围栏，不要解释文字
 4. 可覆盖 physics_update、pick_move_direction、fire、fire_on_enemy、go_to 等
-5. 可用能力：move(direction)、move(direction, extra_steps)、fire()、can_fire()、update_facing(direction)、go_to(target_grid)、find_direct_fire_direction()、ray_detect_nearest_objects_in_front()、BuffHelper.find_nearest_obtainable_buff(self, range)、TankHelper.find_nearest_enemy(self)、TankHelper.find_player()、BestFireGridStrategy.find_best_fire_grid(self)、PathFinderHelper.find_path(...)
+5. 后续消息会提供项目参考脚本源码，只能使用这些脚本里已有的 API 与成员，不要编造方法
 6. 成员：grid_pos、facing、moving、ai_think_timer、pending_steps；方向为 Vector2i.UP/DOWN/LEFT/RIGHT
 7. 绝不能误伤基地 Eagle；开火前用射线检测跳过 Eagle / BrickWallEagle
 8. 代码风格：显式类型、业务方法不加下划线前缀、无 return 的函数末尾写 pass
@@ -148,7 +160,7 @@ static func async_generate_one(key: String) -> bool:
 		delete_generated_script(key)
 		return false
 
-	var reply := await OpenAiClient.async_chat(strategy, SYSTEM_PROMPT)
+	var reply := await OpenAiClient.async_chat_messages(build_chat_messages(key, strategy))
 	var code := extract_gdscript(reply)
 	if StringUtils.is_blank(code):
 		Log.error("tank agent generate empty code key:[{}]", key)
@@ -158,6 +170,48 @@ static func async_generate_one(key: String) -> bool:
 	FileUtils.write_string_to_file(script_path(key), code)
 	Log.info("tank agent script generated key:[{}] path:[{}]", key, script_path(key))
 	return true
+
+
+static func build_chat_messages(key: String, strategy: String) -> Array[ChatMessage]:
+	var messages: Array[ChatMessage] = []
+	messages.append(ChatMessage.new(ChatMessage.ROLE_SYSTEM, SYSTEM_PROMPT))
+
+	for path in REFERENCE_SCRIPTS:
+		var source := FileUtils.read_file_to_string(path)
+		if StringUtils.is_blank(source):
+			Log.error("tank agent reference script missing path:[{}]", path)
+			continue
+		messages.append(ChatMessage.new(
+			ChatMessage.ROLE_USER,
+			StringUtils.format("参考脚本 {}：\n{}", path, source)
+		))
+
+	var tank_data := tank_data_for_key(key)
+	if tank_data.script_resource in REFERENCE_SCRIPTS:
+		messages.append(ChatMessage.new(
+			ChatMessage.ROLE_USER,
+			StringUtils.format(
+				"该坦克当前默认脚本路径：{}（源码已在前面的参考脚本中提供）",
+				tank_data.script_resource
+			)
+		))
+	else:
+		var default_source := FileUtils.read_file_to_string(tank_data.script_resource)
+		if !StringUtils.is_blank(default_source):
+			messages.append(ChatMessage.new(
+				ChatMessage.ROLE_USER,
+				StringUtils.format(
+					"该坦克当前默认脚本 {}（可参考，生成结果将替换它）：\n{}",
+					tank_data.script_resource,
+					default_source
+				)
+			))
+
+	messages.append(ChatMessage.new(
+		ChatMessage.ROLE_USER,
+		StringUtils.format("请根据以下策略描述生成坦克脚本：\n{}", strategy)
+	))
+	return messages
 
 
 static func extract_gdscript(text: String) -> String:
