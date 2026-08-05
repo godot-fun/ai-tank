@@ -36,12 +36,24 @@ theme_override_constants/margin_bottom = 48
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="TitleLabel" type="Label" parent="Margin/VBox"]
+[node name="HeaderRow" type="HBoxContainer" parent="Margin/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Tank Agent"
-horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="Margin/VBox/HeaderRow"]
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
+text = "返回"
 
 [node name="HintLabel" type="Label" parent="Margin/VBox"]
 layout_mode = 2
@@ -66,20 +78,6 @@ theme_override_colors/font_color = Color(0.75, 0.8, 0.88, 1)
 theme_override_font_sizes/font_size = 22
 text = "策略已填写 0 / 6，已生成代码 0 / 6"
 horizontal_alignment = 1
-
-[node name="BackButton" type="Button" parent="."]
-custom_minimum_size = Vector2(140, 56)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -204.0
-offset_top = 24.0
-offset_right = -24.0
-offset_bottom = 80.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 28
-text = "返回"
 
 [node name="LoadingOverlay" type="ColorRect" parent="."]
 visible = false

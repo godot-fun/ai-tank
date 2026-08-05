@@ -6,7 +6,7 @@ const SPINNER_SIZE := Vector2(72, 72)
 
 @onready var form: VBoxContainer = $Margin/VBox/Scroll/Form
 @onready var status_label: Label = $Margin/VBox/StatusLabel
-@onready var back_button: Button = $BackButton
+@onready var back_button: Button = $Margin/VBox/HeaderRow/BackButton
 @onready var loading_overlay: ColorRect = $LoadingOverlay
 @onready var loading_spinner: Control = $LoadingOverlay/Center/VBox/Spinner
 @onready var loading_label: Label = $LoadingOverlay/Center/VBox/LoadingLabel
