@@ -114,9 +114,10 @@ func make_tank_row(tank_data: TankConfig.TankData) -> Control:
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 16)
 
+	var tank_resource := BuffManager.appearance_tank_resource(tank_data.id, tank_data.tank_resource)
 	var tank_icon := TextureRect.new()
 	tank_icon.name = "TankIcon"
-	tank_icon.texture = load(tank_data.tank_resource)
+	tank_icon.texture = load(tank_resource)
 	tank_icon.custom_minimum_size = Vector2(TANK_ICON_SIZE, TANK_ICON_SIZE)
 	tank_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tank_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

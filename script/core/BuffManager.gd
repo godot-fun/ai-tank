@@ -82,7 +82,7 @@ static func add_buff(tank: Tank, buff_type: int) -> bool:
 	if buff_data.max_stack > 0:
 		buff_container.add_buff(buff)
 		add_current_level_buff(tank.id, buff)
-		update_tank_appearance(tank, buff_container.buffs)
+		update_tank_appearance(tank)
 	buff.trigger(tank)
 	return true
 
@@ -100,33 +100,36 @@ static func wrap_buff_container(tank: Tank) -> void:
 static func trigger_buffs(tank: Tank, buffs: Array[IBuff]) -> void:
 	for buff in buffs:
 		buff.trigger(tank)
-	update_tank_appearance(tank, buffs)
+	update_tank_appearance(tank)
 	pass
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-
-static func update_tank_appearance(tank: Tank, buffs: Array[IBuff]) -> void:
-	if tank.team == TankConfig.Team.BOSS_ENEMY:
-		return
-	var buff_container := get_buff_container(tank.id)
+static func appearance_bullet_resource(tank_id: int, bullet_resource: String) -> String:
+	var buff_container := get_buff_container(tank_id)
 	var bullet_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SPEED)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_SIZE)
 	bullet_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.BULLET_FIRE_INTERVAL)
 	
+	var bullet_resource_before: String = StringUtils.substring_before_last(bullet_resource, "/")
+	var bullet_id := clampi(bullet_buff_count, 1, 6)
+	return StringUtils.format("{}/{}.png", bullet_resource_before, bullet_id)
+
+static func appearance_tank_resource(tank_id: int, tank_resource: String) -> String:
+	var buff_container := get_buff_container(tank_id)
 	var tank_buff_count := buff_container.buff_type_of_size(IBuff.BuffType.TANK_SPEED)
 	tank_buff_count = tank_buff_count + buff_container.buff_type_of_size(IBuff.BuffType.TANK_SIZE)
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_RESPAWN)
 	tank_buff_count += buff_container.buff_type_of_size(IBuff.BuffType.TANK_HP)
 	
-	var bullet_resource_before: String = StringUtils.substring_before_last(tank.bullet_resource, "/")
-	var tank_resource_before: String = StringUtils.substring_before_last(tank.tank_resource, "_")
-	
-	var bullet_id := clampi(bullet_buff_count, 1, 6)
-	var tank_id := clampi(tank_buff_count, 1, 6)
-	
-	var bullet_resource := StringUtils.format("{}/{}.png", bullet_resource_before, bullet_id)
-	var tank_resource := StringUtils.format("{}_{}.png", tank_resource_before, tank_id)
+	var tank_resource_before: String = StringUtils.substring_before_last(tank_resource, "_")
+	return StringUtils.format("{}_{}.png", tank_resource_before, clampi(tank_buff_count, 1, 6))
+
+static func update_tank_appearance(tank: Tank) -> void:
+	if tank.team == TankConfig.Team.BOSS_ENEMY:
+		return
+	var bullet_resource := appearance_bullet_resource(tank.id, tank.bullet_resource)
+	var tank_resource := appearance_tank_resource(tank.id, tank.tank_resource)
 	tank.bullet_resource = bullet_resource
 	tank.tank_resource = tank_resource
 	tank.scale_tank_deferred()

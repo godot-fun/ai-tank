@@ -167,7 +167,7 @@ func spawn_wave_tanks(tank_data: TankConfig.TankData, buff_size: int) -> void:
 		var tank := TankHelper.create_tank_with_buffs(tank_data, spawn_grids[i], buffs)
 		if tank == null:
 			continue
-		BuffManager.update_tank_appearance(tank, buffs)
+		BuffManager.update_tank_appearance(tank)
 
 
 func spawn_mini_boss_enemy() -> void:
