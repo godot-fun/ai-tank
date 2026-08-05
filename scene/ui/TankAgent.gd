@@ -62,11 +62,20 @@ func build_form() -> void:
 		icon.tooltip_text = key
 		header.add_child(icon)
 
+		var name_label := Label.new()
+		name_label.name = "TankName"
+		name_label.text = key
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.add_theme_font_size_override("font_size", 26)
+		name_label.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98, 1))
+		header.add_child(name_label)
+
 		var generate_button := Button.new()
 		generate_button.name = "GenerateButton"
 		generate_button.text = "生成策略"
 		generate_button.custom_minimum_size = Vector2(160, 56)
 		generate_button.add_theme_font_size_override("font_size", 24)
+		style_generate_button(generate_button)
 		generate_button.disabled = generating
 		generate_button.mouse_entered.connect(on_button_hover)
 		generate_button.pressed.connect(on_generate_one_pressed.bind(key))
@@ -170,6 +179,29 @@ func on_spinner_draw() -> void:
 	var radius := mini(center.x, center.y) - 6.0
 	loading_spinner.draw_arc(center, radius, 0.0, TAU * 0.72, 48, Color(0.45, 0.78, 1.0, 1.0), 8.0, true)
 	pass
+
+
+func style_generate_button(button: Button) -> void:
+	button.add_theme_color_override("font_color", Color(0.95, 0.98, 1.0, 1.0))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color(0.9, 0.95, 1.0, 1.0))
+	button.add_theme_color_override("font_disabled_color", Color(0.75, 0.8, 0.85, 0.7))
+	button.add_theme_stylebox_override("normal", make_generate_style(Colors.info))
+	button.add_theme_stylebox_override("hover", make_generate_style(Colors.info.lightened(0.12)))
+	button.add_theme_stylebox_override("pressed", make_generate_style(Colors.info.darkened(0.12)))
+	button.add_theme_stylebox_override("disabled", make_generate_style(Color(0.25, 0.32, 0.4, 1.0)))
+	pass
+
+
+func make_generate_style(bg: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = bg
+	style.set_corner_radius_all(8)
+	style.content_margin_left = 16
+	style.content_margin_top = 10
+	style.content_margin_right = 16
+	style.content_margin_bottom = 10
+	return style
 
 
 func on_button_hover() -> void:
