@@ -134,13 +134,11 @@ static func load_generated_script(key: String) -> Script:
 	if !has_generated_script(key):
 		return null
 	var source := FileUtils.read_file_to_string(script_path(key))
-	var script := GDScript.new()
-	script.source_code = source
-	var err := script.reload()
-	if err != OK:
-		Log.error("tank agent script reload failed key:[{}] err:[{}]", key, err)
+	var compiled := GDScriptUtils.compile(source)
+	if compiled == null:
+		Log.error("tank agent script invalid at load key:[{}]", key)
 		return null
-	return script
+	return compiled
 
 
 ## 存在生成脚本时优先使用；否则回退 TankConfig 默认脚本。
@@ -161,9 +159,14 @@ static func async_generate_one(key: String) -> bool:
 		return false
 
 	var reply := await OpenAiClient.async_chat_messages(build_chat_messages(key, strategy))
-	var code := extract_gdscript(reply)
+	var code := GDScriptUtils.extract_source(reply)
 	if StringUtils.is_blank(code):
 		Log.error("tank agent generate empty code key:[{}]", key)
+		return false
+
+	if GDScriptUtils.compile(code) == null:
+		Log.error("tank agent validate failed key:[{}] reason:[compile or instantiate]", key)
+		delete_generated_script(key)
 		return false
 
 	ensure_dir(SCRIPTS_DIR)
@@ -212,21 +215,6 @@ static func build_chat_messages(key: String, strategy: String) -> Array[ChatMess
 		StringUtils.format("请根据以下策略描述生成坦克脚本：\n{}", strategy)
 	))
 	return messages
-
-
-static func extract_gdscript(text: String) -> String:
-	if StringUtils.is_blank(text):
-		return StringUtils.EMPTY
-	var code := FileUtils.normalize_line_endings_to_lf(text).strip_edges()
-	if code.begins_with("```"):
-		var first_newline := code.find("\n")
-		if first_newline >= 0:
-			code = code.substr(first_newline + 1)
-		var fence := code.rfind("```")
-		if fence >= 0:
-			code = code.substr(0, fence)
-		code = code.strip_edges()
-	return code
 
 
 static func ensure_dir(dir_path: String) -> void:

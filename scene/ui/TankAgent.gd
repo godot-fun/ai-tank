@@ -243,7 +243,7 @@ func on_generate_one_pressed(key: String) -> void:
 	if ok:
 		Alert.alert(StringUtils.format("{} 策略已生成", key), Colors.success)
 	else:
-		Alert.alert(StringUtils.format("{} 策略生成失败", key), Colors.error)
+		Alert.alert(StringUtils.format("{} 生成或校验失败", key), Colors.error)
 	pass
 
 
