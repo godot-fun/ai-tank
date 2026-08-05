@@ -5,7 +5,7 @@ const TANK_ICON_SIZE := 72.0
 const SPINNER_SIZE := Vector2(72, 72)
 
 @onready var form: VBoxContainer = $Margin/VBox/Scroll/FormMargin/Form
-@onready var status_label: Label = $Margin/VBox/StatusLabel
+@onready var status_label: Label = $Margin/VBox/HeaderRow/StatusLabel
 @onready var back_button: Button = $Margin/VBox/HeaderRow/BackButton
 @onready var loading_overlay: ColorRect = $LoadingOverlay
 @onready var loading_spinner: Control = $LoadingOverlay/Center/VBox/Spinner
@@ -122,7 +122,7 @@ func refresh_status() -> void:
 		if TankAgentManager.has_generated_script(key):
 			generated += 1
 	var total := TankAgentManager.AGENT_TANK_IDS.size()
-	status_label.text = "策略 %d / %d，已生成 %d / %d（有生成代码则游戏优先使用）" % [
+	status_label.text = "（策略 %d / %d，已生成 %d / %d，有生成代码则游戏优先使用）" % [
 		filled, total, generated, total
 	]
 	pass
@@ -233,7 +233,7 @@ func on_generate_one_pressed(key: String) -> void:
 		return
 
 	set_busy(true, key)
-	status_label.text = StringUtils.format("正在生成 {} 的策略代码…", key)
+	status_label.text = StringUtils.format("（正在生成 {} 的策略代码…）", key)
 
 	var ok := await TankAgentManager.async_generate_one(key)
 	set_busy(false)
