@@ -2,19 +2,29 @@ extends Control
 
 const HOME_SCENE := "res://scene/Home.tscn"
 const TANK_ICON_SIZE := 72.0
+const SPINNER_SIZE := Vector2(72, 72)
 
 @onready var form: VBoxContainer = $Margin/VBox/Scroll/Form
 @onready var status_label: Label = $Margin/VBox/StatusLabel
 @onready var back_button: Button = $BackButton
+@onready var loading_overlay: ColorRect = $LoadingOverlay
+@onready var loading_spinner: Control = $LoadingOverlay/Center/VBox/Spinner
+@onready var loading_label: Label = $LoadingOverlay/Center/VBox/LoadingLabel
 
 var editors: Dictionary = {}
 var generate_buttons: Dictionary = {}
 var generating := false
+var spinner_tween: Tween
 
 
 func _ready() -> void:
 	back_button.pressed.connect(on_back_pressed)
 	back_button.mouse_entered.connect(on_button_hover)
+	loading_spinner.draw.connect(on_spinner_draw)
+	loading_spinner.custom_minimum_size = SPINNER_SIZE
+	loading_spinner.pivot_offset = SPINNER_SIZE * 0.5
+	loading_spinner.queue_redraw()
+	loading_overlay.visible = false
 	build_form()
 	refresh_status()
 	pass
@@ -113,12 +123,52 @@ func persist_editors(clear_changed_scripts: bool) -> void:
 	pass
 
 
-func set_busy(busy: bool) -> void:
+func set_busy(busy: bool, key: String = "") -> void:
 	generating = busy
 	back_button.disabled = busy
-	for key: String in generate_buttons:
-		var button: Button = generate_buttons[key]
+	for button_key: String in generate_buttons:
+		var button: Button = generate_buttons[button_key]
 		button.disabled = busy
+	if busy:
+		show_loading(key)
+	else:
+		hide_loading()
+	pass
+
+
+func show_loading(key: String) -> void:
+	loading_label.text = StringUtils.format("正在生成 {} 的策略代码…", key)
+	loading_overlay.visible = true
+	start_spinner()
+	pass
+
+
+func hide_loading() -> void:
+	loading_overlay.visible = false
+	stop_spinner()
+	pass
+
+
+func start_spinner() -> void:
+	stop_spinner()
+	loading_spinner.rotation = 0.0
+	spinner_tween = create_tween().set_loops()
+	spinner_tween.tween_property(loading_spinner, "rotation", TAU, 0.9).from(0.0)
+	pass
+
+
+func stop_spinner() -> void:
+	if spinner_tween != null and spinner_tween.is_valid():
+		spinner_tween.kill()
+	spinner_tween = null
+	loading_spinner.rotation = 0.0
+	pass
+
+
+func on_spinner_draw() -> void:
+	var center := SPINNER_SIZE * 0.5
+	var radius := mini(center.x, center.y) - 6.0
+	loading_spinner.draw_arc(center, radius, 0.0, TAU * 0.72, 48, Color(0.45, 0.78, 1.0, 1.0), 8.0, true)
 	pass
 
 
@@ -138,9 +188,8 @@ func on_generate_one_pressed(key: String) -> void:
 		Alert.alert("请先填写策略文本", Colors.warning)
 		return
 
-	set_busy(true)
+	set_busy(true, key)
 	status_label.text = StringUtils.format("正在生成 {} 的策略代码…", key)
-	Alert.alert(StringUtils.format("开始生成 {}", key), Colors.info)
 
 	var ok := await TankAgentManager.async_generate_one(key)
 	set_busy(false)
