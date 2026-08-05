@@ -29,33 +29,45 @@ const SYSTEM_PROMPT := """你是 Godot 4.x GDScript 坦克 AI 代码生成器。
 8. 代码风格：显式类型、业务方法不加下划线前缀、无 return 的函数末尾写 pass
 """
 
-static var strategies: Dictionary[String, String] = load_strategies()
+static var strategies: Dictionary[String, String] = {}
+static var config_loaded: bool = load_config()
 
 
-static func load_strategies() -> Dictionary[String, String]:
-	var result: Dictionary[String, String] = {}
+static func load_config() -> bool:
+	strategies.clear()
 	for key: String in AGENT_TANK_IDS:
-		result[key] = StringUtils.EMPTY
+		strategies[key] = StringUtils.EMPTY
 
 	var json := FileUtils.read_file_to_string(STRATEGIES_PATH)
 	if StringUtils.is_blank(json):
-		return result
+		return true
 
 	var data: Variant = JSON.parse_string(json)
 	if typeof(data) != TYPE_DICTIONARY:
 		Log.error("tank agent strategies parse failed path:[{}]", STRATEGIES_PATH)
-		return result
+		return true
 
 	var dict: Dictionary = data
 	for key: String in AGENT_TANK_IDS:
-		if dict.has(key):
-			result[key] = str(dict[key])
-	return result
+		if !dict.has(key):
+			continue
+		var entry: Variant = dict[key]
+		if typeof(entry) == TYPE_DICTIONARY:
+			var entry_dict: Dictionary = entry
+			strategies[key] = str(entry_dict.get("text", StringUtils.EMPTY))
+		else:
+			strategies[key] = str(entry)
+	return true
 
 
 static func save_strategies() -> void:
 	ensure_dir(ROOT_DIR)
-	FileUtils.write_string_to_file(STRATEGIES_PATH, JsonUtils.object_to_json(strategies))
+	var data: Dictionary = {}
+	for key: String in AGENT_TANK_IDS:
+		data[key] = {
+			"text": strategies.get(key, StringUtils.EMPTY),
+		}
+	FileUtils.write_string_to_file(STRATEGIES_PATH, JsonUtils.object_to_json(data))
 	Log.info("tank agent strategies saved path:[{}]", STRATEGIES_PATH)
 	pass
 
@@ -70,6 +82,12 @@ static func set_strategy(key: String, text: String) -> void:
 		return
 	strategies[key] = text
 	pass
+
+
+static func tank_data_for_key(key: String) -> TankConfig.TankData:
+	if not AGENT_TANK_IDS.has(key):
+		return null
+	return TankConfig.tank_datas[AGENT_TANK_IDS[key]]
 
 
 static func agent_key_for_tank_id(tank_id: int) -> String:
@@ -113,7 +131,7 @@ static func load_generated_script(key: String) -> Script:
 	return script
 
 
-## 优先返回 Agent 生成脚本；没有则回退 TankConfig 默认脚本。
+## 存在生成脚本时优先使用；否则回退 TankConfig 默认脚本。
 static func resolve_script(data: TankConfig.TankData) -> Script:
 	var key := agent_key_for_tank_id(data.id)
 	if !StringUtils.is_blank(key):
@@ -128,7 +146,7 @@ static func async_generate_one(key: String) -> bool:
 	var strategy := get_strategy(key)
 	if StringUtils.is_blank(strategy):
 		delete_generated_script(key)
-		return true
+		return false
 
 	var reply := await OpenAiClient.async_chat(strategy, SYSTEM_PROMPT)
 	var code := extract_gdscript(reply)
@@ -140,26 +158,6 @@ static func async_generate_one(key: String) -> bool:
 	FileUtils.write_string_to_file(script_path(key), code)
 	Log.info("tank agent script generated key:[{}] path:[{}]", key, script_path(key))
 	return true
-
-
-static func async_generate_all() -> Dictionary:
-	var ok_count := 0
-	var fail_count := 0
-	var skip_count := 0
-	for key: String in AGENT_TANK_IDS:
-		if StringUtils.is_blank(get_strategy(key)):
-			delete_generated_script(key)
-			skip_count += 1
-			continue
-		if await async_generate_one(key):
-			ok_count += 1
-		else:
-			fail_count += 1
-	return {
-		"ok": ok_count,
-		"fail": fail_count,
-		"skip": skip_count,
-	}
 
 
 static func extract_gdscript(text: String) -> String:

@@ -20,6 +20,20 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.08, 0.1, 0.14, 1)
 
+[node name="BackButton" type="Button" parent="."]
+custom_minimum_size = Vector2(140, 56)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -204.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 80.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 28
+text = "返回"
+
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -47,7 +61,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.74, 0.8, 1)
 theme_override_font_sizes/font_size = 24
-text = "为每辆坦克填写策略文本，生成代码后会在游戏中优先使用"
+text = "输入该坦克的策略描述，例如：优先拾取 buff，其次追击最近敌人，绝不误伤基地"
 horizontal_alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
@@ -65,26 +79,3 @@ theme_override_colors/font_color = Color(0.75, 0.8, 0.88, 1)
 theme_override_font_sizes/font_size = 22
 text = "策略已填写 0 / 6，已生成代码 0 / 6"
 horizontal_alignment = 1
-
-[node name="ButtonRow" type="HBoxContainer" parent="Margin/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 24
-alignment = 1
-
-[node name="SaveButton" type="Button" parent="Margin/VBox/ButtonRow"]
-custom_minimum_size = Vector2(220, 64)
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "保存策略"
-
-[node name="GenerateButton" type="Button" parent="Margin/VBox/ButtonRow"]
-custom_minimum_size = Vector2(220, 64)
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "生成代码"
-
-[node name="BackButton" type="Button" parent="Margin/VBox/ButtonRow"]
-custom_minimum_size = Vector2(220, 64)
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "返回"

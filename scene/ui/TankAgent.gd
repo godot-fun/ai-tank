@@ -1,26 +1,29 @@
 extends Control
 
 const HOME_SCENE := "res://scene/Home.tscn"
+const TANK_ICON_SIZE := 72.0
 
 @onready var form: VBoxContainer = $Margin/VBox/Scroll/Form
 @onready var status_label: Label = $Margin/VBox/StatusLabel
-@onready var save_button: Button = $Margin/VBox/ButtonRow/SaveButton
-@onready var generate_button: Button = $Margin/VBox/ButtonRow/GenerateButton
-@onready var back_button: Button = $Margin/VBox/ButtonRow/BackButton
+@onready var back_button: Button = $BackButton
 
 var editors: Dictionary = {}
+var generate_buttons: Dictionary = {}
 var generating := false
 
 
 func _ready() -> void:
-	save_button.pressed.connect(on_save_pressed)
-	generate_button.pressed.connect(on_generate_pressed)
 	back_button.pressed.connect(on_back_pressed)
-	save_button.mouse_entered.connect(on_button_hover)
-	generate_button.mouse_entered.connect(on_button_hover)
 	back_button.mouse_entered.connect(on_button_hover)
 	build_form()
 	refresh_status()
+	pass
+
+
+func _exit_tree() -> void:
+	if generating:
+		return
+	persist_editors(true)
 	pass
 
 
@@ -28,44 +31,54 @@ func build_form() -> void:
 	for child in form.get_children():
 		child.queue_free()
 	editors.clear()
+	generate_buttons.clear()
 
 	for key: String in TankAgentManager.AGENT_TANK_IDS:
+		var tank_data := TankAgentManager.tank_data_for_key(key)
 		var row := VBoxContainer.new()
 		row.name = StringUtils.format("Row_{}", key)
 		row.add_theme_constant_override("separation", 8)
 
 		var header := HBoxContainer.new()
-		header.add_theme_constant_override("separation", 12)
+		header.add_theme_constant_override("separation", 16)
+		header.alignment = BoxContainer.ALIGNMENT_BEGIN
 
-		var title := Label.new()
-		title.text = key
-		title.add_theme_font_size_override("font_size", 28)
-		title.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98, 1))
-		header.add_child(title)
+		var icon := TextureRect.new()
+		icon.name = "TankIcon"
+		icon.texture = load(tank_data.tank_resource)
+		icon.custom_minimum_size = Vector2(TANK_ICON_SIZE, TANK_ICON_SIZE)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.tooltip_text = key
+		header.add_child(icon)
 
-		var badge := Label.new()
-		badge.name = "Badge"
-		badge.add_theme_font_size_override("font_size", 22)
-		if TankAgentManager.has_generated_script(key):
-			badge.text = "已生成代码"
-			badge.add_theme_color_override("font_color", Colors.success)
-		else:
-			badge.text = "使用默认脚本"
-			badge.add_theme_color_override("font_color", Color(0.55, 0.58, 0.65, 1))
-		header.add_child(badge)
+		var generate_button := Button.new()
+		generate_button.name = "GenerateButton"
+		generate_button.text = "生成策略"
+		generate_button.custom_minimum_size = Vector2(160, 56)
+		generate_button.add_theme_font_size_override("font_size", 24)
+		generate_button.disabled = generating
+		generate_button.mouse_entered.connect(on_button_hover)
+		generate_button.pressed.connect(on_generate_one_pressed.bind(key))
+		header.add_child(generate_button)
 		row.add_child(header)
 
+		var strategy := TankAgentManager.get_strategy(key)
 		var editor := TextEdit.new()
 		editor.name = "Editor"
 		editor.custom_minimum_size = Vector2(0, 120)
 		editor.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
-		editor.placeholder_text = "输入该坦克的策略描述，例如：优先拾取 buff，其次追击最近敌人，绝不误伤基地"
-		editor.text = TankAgentManager.get_strategy(key)
+		if TankAgentManager.has_generated_script(key) and !StringUtils.is_blank(strategy):
+			editor.placeholder_text = strategy
+		else:
+			editor.placeholder_text = "使用默认脚本"
+		editor.text = strategy
 		editor.add_theme_font_size_override("font_size", 22)
 		row.add_child(editor)
 
 		form.add_child(row)
 		editors[key] = editor
+		generate_buttons[key] = generate_button
 	pass
 
 
@@ -78,20 +91,34 @@ func refresh_status() -> void:
 		if TankAgentManager.has_generated_script(key):
 			generated += 1
 	var total := TankAgentManager.AGENT_TANK_IDS.size()
-	status_label.text = "策略已填写 %d / %d，已生成代码 %d / %d（游戏优先使用生成代码）" % [
+	status_label.text = "策略 %d / %d，已生成 %d / %d（有生成代码则游戏优先使用）" % [
 		filled, total, generated, total
 	]
 	pass
 
 
-func apply_editors_to_manager(clear_changed_scripts: bool) -> void:
+func persist_editors(clear_changed_scripts: bool) -> void:
+	if editors.is_empty():
+		return
 	for key: String in TankAgentManager.AGENT_TANK_IDS:
+		if !editors.has(key):
+			continue
 		var editor: TextEdit = editors[key]
 		var new_text := editor.text.strip_edges()
 		var old_text := TankAgentManager.get_strategy(key)
 		TankAgentManager.set_strategy(key, new_text)
 		if clear_changed_scripts and old_text != new_text:
 			TankAgentManager.delete_generated_script(key)
+	TankAgentManager.save_strategies()
+	pass
+
+
+func set_busy(busy: bool) -> void:
+	generating = busy
+	back_button.disabled = busy
+	for key: String in generate_buttons:
+		var button: Button = generate_buttons[key]
+		button.disabled = busy
 	pass
 
 
@@ -100,49 +127,30 @@ func on_button_hover() -> void:
 	pass
 
 
-func on_save_pressed() -> void:
+func on_generate_one_pressed(key: String) -> void:
 	if RateLimitUtils.limit_second_1() or generating:
 		return
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
-	apply_editors_to_manager(true)
-	TankAgentManager.save_strategies()
-	build_form()
-	refresh_status()
-	Alert.alert("策略已保存", Colors.success)
-	pass
+	persist_editors(false)
 
-
-func on_generate_pressed() -> void:
-	if RateLimitUtils.limit_second_1() or generating:
+	var strategy := TankAgentManager.get_strategy(key)
+	if StringUtils.is_blank(strategy):
+		Alert.alert("请先填写策略文本", Colors.warning)
 		return
-	Audios.play_sfx(AudioConfig.UI_CONFIRM)
-	generating = true
-	save_button.disabled = true
-	generate_button.disabled = true
-	back_button.disabled = true
 
-	apply_editors_to_manager(false)
-	TankAgentManager.save_strategies()
-	status_label.text = "正在通过 AI 生成坦克代码…"
-	Alert.alert("开始生成坦克代码", Colors.info)
+	set_busy(true)
+	status_label.text = StringUtils.format("正在生成 {} 的策略代码…", key)
+	Alert.alert(StringUtils.format("开始生成 {}", key), Colors.info)
 
-	var result: Dictionary = await TankAgentManager.async_generate_all()
-	generating = false
-	save_button.disabled = false
-	generate_button.disabled = false
-	back_button.disabled = false
-
+	var ok := await TankAgentManager.async_generate_one(key)
+	set_busy(false)
 	build_form()
 	refresh_status()
 
-	var ok: int = result.get("ok", 0)
-	var fail: int = result.get("fail", 0)
-	if fail > 0:
-		Alert.alert(StringUtils.format("生成完成：成功 {}，失败 {}", ok, fail), Colors.warning)
-	elif ok > 0:
-		Alert.alert(StringUtils.format("已生成 {} 个坦克脚本", ok), Colors.success)
+	if ok:
+		Alert.alert(StringUtils.format("{} 策略已生成", key), Colors.success)
 	else:
-		Alert.alert("没有可生成的策略文本", Colors.warning)
+		Alert.alert(StringUtils.format("{} 策略生成失败", key), Colors.error)
 	pass
 
 
@@ -150,5 +158,6 @@ func on_back_pressed() -> void:
 	if generating:
 		return
 	Audios.play_sfx(AudioConfig.UI_SELECT)
+	persist_editors(true)
 	await SceneHelper.async_change_scene_to_file(HOME_SCENE)
 	pass
