@@ -4,7 +4,7 @@ const HOME_SCENE := "res://scene/Home.tscn"
 const TANK_ICON_SIZE := 72.0
 const SPINNER_SIZE := Vector2(72, 72)
 
-@onready var form: VBoxContainer = $Margin/VBox/Scroll/Form
+@onready var form: VBoxContainer = $Margin/VBox/Scroll/FormMargin/Form
 @onready var status_label: Label = $Margin/VBox/StatusLabel
 @onready var back_button: Button = $Margin/VBox/HeaderRow/BackButton
 @onready var loading_overlay: ColorRect = $LoadingOverlay

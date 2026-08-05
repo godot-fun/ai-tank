@@ -67,7 +67,15 @@ autowrap_mode = 3
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Form" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+[node name="FormMargin" type="MarginContainer" parent="Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="Form" type="VBoxContainer" parent="Margin/VBox/Scroll/FormMargin"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 24
