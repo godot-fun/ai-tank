@@ -29,7 +29,7 @@ func build_form() -> void:
 		child.queue_free()
 	editors.clear()
 
-	for key in TankAgentManager.AGENT_KEYS:
+	for key: String in TankAgentManager.AGENT_TANK_IDS:
 		var row := VBoxContainer.new()
 		row.name = StringUtils.format("Row_{}", key)
 		row.add_theme_constant_override("separation", 8)
@@ -72,19 +72,20 @@ func build_form() -> void:
 func refresh_status() -> void:
 	var generated := 0
 	var filled := 0
-	for key in TankAgentManager.AGENT_KEYS:
+	for key: String in TankAgentManager.AGENT_TANK_IDS:
 		if !StringUtils.is_blank(TankAgentManager.get_strategy(key)):
 			filled += 1
 		if TankAgentManager.has_generated_script(key):
 			generated += 1
+	var total := TankAgentManager.AGENT_TANK_IDS.size()
 	status_label.text = "策略已填写 %d / %d，已生成代码 %d / %d（游戏优先使用生成代码）" % [
-		filled, TankAgentManager.AGENT_KEYS.size(), generated, TankAgentManager.AGENT_KEYS.size()
+		filled, total, generated, total
 	]
 	pass
 
 
 func apply_editors_to_manager(clear_changed_scripts: bool) -> void:
-	for key in TankAgentManager.AGENT_KEYS:
+	for key: String in TankAgentManager.AGENT_TANK_IDS:
 		var editor: TextEdit = editors[key]
 		var new_text := editor.text.strip_edges()
 		var old_text := TankAgentManager.get_strategy(key)

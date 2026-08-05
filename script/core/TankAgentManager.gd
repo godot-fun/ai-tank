@@ -29,28 +29,12 @@ const SYSTEM_PROMPT := """你是 Godot 4.x GDScript 坦克 AI 代码生成器。
 8. 代码风格：显式类型、业务方法不加下划线前缀、无 return 的函数末尾写 pass
 """
 
-static var AGENT_KEYS: Array[String] = build_agent_keys()
-static var KEY_BY_TANK_ID: Dictionary[int, String] = build_key_by_tank_id()
 static var strategies: Dictionary[String, String] = load_strategies()
-
-
-static func build_agent_keys() -> Array[String]:
-	var keys: Array[String] = []
-	for key: String in AGENT_TANK_IDS:
-		keys.append(key)
-	return keys
-
-
-static func build_key_by_tank_id() -> Dictionary[int, String]:
-	var result: Dictionary[int, String] = {}
-	for key: String in AGENT_TANK_IDS:
-		result[AGENT_TANK_IDS[key]] = key
-	return result
 
 
 static func load_strategies() -> Dictionary[String, String]:
 	var result: Dictionary[String, String] = {}
-	for key in AGENT_KEYS:
+	for key: String in AGENT_TANK_IDS:
 		result[key] = StringUtils.EMPTY
 
 	var json := FileUtils.read_file_to_string(STRATEGIES_PATH)
@@ -63,7 +47,7 @@ static func load_strategies() -> Dictionary[String, String]:
 		return result
 
 	var dict: Dictionary = data
-	for key in AGENT_KEYS:
+	for key: String in AGENT_TANK_IDS:
 		if dict.has(key):
 			result[key] = str(dict[key])
 	return result
@@ -89,7 +73,10 @@ static func set_strategy(key: String, text: String) -> void:
 
 
 static func agent_key_for_tank_id(tank_id: int) -> String:
-	return KEY_BY_TANK_ID.get(tank_id, StringUtils.EMPTY)
+	for key: String in AGENT_TANK_IDS:
+		if AGENT_TANK_IDS[key] == tank_id:
+			return key
+	return StringUtils.EMPTY
 
 
 static func script_path(key: String) -> String:
@@ -159,7 +146,7 @@ static func async_generate_all() -> Dictionary:
 	var ok_count := 0
 	var fail_count := 0
 	var skip_count := 0
-	for key in AGENT_KEYS:
+	for key: String in AGENT_TANK_IDS:
 		if StringUtils.is_blank(get_strategy(key)):
 			delete_generated_script(key)
 			skip_count += 1
