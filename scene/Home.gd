@@ -18,6 +18,7 @@ const TANK_ANIMATION_FPS := 5.0
 @onready var continue_button: Button = $CenterContainer/VBox/MenuButtons/ContinueButton
 @onready var ai_mode_button: Button = $CenterContainer/VBox/MenuButtons/AiModeButton
 @onready var human_mode_button: Button = $CenterContainer/VBox/MenuButtons/HumanModeButton
+@onready var tank_agent_button: Button = $CenterContainer/VBox/MenuButtons/TankAgentButton
 @onready var exit_button: Button = $CenterContainer/VBox/MenuButtons/ExitButton
 
 
@@ -28,10 +29,12 @@ func _ready() -> void:
 	continue_button.pressed.connect(on_continue_pressed)
 	ai_mode_button.pressed.connect(on_ai_mode_pressed)
 	human_mode_button.pressed.connect(on_human_mode_pressed)
+	tank_agent_button.pressed.connect(on_tank_agent_pressed)
 	exit_button.pressed.connect(on_exit_pressed)
 	continue_button.mouse_entered.connect(on_button_hover)
 	ai_mode_button.mouse_entered.connect(on_button_hover)
 	human_mode_button.mouse_entered.connect(on_button_hover)
+	tank_agent_button.mouse_entered.connect(on_button_hover)
 	exit_button.mouse_entered.connect(on_button_hover)
 	setup_tank_animation()
 	play_intro()
@@ -104,6 +107,15 @@ func on_ai_mode_pressed() -> void:
 
 func on_human_mode_pressed() -> void:
 	await start_game(BattleProgress.PlayMode.HUMAN)
+	pass
+
+
+func on_tank_agent_pressed() -> void:
+	if RateLimitUtils.limit_second_1():
+		return
+	Audios.play_sfx(AudioConfig.UI_CONFIRM)
+	Audio.stop_voice_fade()
+	await SceneHelper.async_change_scene_to_file("res://scene/ui/TankAgent.tscn")
 	pass
 
 

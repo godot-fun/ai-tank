@@ -76,6 +76,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "人肉模式"
 
+[node name="TankAgentButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Tank Agent"
+
 [node name="ExitButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2

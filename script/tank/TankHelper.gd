@@ -47,7 +47,7 @@ static func create_tank_with_buffs(data: TankConfig.TankData, grid: Vector2i, bu
 	if spawn_grid == Vector2i.MIN:
 		return null
 	var scene: PackedScene = load(TANK_SCENE)
-	var script: Script = load(data.script_resource)
+	var script: Script = TankAgentManager.resolve_script(data)
 	var tank: Tank = scene.instantiate()
 	tank.set_script(script)
 	tank.apply_data(data, spawn_grid)
