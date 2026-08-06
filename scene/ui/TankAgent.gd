@@ -3,6 +3,9 @@ extends Control
 const HOME_SCENE := "res://scene/Home.tscn"
 const TANK_ICON_SIZE := 72.0
 const SPINNER_SIZE := Vector2(72, 72)
+const SETTING_API_KEY := "openai_api_key"
+const SETTING_BASE_URL := "openai_base_url"
+const SETTING_MODEL := "openai_model"
 
 @onready var form: VBoxContainer = $Margin/VBox/Scroll/FormMargin/Form
 @onready var status_label: Label = $Margin/VBox/HeaderRow/StatusLabel
@@ -13,6 +16,9 @@ const SPINNER_SIZE := Vector2(72, 72)
 
 var editors: Dictionary = {}
 var generate_buttons: Dictionary = {}
+var api_key_edit: LineEdit
+var base_url_edit: LineEdit
+var model_edit: LineEdit
 var generating := false
 var spinner_tween: Tween
 
@@ -25,6 +31,7 @@ func _ready() -> void:
 	loading_spinner.pivot_offset = SPINNER_SIZE * 0.5
 	loading_spinner.queue_redraw()
 	loading_overlay.visible = false
+	apply_saved_api_config()
 	build_form()
 	refresh_status()
 	pass
@@ -33,6 +40,7 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if generating:
 		return
+	persist_api_config()
 	persist_editors(true)
 	pass
 
@@ -42,6 +50,11 @@ func build_form() -> void:
 		child.queue_free()
 	editors.clear()
 	generate_buttons.clear()
+	api_key_edit = null
+	base_url_edit = null
+	model_edit = null
+
+	build_api_config_section()
 
 	for key: String in TankAgentManager.AGENT_TANK_IDS:
 		var tank_data := TankAgentManager.tank_data_for_key(key)
@@ -113,6 +126,93 @@ func build_form() -> void:
 	pass
 
 
+func build_api_config_section() -> void:
+	var section := VBoxContainer.new()
+	section.name = "ApiConfig"
+	section.add_theme_constant_override("separation", 8)
+
+	var title := Label.new()
+	title.text = "API 配置"
+	title.add_theme_font_size_override("font_size", 26)
+	title.add_theme_color_override("font_color", Color(0.92, 0.94, 0.98, 1))
+	section.add_child(title)
+
+	base_url_edit = add_config_field(
+		section,
+		"Base URL",
+		Setting.get_string(SETTING_BASE_URL, OpenAiClient.base_url),
+		false
+	)
+
+	var key_model_row := HBoxContainer.new()
+	key_model_row.add_theme_constant_override("separation", 16)
+	model_edit = add_config_field(
+		key_model_row,
+		"Model",
+		Setting.get_string(SETTING_MODEL, OpenAiClient.model),
+		false
+	)
+	model_edit.size_flags_stretch_ratio = 1.0
+	api_key_edit = add_config_field(
+		key_model_row,
+		"API Key",
+		Setting.get_string(SETTING_API_KEY, OpenAiClient.api_key),
+		true
+	)
+	api_key_edit.placeholder_text = "环境变量 OPENAI_API_KEY 或在此填写"
+	api_key_edit.size_flags_stretch_ratio = 1.4
+	section.add_child(key_model_row)
+
+	form.add_child(section)
+	pass
+
+
+func add_config_field(parent: Node, label_text: String, value: String, as_password: bool) -> LineEdit:
+	var row := HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("separation", 12)
+
+	var label := Label.new()
+	label.text = label_text
+	label.custom_minimum_size = Vector2(100, 0)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 22)
+	label.add_theme_color_override("font_color", Color(0.75, 0.8, 0.88, 1))
+	row.add_child(label)
+
+	var edit := LineEdit.new()
+	edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	edit.custom_minimum_size = Vector2(0, 44)
+	edit.text = value
+	edit.secret = as_password
+	edit.editable = !generating
+	edit.add_theme_font_size_override("font_size", 22)
+	row.add_child(edit)
+
+	parent.add_child(row)
+	return edit
+
+
+func apply_saved_api_config() -> void:
+	OpenAiClient.api_key = Setting.get_string(SETTING_API_KEY, OpenAiClient.api_key)
+	OpenAiClient.base_url = Setting.get_string(SETTING_BASE_URL, OpenAiClient.base_url)
+	OpenAiClient.model = Setting.get_string(SETTING_MODEL, OpenAiClient.model)
+	pass
+
+
+func persist_api_config() -> void:
+	if api_key_edit == null or base_url_edit == null or model_edit == null:
+		return
+	OpenAiClient.api_key = api_key_edit.text.strip_edges()
+	OpenAiClient.base_url = base_url_edit.text.strip_edges()
+	OpenAiClient.model = model_edit.text.strip_edges()
+	Setting.set_string(SETTING_API_KEY, OpenAiClient.api_key)
+	Setting.set_string(SETTING_BASE_URL, OpenAiClient.base_url)
+	Setting.set_string(SETTING_MODEL, OpenAiClient.model)
+	Setting.save()
+	pass
+
+
 func refresh_status() -> void:
 	var generated := 0
 	var filled := 0
@@ -150,6 +250,12 @@ func set_busy(busy: bool, key: String = "") -> void:
 	for button_key: String in generate_buttons:
 		var button: Button = generate_buttons[button_key]
 		button.disabled = busy
+	if api_key_edit != null:
+		api_key_edit.editable = !busy
+	if base_url_edit != null:
+		base_url_edit.editable = !busy
+	if model_edit != null:
+		model_edit.editable = !busy
 	if busy:
 		show_loading(key)
 	else:
@@ -225,6 +331,7 @@ func on_generate_one_pressed(key: String) -> void:
 	if RateLimitUtils.limit_second_1() or generating:
 		return
 	Audios.play_sfx(AudioConfig.UI_CONFIRM)
+	persist_api_config()
 	persist_editors(false)
 
 	var strategy := TankAgentManager.get_strategy(key)
@@ -251,6 +358,7 @@ func on_back_pressed() -> void:
 	if generating:
 		return
 	Audios.play_sfx(AudioConfig.UI_SELECT)
+	persist_api_config()
 	persist_editors(true)
 	await SceneHelper.async_change_scene_to_file(HOME_SCENE)
 	pass
