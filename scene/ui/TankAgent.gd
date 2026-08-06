@@ -189,8 +189,35 @@ func add_config_field(parent: Node, label_text: String, value: String, as_passwo
 	edit.add_theme_font_size_override("font_size", 22)
 	row.add_child(edit)
 
+	if as_password:
+		var toggle := Button.new()
+		toggle.custom_minimum_size = Vector2(44, 44)
+		toggle.focus_mode = Control.FOCUS_NONE
+		refresh_secret_toggle(toggle, edit)
+		toggle.pressed.connect(on_secret_toggle_pressed.bind(edit, toggle))
+		toggle.mouse_entered.connect(on_button_hover)
+		row.add_child(toggle)
+
 	parent.add_child(row)
 	return edit
+
+
+func refresh_secret_toggle(toggle: Button, edit: LineEdit) -> void:
+	# 密文显示眼睛（点按可看明文）；明文显示「隐」（点按可隐藏）
+	if edit.secret:
+		toggle.text = "👁"
+		toggle.tooltip_text = "显示明文"
+	else:
+		toggle.text = "隐"
+		toggle.tooltip_text = "隐藏明文"
+	pass
+
+
+func on_secret_toggle_pressed(edit: LineEdit, toggle: Button) -> void:
+	Audios.play_sfx(AudioConfig.UI_SELECT)
+	edit.secret = !edit.secret
+	refresh_secret_toggle(toggle, edit)
+	pass
 
 
 func apply_saved_api_config() -> void:
