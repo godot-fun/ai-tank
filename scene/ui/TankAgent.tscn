@@ -54,7 +54,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.75, 0.8, 0.88, 1)
 theme_override_font_sizes/font_size = 22
-text = "（策略 0 / 6，已创建 0 / 6，有创建智能体则游戏优先使用）"
+text = "（智能体 0 / 6，游戏优先使用智能体）"
 vertical_alignment = 1
 
 [node name="BackButton" type="Button" parent="Margin/VBox/HeaderRow"]
@@ -68,7 +68,7 @@ text = "返回"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.74, 0.8, 1)
 theme_override_font_sizes/font_size = 18
-text = "用自然语言描述你的坦克智能体，点击「创建智能体」后会生成坦克 AI Agent，游戏中优先使用创建好的智能体。可写关键字：buff / 拾取增益、敌人 / 最近敌人 / 追击 / 拦截、主坦克 / 友军 / 协同作战、基地 / Eagle / 守家 / 不误伤基地 / BrickWallEagle、开火 / 射击 / 清砖 / 见敌开火、移动 / 上下左右 / 寻路 / 前往格子 / 不堵路、最佳射击点 / 站桩开火 / 向上开火、砖墙 / 钢墙 / 水面 / 障碍、随机游荡 / 保持距离 / 不要离基地太远、前半关 / 后半关 / 优先顺序。也可写角色倾向：守家、进攻、清道、支援、拾取优先。注意：不要误伤基地，不要对着 Eagle / BrickWallEagle 开火。示例：优先拾取 buff，其次追击最近敌人，绝不误伤基地；或：待在基地旁边守家，敌人靠近再拦截。"
+text = "用自然语言描述你的坦克智能体，点击「创建智能体」后会生成坦克智能体，游戏中优先使用创建好的智能体。可写关键字：拾取增益、敌人 / 最近敌人 / 追击 / 拦截、主坦克 / 友军 / 协同作战、基地 / 守家 / 不误伤基地、开火 / 射击 / 清砖 / 见敌开火、移动 / 上下左右 / 寻路 / 前往格子 / 不堵路、最佳射击点 / 站桩开火 / 向上开火、砖墙 / 钢墙 / 水面 / 障碍、随机游荡 / 保持距离 / 不要离基地太远、前半关 / 后半关 / 优先顺序。也可写角色倾向：守家、进攻、清道、支援、拾取优先。注意：不要误伤基地，不要对着基地开火。示例：优先拾取增益，其次追击最近敌人，绝不误伤基地；或：待在基地旁边守家，敌人靠近再拦截。"
 horizontal_alignment = 1
 autowrap_mode = 3
 
