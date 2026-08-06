@@ -85,7 +85,7 @@ func build_form() -> void:
 
 		var generate_button := Button.new()
 		generate_button.name = "GenerateButton"
-		generate_button.text = "生成策略"
+		generate_button.text = "创建智能体"
 		generate_button.custom_minimum_size = Vector2(160, 56)
 		generate_button.add_theme_font_size_override("font_size", 24)
 		style_generate_button(generate_button)
@@ -99,12 +99,22 @@ func build_form() -> void:
 		script_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		script_status.add_theme_font_size_override("font_size", 22)
 		if TankAgentManager.has_generated_script(key):
-			script_status.text = "已生成脚本"
+			script_status.text = "已创建"
 			script_status.add_theme_color_override("font_color", Colors.success)
 		else:
-			script_status.text = "未生成脚本"
+			script_status.text = "未创建"
 			script_status.add_theme_color_override("font_color", Color(0.55, 0.58, 0.65, 1))
 		header.add_child(script_status)
+
+		if key == "tank_1":
+			var note := Label.new()
+			note.name = "HumanModeNote"
+			note.text = "（人肉模式下 tank_1 由玩家手动控制）"
+			note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			note.add_theme_font_size_override("font_size", 22)
+			note.add_theme_color_override("font_color", Color(0.75, 0.8, 0.88, 1))
+			header.add_child(note)
+
 		row.add_child(header)
 
 		var strategy := TankAgentManager.get_strategy(key)
@@ -249,9 +259,7 @@ func refresh_status() -> void:
 		if TankAgentManager.has_generated_script(key):
 			generated += 1
 	var total := TankAgentManager.AGENT_TANK_IDS.size()
-	status_label.text = "（策略 %d / %d，已生成 %d / %d，有生成代码则游戏优先使用）" % [
-		filled, total, generated, total
-	]
+	status_label.text = "（智能体 %d / %d，游戏优先使用智能体）" % [generated, total]
 	pass
 
 
