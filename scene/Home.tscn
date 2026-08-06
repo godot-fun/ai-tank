@@ -33,23 +33,12 @@ layout_mode = 2
 theme_override_constants/separation = 48
 alignment = 1
 
-[node name="HeaderRow" type="HBoxContainer" parent="CenterContainer/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 32
-alignment = 1
-
-[node name="TankArea" type="Control" parent="CenterContainer/VBox/HeaderRow"]
-custom_minimum_size = Vector2(240, 240)
-layout_mode = 2
-
-[node name="TankSprite" type="AnimatedSprite2D" parent="CenterContainer/VBox/HeaderRow/TankArea"]
-position = Vector2(120, 120)
-
-[node name="TitleLabel" type="Label" parent="CenterContainer/VBox/HeaderRow"]
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
 theme_override_font_sizes/font_size = 96
 text = "AI TANK"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MenuButtons" type="VBoxContainer" parent="CenterContainer/VBox"]
