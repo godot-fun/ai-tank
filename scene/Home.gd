@@ -1,12 +1,12 @@
-extends Control
+extends Node2D
 
-@onready var title_label: Label = $CenterContainer/VBox/TitleLabel
-@onready var menu_buttons: VBoxContainer = $CenterContainer/VBox/MenuButtons
-@onready var continue_button: Button = $CenterContainer/VBox/MenuButtons/ContinueButton
-@onready var ai_mode_button: Button = $CenterContainer/VBox/MenuButtons/AiModeButton
-@onready var human_mode_button: Button = $CenterContainer/VBox/MenuButtons/HumanModeButton
-@onready var tank_agent_button: Button = $CenterContainer/VBox/MenuButtons/TankAgentButton
-@onready var exit_button: Button = $CenterContainer/VBox/MenuButtons/ExitButton
+@onready var title_label: Label = $Ui/Root/CenterContainer/VBox/TitleLabel
+@onready var menu_buttons: VBoxContainer = $Ui/Root/CenterContainer/VBox/MenuButtons
+@onready var continue_button: Button = $Ui/Root/CenterContainer/VBox/MenuButtons/ContinueButton
+@onready var ai_mode_button: Button = $Ui/Root/CenterContainer/VBox/MenuButtons/AiModeButton
+@onready var human_mode_button: Button = $Ui/Root/CenterContainer/VBox/MenuButtons/HumanModeButton
+@onready var tank_agent_button: Button = $Ui/Root/CenterContainer/VBox/MenuButtons/TankAgentButton
+@onready var exit_button: Button = $Ui/Root/CenterContainer/VBox/MenuButtons/ExitButton
 
 
 func _ready() -> void:
@@ -110,18 +110,18 @@ func on_exit_pressed() -> void:
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-const ENEMY_WAVE_INTERVAL := 5.0
-const JEEP_WAVE_INTERVAL := 7.0
+const ENEMY_WAVE_INTERVAL := 7.0
+const JEEP_WAVE_INTERVAL := 13.0
 const BOSS_SPAWN_INTERVAL := 30.0
 
 ## 在 Home 场景初始化我方 6 辆坦克，并按节奏刷敌坦克 / jeep / boss
 func init_home_battle() -> void:
-	$Background.visible = false
-	$CenterContainer.z_index = 100
+	$Ui/Root/Background.visible = false
+	$Ui/Root/CenterContainer.z_index = 100
 	GameManager.init()
 	BuffManager.start_level()
-	LevelConfig.load_level(0)
-	Eagle.create_base()
+#	LevelConfig.load_level(randi() % LevelConfig.MAP_DATA.size())
+#	Eagle.create_base()
 
 	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)
 	var partners: Array[TankConfig.TankData] = [

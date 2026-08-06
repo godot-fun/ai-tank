@@ -2,16 +2,21 @@
 
 [ext_resource type="Script" path="res://scene/Home.gd" id="1_home"]
 
-[node name="Home" type="Control"]
+[node name="Home" type="Node2D"]
+script = ExtResource("1_home")
+
+[node name="Ui" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Root" type="Control" parent="Ui"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_home")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="Ui/Root"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.08, 0.1, 0.14, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="Ui/Root"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,12 +33,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBox" type="VBoxContainer" parent="Ui/Root/CenterContainer"]
 layout_mode = 2
 theme_override_constants/separation = 48
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/VBox"]
+[node name="TitleLabel" type="Label" parent="Ui/Root/CenterContainer/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.94, 0.98, 1)
 theme_override_font_sizes/font_size = 96
@@ -41,37 +46,37 @@ text = "AI TANK"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MenuButtons" type="VBoxContainer" parent="CenterContainer/VBox"]
+[node name="MenuButtons" type="VBoxContainer" parent="Ui/Root/CenterContainer/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="ContinueButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+[node name="ContinueButton" type="Button" parent="Ui/Root/CenterContainer/VBox/MenuButtons"]
 visible = false
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "继续游戏"
 
-[node name="AiModeButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+[node name="AiModeButton" type="Button" parent="Ui/Root/CenterContainer/VBox/MenuButtons"]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "AI模式"
 
-[node name="HumanModeButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+[node name="HumanModeButton" type="Button" parent="Ui/Root/CenterContainer/VBox/MenuButtons"]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "人肉模式"
 
-[node name="TankAgentButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+[node name="TankAgentButton" type="Button" parent="Ui/Root/CenterContainer/VBox/MenuButtons"]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Tank Agent"
 
-[node name="ExitButton" type="Button" parent="CenterContainer/VBox/MenuButtons"]
+[node name="ExitButton" type="Button" parent="Ui/Root/CenterContainer/VBox/MenuButtons"]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
