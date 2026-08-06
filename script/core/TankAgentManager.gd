@@ -8,12 +8,12 @@ const SCRIPT_EXT := ".gd"
 
 ## 唯一配置源：agent key → TankConfig.id
 static var AGENT_TANK_IDS: Dictionary[String, int] = {
-	"tank_1": TankConfig.tank_1.id,
-	"tank_2": TankConfig.tank_2.id,
-	"tank_3": TankConfig.tank_3.id,
-	"tank_4": TankConfig.tank_4.id,
-	"tank_5": TankConfig.tank_5.id,
-	"tank_6": TankConfig.tank_6.id,
+	"tank_1": TankConfig.TANK_1_ID,
+	"tank_2": TankConfig.TANK_2_ID,
+	"tank_3": TankConfig.TANK_3_ID,
+	"tank_4": TankConfig.TANK_4_ID,
+	"tank_5": TankConfig.TANK_5_ID,
+	"tank_6": TankConfig.TANK_6_ID,
 }
 
 ## 生成时一并传给 AI 的参考脚本（继承链 + 策略示例 + 常用工具）

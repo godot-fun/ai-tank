@@ -25,7 +25,9 @@ func _ready() -> void:
 	exit_button.mouse_entered.connect(on_button_hover)
 	play_intro()
 	Audio.play_voice(AudioConfig.BGM_OPENING_DEMO_PART2)
+	init_home_battle()
 	pass
+
 
 
 func play_intro() -> void:
@@ -102,4 +104,55 @@ func start_game(mode: BattleProgress.PlayMode) -> void:
 func on_exit_pressed() -> void:
 	Audios.play_sfx(AudioConfig.UI_SELECT)
 	await gdf.quit()
+	pass
+
+
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+const ENEMY_WAVE_INTERVAL := 5.0
+const JEEP_WAVE_INTERVAL := 7.0
+const BOSS_SPAWN_INTERVAL := 30.0
+
+## 在 Home 场景初始化我方 6 辆坦克，并按节奏刷敌坦克 / jeep / boss
+func init_home_battle() -> void:
+	$Background.visible = false
+	$CenterContainer.z_index = 100
+	GameManager.init()
+	BuffManager.start_level()
+	LevelConfig.load_level(0)
+	Eagle.create_base()
+
+	TankHelper.create_tank(TankConfig.my_tank, Eagle.player_tank_start_grid_pos)
+	var partners: Array[TankConfig.TankData] = [
+		TankConfig.tank_2, TankConfig.tank_3, TankConfig.tank_4, TankConfig.tank_5, TankConfig.tank_6,
+	]
+	for data in partners:
+		TankHelper.create_tank(data, Eagle.partner_tank_start_grid_pos)
+
+	spawn_wave(TankConfig.enemy_easy)
+	loop_spawn(spawn_wave.bind(TankConfig.enemy_easy), ENEMY_WAVE_INTERVAL)
+	loop_spawn(spawn_wave.bind(TankConfig.enemy_jeep), JEEP_WAVE_INTERVAL)
+	loop_spawn(spawn_boss, BOSS_SPAWN_INTERVAL)
+	pass
+
+
+func loop_spawn(callback: Callable, interval: float) -> void:
+	var tween := create_tween().set_loops()
+	tween.tween_interval(interval)
+	tween.tween_callback(callback)
+	pass
+
+
+
+func spawn_wave(tank_data: TankConfig.TankData) -> void:
+	for grid in EnemySpawner.spawn_grids:
+		TankHelper.create_tank(tank_data, grid)
+	pass
+
+
+func spawn_boss() -> void:
+	var tank := TankHelper.create_tank(TankConfig.boss_enemy_easy, EnemySpawner.spawn_grids[1])
+	if tank != null:
+		tank.scale_tank_deferred()
 	pass

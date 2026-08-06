@@ -14,6 +14,13 @@ const DEFAULT_TANK_SPEED := 280.0
 const DEFAULT_ENEMY_TANK_SPEED := 300.0
 const DEFAULT_TANK_HP: int = 1
 
+const TANK_1_ID := 1
+const TANK_2_ID := 2
+const TANK_3_ID := 3
+const TANK_4_ID := 4
+const TANK_5_ID := 5
+const TANK_6_ID := 6
+
 
 const DEFAULT_BULLET_SPEED := 700.0
 const DEFAULT_BULLET_SIZE := 1.0
@@ -128,7 +135,7 @@ static var my_tank: TankData = TankData.new(
 )
 
 static var tank_1: TankData = TankData.new(
-	1,
+	TANK_1_ID,
 	Team.PLAYER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
@@ -146,7 +153,7 @@ static var tank_1: TankData = TankData.new(
 )
 
 static var tank_2: TankData = TankData.new(
-	11,
+	TANK_2_ID,
 	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
@@ -164,7 +171,7 @@ static var tank_2: TankData = TankData.new(
 )
 
 static var tank_3: TankData = TankData.new(
-	12,
+	TANK_3_ID,
 	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
@@ -182,7 +189,7 @@ static var tank_3: TankData = TankData.new(
 )
 
 static var tank_4: TankData = TankData.new(
-	13,
+	TANK_4_ID,
 	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + TankHpBuff.EFFECT_VALUE,
@@ -200,7 +207,7 @@ static var tank_4: TankData = TankData.new(
 )
 
 static var tank_5: TankData = TankData.new(
-	14,
+	TANK_5_ID,
 	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
@@ -218,7 +225,7 @@ static var tank_5: TankData = TankData.new(
 )
 
 static var tank_6: TankData = TankData.new(
-	15,
+	TANK_6_ID,
 	Team.PARTNER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP + TankHpBuff.EFFECT_VALUE,
@@ -256,7 +263,7 @@ static var only_fire_enemy: TankData = TankData.new(
 
 
 static var my_partner_tank: TankData = TankData.new(
-	5,
+	55,
 	Team.PLAYER,
 	Vector2i(2, 2),
 	DEFAULT_TANK_HP,
